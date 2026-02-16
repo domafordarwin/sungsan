@@ -1,0 +1,22 @@
+<div class="flex min-h-screen items-center justify-center">
+  <div class="w-full max-w-md bg-white rounded-lg shadow p-8">
+    <h1 class="text-2xl font-bold text-center mb-6">AltarServe Manager</h1>
+    <h2 class="text-lg text-gray-600 text-center mb-8">성단 매니저 로그인</h2>
+
+    <%= form_with url: session_path, method: :post, class: "space-y-4" do |f| %>
+      <div>
+        <%= f.label :email_address, "이메일", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.email_field :email_address, required: true, autofocus: true, autocomplete: "email",
+            class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+
+      <div>
+        <%= f.label :password, "비밀번호", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.password_field :password, required: true, autocomplete: "current-password",
+            class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+
+      <%= f.submit "로그인", class: "w-full bg-blue-600 text-white rounded-md py-2 hover:bg-blue-700 cursor-pointer" %>
+    <% end %>
+  </div>
+</div>

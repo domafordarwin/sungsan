@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AltarServe Manager</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+<body class="min-h-screen bg-gray-50">
+  <% if authenticated? %>
+    <%= render "layouts/navbar" %>
+  <% end %>
+
+  <% if notice %>
+    <div class="bg-green-100 text-green-800 p-3 text-center"><%= notice %></div>
+  <% end %>
+  <% if alert %>
+    <div class="bg-red-100 text-red-800 p-3 text-center"><%= alert %></div>
+  <% end %>
+
+  <main class="container mx-auto px-4 py-6">
+    <%= yield %>
+  </main>
+</body>
+</html>

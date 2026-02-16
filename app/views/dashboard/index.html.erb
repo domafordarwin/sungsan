@@ -1,0 +1,16 @@
+<h1 class="text-2xl font-bold mb-6">대시보드</h1>
+<p class="text-gray-600">안녕하세요, <%= Current.user.name %>님. (<%= Current.user.role %>)</p>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+  <% if Current.user.admin? %>
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="font-bold text-gray-700">사용자 관리</h3>
+      <%= link_to "사용자 목록", admin_users_path, class: "text-blue-600 hover:text-blue-800" %>
+    </div>
+  <% end %>
+
+  <div class="bg-white rounded-lg shadow p-6">
+    <h3 class="font-bold text-gray-700">내 정보</h3>
+    <%= link_to "비밀번호 변경", edit_password_path, class: "text-blue-600 hover:text-blue-800" %>
+  </div>
+</div>

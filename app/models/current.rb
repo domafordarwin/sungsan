@@ -1,5 +1,6 @@
 class Current < ActiveSupport::CurrentAttributes
   attribute :user
+  attribute :session
   attribute :parish_id
   attribute :ip_address
   attribute :user_agent

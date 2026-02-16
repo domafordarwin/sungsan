@@ -1,5 +1,5 @@
 class AuditLog < ApplicationRecord
-  ACTIONS = %w[create update destroy].freeze
+  ACTIONS = %w[create update destroy login logout password_change].freeze
 
   belongs_to :parish, optional: true
   belongs_to :user, optional: true
