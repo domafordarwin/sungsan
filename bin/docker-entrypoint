@@ -1,7 +1,36 @@
-#!/bin/bash -e
+#!/bin/bash
 
-if [ "${1}" == "bundle" ]; then
-  bundle exec rails db:prepare
+# Exit on error, but handle db:prepare separately
+set -e
+
+echo "=== Starting AltarServe Manager ==="
+echo "RAILS_ENV: ${RAILS_ENV:-not set}"
+echo "PORT: ${PORT:-3000}"
+
+# Check required environment variables
+if [ -z "$SECRET_KEY_BASE" ] && [ -z "$SECRET_KEY_BASE_DUMMY" ]; then
+  echo "WARNING: SECRET_KEY_BASE is not set!"
 fi
 
+if [ -z "$DATABASE_URL" ] && [ "$RAILS_ENV" = "production" ]; then
+  echo "WARNING: DATABASE_URL is not set for production!"
+fi
+
+# Run db:prepare with retries (database might not be ready yet)
+if [ "${1}" == "bundle" ]; then
+  MAX_RETRIES=5
+  RETRY_COUNT=0
+
+  until bundle exec rails db:prepare 2>&1; do
+    RETRY_COUNT=$((RETRY_COUNT + 1))
+    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+      echo "ERROR: db:prepare failed after $MAX_RETRIES attempts. Starting server anyway..."
+      break
+    fi
+    echo "db:prepare failed (attempt $RETRY_COUNT/$MAX_RETRIES). Retrying in 3 seconds..."
+    sleep 3
+  done
+fi
+
+echo "=== Starting Puma server ==="
 exec "${@}"

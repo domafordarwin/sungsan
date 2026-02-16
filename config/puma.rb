@@ -1,30 +1,30 @@
-# Puma can serve each request in a thread from an internal thread pool.
-# The `threads` method setting takes two numbers: a minimum and maximum.
-# Any libraries that use thread pools should be configured to match
-# the maximum value specified for Puma.
+# Puma configuration for AltarServe Manager
+
 max_threads_count = ENV.fetch("RAILS_MAX_THREADS") { 5 }
 min_threads_count = ENV.fetch("RAILS_MIN_THREADS") { max_threads_count }
 threads min_threads_count, max_threads_count
 
-# Specifies that the worker count should equal the number of processors in production.
+# Railway/Docker: single process mode to minimize memory usage
+# Set WEB_CONCURRENCY=2 if you need workers on larger instances
 if ENV["RAILS_ENV"] == "production"
-  require "concurrent-ruby"
-  worker_count = Integer(ENV.fetch("WEB_CONCURRENCY") { [Concurrent.physical_processor_count, 2].min })
-  workers worker_count if worker_count > 1
+  worker_count = Integer(ENV.fetch("WEB_CONCURRENCY") { 0 })
+  workers worker_count if worker_count > 0
 end
 
-# Specifies the `worker_timeout` threshold that Puma will use to wait before
-# temporary a worker in development.
 worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
 
-# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-port ENV.fetch("PORT") { 3000 }
+# Bind to 0.0.0.0 so Railway/Docker can route traffic
+app_port = ENV.fetch("PORT") { 3000 }
+bind "tcp://0.0.0.0:#{app_port}"
 
-# Specifies the `environment` that Puma will run in.
 environment ENV.fetch("RAILS_ENV") { "development" }
 
-# Specifies the `pidfile` that Puma will use.
 pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
+
+# Log when Puma starts
+on_booted do
+  puts "=== Puma booted on port #{app_port} ==="
+end

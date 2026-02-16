@@ -11,7 +11,8 @@ RUN apt-get update -qq && \
 
 ENV RAILS_ENV="production" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development:test"
+    BUNDLE_WITHOUT="development:test" \
+    RUBY_YJIT_ENABLE="1"
 
 FROM base AS build
 
@@ -43,5 +44,12 @@ RUN mkdir -p /rails/log /rails/storage /rails/tmp/pids /rails/tmp/cache /rails/t
 USER 1000:1000
 
 ENTRYPOINT ["bash", "/rails/bin/docker-entrypoint"]
+
+# Railway sets PORT dynamically; Puma reads it from ENV
 EXPOSE 3000
+
+# Health check for Railway
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:${PORT:-3000}/up || exit 1
+
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
