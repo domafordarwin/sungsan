@@ -2,7 +2,7 @@ module SampleDataScoped
   extend ActiveSupport::Concern
 
   included do
-    scope :sample,     -> { where(sample_data: true) }
-    scope :non_sample, -> { where(sample_data: false) }
+    scope :demo_data,  -> { where(sample_data: true) }
+    scope :real_data,  -> { where(sample_data: false) }
   end
 end
