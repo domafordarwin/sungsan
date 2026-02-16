@@ -25,7 +25,8 @@ RUN bundle install && \
 
 COPY . .
 
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+RUN chmod +x bin/* && \
+    SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 
 FROM base
 
@@ -37,6 +38,6 @@ RUN groupadd --system --gid 1000 rails && \
     chown -R rails:rails db log storage tmp
 USER 1000:1000
 
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+ENTRYPOINT ["bash", "/rails/bin/docker-entrypoint"]
 EXPOSE 3000
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
