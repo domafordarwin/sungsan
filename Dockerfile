@@ -37,10 +37,10 @@ COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
 # Create directories and set permissions
-RUN mkdir -p /rails/log /rails/storage /rails/tmp/pids /rails/tmp/cache /rails/tmp/sockets && \
+RUN mkdir -p /rails/log /rails/storage /rails/tmp/pids /rails/tmp/cache /rails/tmp/sockets /data/storage && \
     groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails /rails/db /rails/log /rails/storage /rails/tmp
+    chown -R rails:rails /rails/db /rails/log /rails/storage /rails/tmp /data/storage
 USER 1000:1000
 
 ENTRYPOINT ["bash", "/rails/bin/docker-entrypoint"]

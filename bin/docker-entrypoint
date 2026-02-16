@@ -39,5 +39,17 @@ EOSQL
   echo "=== DB setup complete ==="
 fi
 
+# Check volume mount for persistent storage
+if [ -d "/data/storage" ]; then
+  echo "=== Storage volume: /data/storage EXISTS ==="
+  if [ -w "/data/storage" ]; then
+    echo "=== Storage volume: WRITABLE ==="
+  else
+    echo "WARNING: /data/storage is NOT writable!"
+  fi
+else
+  echo "WARNING: /data/storage does NOT exist — uploads will be lost on redeploy!"
+fi
+
 echo "=== Starting server ==="
 exec "${@}"
