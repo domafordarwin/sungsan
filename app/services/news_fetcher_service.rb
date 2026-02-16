@@ -1,13 +1,13 @@
-require "net/http"
-require "json"
-require "rexml/document"
-
 class NewsFetcherService
   NAVER_KEYWORDS = ["가톨릭 성단", "성산포 성당", "제주교구", "가톨릭 미사"].freeze
   CATHOLIC_RSS_URL = "https://www.catholicnews.co.kr/news/rss.php".freeze
   DIOCESE_RSS_URL = "https://www.jejucatholic.org/rss".freeze
 
   def self.fetch_all(parish)
+    require "net/http"
+    require "json"
+    require "rexml/document"
+
     results = { naver: 0, catholic_news: 0, diocese: 0, errors: [] }
 
     results[:naver] = fetch_naver(parish, results[:errors])

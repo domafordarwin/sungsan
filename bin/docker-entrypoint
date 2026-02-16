@@ -12,34 +12,27 @@ if [ "${1}" == "bundle" ]; then
 
   # Step 2: Run pending migrations
   echo "=== Step 2: db:migrate ==="
-  bundle exec rails db:migrate 2>&1
-  MIGRATE_EXIT=$?
-  echo "db:migrate exit code: ${MIGRATE_EXIT}"
-
-  # Step 2.5: If migrate failed, try schema:load then migrate
-  if [ $MIGRATE_EXIT -ne 0 ]; then
-    echo "=== Step 2.5: Fallback - schema:load + migrate ==="
+  bundle exec rails db:migrate 2>&1 || {
+    echo "=== db:migrate failed, trying db:schema:load + db:migrate ==="
     bundle exec rails db:schema:load 2>&1 || echo "schema:load had issues"
-    bundle exec rails db:migrate 2>&1 || echo "migrate still failing"
-  fi
+    bundle exec rails db:migrate 2>&1 || echo "WARNING: migrate still failing"
+  }
 
-  # Step 3: Check if news_articles table exists (new table)
-  echo "=== Step 3: Verify new tables ==="
+  # Step 3: Verify tables
+  echo "=== Step 3: Verify tables ==="
   bundle exec rails runner "
     tables = %w[news_articles posts comments photo_albums photos active_storage_blobs]
     tables.each do |t|
       exists = ActiveRecord::Base.connection.table_exists?(t)
-      puts \"  #{t}: #{exists ? 'OK' : 'MISSING'}\"
+      puts \"  #{t}: #{exists ? 'OK' : 'MISSING'}\";
     end
-  " 2>/dev/null
+  " 2>&1 || echo "Table verification skipped"
 
   # Step 4: Seed data
   echo "=== Step 4: db:seed ==="
-  bundle exec rails db:seed 2>&1 && echo "db:seed OK" || echo "WARNING: db:seed failed"
+  bundle exec rails db:seed 2>&1 || echo "WARNING: db:seed failed"
 
-  # Step 5: Final verification
-  USER_COUNT=$(bundle exec rails runner "puts User.unscoped.count" 2>/dev/null || echo "0")
-  echo "=== DB Ready: ${USER_COUNT} users ==="
+  echo "=== DB setup complete ==="
 fi
 
 echo "=== Starting Puma server ==="

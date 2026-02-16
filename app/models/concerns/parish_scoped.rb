@@ -5,7 +5,14 @@ module ParishScoped
     belongs_to :parish
     validates :parish_id, presence: true
 
-    default_scope -> { where(parish_id: Current.parish_id) if Current.parish_id }
+    default_scope lambda {
+      if Current.parish_id
+        where(parish_id: Current.parish_id)
+      end
+    rescue ActiveRecord::StatementInvalid, PG::UndefinedTable
+      # Table may not exist yet during migrations — skip scope gracefully
+      nil
+    }
   end
 
   class_methods do
