@@ -12,6 +12,7 @@ admin = User.find_or_create_by!(email_address: "admin@sungsan.org") do |u|
   u.name = "관리자"
   u.password = "password123"
   u.role = "admin"
+  u.sample_data = true
 end
 
 # 3. 역할 정의
@@ -27,6 +28,7 @@ roles_data = [
 roles = roles_data.map do |attrs|
   Role.find_or_create_by!(parish: parish, name: attrs[:name]) do |r|
     r.assign_attributes(attrs)
+    r.sample_data = true
   end
 end
 
@@ -43,6 +45,7 @@ event_types_data = [
 event_types = event_types_data.map do |attrs|
   EventType.find_or_create_by!(parish: parish, name: attrs[:name]) do |et|
     et.assign_attributes(attrs)
+    et.sample_data = true
   end
 end
 
@@ -72,6 +75,7 @@ qualifications_data = [
 qualifications_data.each do |attrs|
   Qualification.find_or_create_by!(parish: parish, name: attrs[:name]) do |q|
     q.assign_attributes(attrs)
+    q.sample_data = true
   end
 end
 
@@ -81,6 +85,7 @@ operator = User.find_or_create_by!(email_address: "operator@sungsan.org") do |u|
   u.name = "운영자"
   u.password = "password123"
   u.role = "operator"
+  u.sample_data = true
 end
 
 # 8. 테스트 봉사자
@@ -92,6 +97,7 @@ members = 10.times.map do |i|
     m.baptized = true
     m.confirmed = i < 7
     m.active = true
+    m.sample_data = true
   end
 end
 
@@ -101,6 +107,7 @@ member_user = User.find_or_create_by!(email_address: "member@sungsan.org") do |u
   u.name = "봉사자1"
   u.password = "password123"
   u.role = "member"
+  u.sample_data = true
 end
 members.first.update!(user: member_user) unless members.first.user_id
 
@@ -115,7 +122,8 @@ if Event.count == 0
       event_type: sunday_3rd,
       date: date,
       start_time: "11:00",
-      recurring_group_id: SecureRandom.uuid
+      recurring_group_id: SecureRandom.uuid,
+      sample_data: true
     )
   end
 end
@@ -124,3 +132,7 @@ puts "Seeding completed!"
 puts "  Admin: admin@sungsan.org / password123"
 puts "  Operator: operator@sungsan.org / password123"
 puts "  Member: member@sungsan.org / password123"
+puts ""
+puts "  * 모든 예시 데이터에 sample_data=true 표시됨"
+puts "  * 일괄 삭제: rails db:purge_sample_data"
+puts "  * 현황 확인: rails db:sample_data_status"

@@ -1,6 +1,7 @@
 class EventType < ApplicationRecord
   include ParishScoped
   include Auditable
+  include SampleDataScoped
 
   has_many :event_role_requirements, dependent: :destroy
   has_many :roles, through: :event_role_requirements

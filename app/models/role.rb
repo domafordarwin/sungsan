@@ -1,6 +1,7 @@
 class Role < ApplicationRecord
   include ParishScoped
   include Auditable
+  include SampleDataScoped
 
   has_many :event_role_requirements, dependent: :destroy
   has_many :assignments, dependent: :restrict_with_error

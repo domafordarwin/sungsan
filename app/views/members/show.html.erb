@@ -39,6 +39,9 @@
         <%= button_to @member.active? ? "비활성화" : "활성화",
             toggle_active_member_path(@member), method: :patch,
             class: @member.active? ? "btn-lava" : "btn-moss" %>
+        <%= button_to "삭제", member_path(@member), method: :delete,
+            class: "btn-lava",
+            form: { data: { turbo_confirm: "'#{@member.name}' 봉사자를 정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다." } } %>
       <% end %>
       <%= link_to "목록", members_path, class: "btn-ghost" %>
     </div>

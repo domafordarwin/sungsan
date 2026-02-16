@@ -3,6 +3,7 @@ class Member < ApplicationRecord
   include Auditable
   include Maskable
   include Paginatable
+  include SampleDataScoped
 
   belongs_to :user, optional: true
   has_many :assignments, dependent: :restrict_with_error

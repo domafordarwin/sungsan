@@ -2,6 +2,7 @@ class Event < ApplicationRecord
   include ParishScoped
   include Auditable
   include Paginatable
+  include SampleDataScoped
 
   belongs_to :event_type
   has_many :assignments, dependent: :destroy

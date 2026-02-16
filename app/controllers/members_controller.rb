@@ -1,5 +1,5 @@
 class MembersController < ApplicationController
-  before_action :set_member, only: %i[show edit update toggle_active]
+  before_action :set_member, only: %i[show edit update destroy toggle_active]
 
   def index
     @members = policy_scope(Member)
@@ -44,6 +44,16 @@ class MembersController < ApplicationController
       redirect_to member_path(@member), notice: "봉사자 정보가 수정되었습니다."
     else
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    authorize @member
+    if @member.destroy
+      redirect_to members_path, notice: "봉사자 '#{@member.name}'이(가) 삭제되었습니다."
+    else
+      error_msg = @member.errors.full_messages.join(", ")
+      redirect_to member_path(@member), alert: "삭제할 수 없습니다: #{error_msg}"
     end
   end
 

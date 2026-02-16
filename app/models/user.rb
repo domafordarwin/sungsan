@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include ParishScoped
+  include SampleDataScoped
 
   has_secure_password
   has_many :sessions, dependent: :destroy

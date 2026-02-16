@@ -1,5 +1,6 @@
 class Qualification < ApplicationRecord
   include ParishScoped
+  include SampleDataScoped
 
   has_many :member_qualifications, dependent: :destroy
 
