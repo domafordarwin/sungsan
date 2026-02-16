@@ -6,12 +6,11 @@ module ParishScoped
     validates :parish_id, presence: true
 
     default_scope lambda {
-      if Current.parish_id
-        where(parish_id: Current.parish_id)
+      begin
+        where(parish_id: Current.parish_id) if Current.parish_id
+      rescue ActiveRecord::StatementInvalid
+        nil
       end
-    rescue ActiveRecord::StatementInvalid, PG::UndefinedTable
-      # Table may not exist yet during migrations — skip scope gracefully
-      nil
     }
   end
 
