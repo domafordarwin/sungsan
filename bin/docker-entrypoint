@@ -6,16 +6,20 @@ echo "PORT: ${PORT:-3000}"
 echo "DATABASE_URL set: $([ -n "$DATABASE_URL" ] && echo 'yes' || echo 'NO!')"
 
 if [ "${1}" == "bundle" ]; then
-  # Step 1: Try db:prepare (handles both new and existing databases)
+  # Step 1: Ensure DB exists and run all pending migrations
   echo "=== Step 1: db:prepare ==="
   bundle exec rails db:prepare 2>&1 && echo "db:prepare OK" || {
     echo "db:prepare failed, trying db:create + db:schema:load..."
     bundle exec rails db:create 2>&1 || echo "(db:create skipped - DB may already exist)"
     bundle exec rails db:schema:load 2>&1 && echo "db:schema:load OK" || {
-      echo "db:schema:load also failed, trying db:migrate..."
+      echo "db:schema:load also failed, trying db:migrate from scratch..."
       bundle exec rails db:migrate 2>&1 && echo "db:migrate OK" || echo "ERROR: All DB setup methods failed!"
     }
   }
+
+  # Step 1.5: Always run db:migrate to apply any pending migrations
+  echo "=== Step 1.5: db:migrate (pending) ==="
+  bundle exec rails db:migrate 2>&1 && echo "db:migrate OK" || echo "WARNING: db:migrate had issues"
 
   # Step 2: Verify tables exist
   echo "=== Step 2: Verify tables ==="
@@ -25,6 +29,7 @@ if [ "${1}" == "bundle" ]; then
   if [ "$TABLE_CHECK" != "true" ]; then
     echo "CRITICAL: Tables still missing! Force loading schema..."
     bundle exec rails db:schema:load DISABLE_DATABASE_ENVIRONMENT_CHECK=1 2>&1
+    bundle exec rails db:migrate 2>&1
   fi
 
   # Step 3: Seed data

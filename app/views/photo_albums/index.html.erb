@@ -17,7 +17,7 @@
         <!-- 커버 이미지 -->
         <div style="height: 180px; background: var(--basalt-100); display: flex; align-items: center; justify-content: center; overflow: hidden;">
           <% if album.cover_photo&.image&.attached? %>
-            <%= image_tag album.cover_photo.image.variant(resize_to_fill: [400, 180]),
+            <%= image_tag album.cover_photo.image,
                 style: "width: 100%; height: 100%; object-fit: cover;" %>
           <% else %>
             <span style="font-size: 3rem; color: var(--basalt-300);">&#128247;</span>
