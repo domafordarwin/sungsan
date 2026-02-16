@@ -10,6 +10,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def pundit_user
+    Current.user
+  end
+
   def set_current_attributes
     if Current.session
       Current.user = Current.session.user
@@ -24,6 +28,6 @@ class ApplicationController < ActionController::Base
   end
 
   def skip_authorization?
-    is_a?(SessionsController) || is_a?(DashboardController)
+    is_a?(SessionsController) || is_a?(DashboardController) || is_a?(StatisticsController)
   end
 end

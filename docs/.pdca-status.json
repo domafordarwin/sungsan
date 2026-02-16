@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-02-16T03:53:26.204Z",
+  "lastUpdated": "2026-02-16T05:53:49.072Z",
   "activeFeatures": [
     "bin",
     "migrate",
@@ -51,9 +51,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-16T00:40:27.869Z",
-        "lastUpdated": "2026-02-16T00:41:08.810Z"
+        "lastUpdated": "2026-02-16T05:03:03.661Z"
       },
-      "lastFile": "/mnt/c/workspace/sungsan/db/migrate/20260216000016_create_audit_logs.rb"
+      "lastFile": "/mnt/c/workspace/sungsan/db/migrate/20260216000007_create_members.rb"
     },
     "sungsan": {
       "phase": "do",
@@ -64,9 +64,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-16T00:41:17.552Z",
-        "lastUpdated": "2026-02-16T03:30:44.650Z"
+        "lastUpdated": "2026-02-16T05:53:49.071Z"
       },
-      "lastFile": "/mnt/c/workspace/sungsan/app/controllers/statistics_controller.rb"
+      "lastFile": "/mnt/c/workspace/sungsan/app/controllers/application_controller.rb"
     },
     "concerns": {
       "phase": "do",
@@ -142,9 +142,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-16T01:14:02.323Z",
-        "lastUpdated": "2026-02-16T03:31:12.360Z"
+        "lastUpdated": "2026-02-16T04:43:54.947Z"
       },
-      "lastFile": "/mnt/c/workspace/sungsan/config/routes.rb"
+      "lastFile": "/mnt/c/workspace/sungsan/config/puma.rb"
     },
     "policies": {
       "phase": "do",
@@ -208,9 +208,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-16T01:55:42.057Z",
-        "lastUpdated": "2026-02-16T01:57:13.212Z"
+        "lastUpdated": "2026-02-16T05:06:31.938Z"
       },
-      "lastFile": "/mnt/c/workspace/sungsan/config/environments/production.rb"
+      "lastFile": "/mnt/c/workspace/sungsan/config/environments/development.rb"
     },
     "initializers": {
       "phase": "do",
@@ -351,7 +351,7 @@
   "session": {
     "startedAt": "2026-02-16T00:11:20.630Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-02-16T03:53:26.204Z"
+    "lastActivity": "2026-02-16T05:53:49.072Z"
   },
   "history": [
     {
@@ -1515,6 +1515,42 @@
     {
       "timestamp": "2026-02-16T03:53:26.204Z",
       "feature": "helpers",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T04:43:54.947Z",
+      "feature": "config",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T05:02:57.347Z",
+      "feature": "migrate",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T05:03:03.661Z",
+      "feature": "migrate",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T05:06:31.938Z",
+      "feature": "environments",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T05:46:06.649Z",
+      "feature": "sungsan",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T05:53:49.071Z",
+      "feature": "sungsan",
       "phase": "do",
       "action": "updated"
     }
