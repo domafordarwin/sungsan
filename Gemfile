@@ -11,7 +11,7 @@ gem "tailwindcss-rails"
 gem "thruster", require: false
 gem "pundit"
 gem "bcrypt", "~> 3.1"
-gem "active_storage-postgresql"
+gem "active_storage_db"
 gem "rexml"
 gem "bootsnap", require: false
 

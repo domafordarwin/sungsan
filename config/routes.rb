@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # Active Storage DB engine
+  mount ActiveStorageDB::Engine => "/active_storage_db"
+
   # Authentication
   resource :session, only: %i[new create destroy]
   resource :password, only: %i[edit update]
