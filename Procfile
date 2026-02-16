@@ -1,1 +1,2 @@
-web: bundle exec rails db:prepare && bundle exec rails db:seed && bundle exec puma -C config/puma.rb
+release: SKIP_EAGER_LOAD=1 bundle exec rails db:fix_stale_migrations db:prepare db:seed
+web: bundle exec puma -C config/puma.rb
