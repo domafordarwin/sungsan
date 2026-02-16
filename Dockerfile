@@ -25,7 +25,9 @@ RUN bundle install && \
 
 COPY . .
 
+# Fix WSL permission issues and create missing directories
 RUN chmod +x bin/* && \
+    mkdir -p log storage tmp/pids tmp/cache tmp/sockets && \
     SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 
 FROM base
@@ -33,9 +35,11 @@ FROM base
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
-RUN groupadd --system --gid 1000 rails && \
+# Create directories and set permissions
+RUN mkdir -p /rails/log /rails/storage /rails/tmp/pids /rails/tmp/cache /rails/tmp/sockets && \
+    groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
+    chown -R rails:rails /rails/db /rails/log /rails/storage /rails/tmp
 USER 1000:1000
 
 ENTRYPOINT ["bash", "/rails/bin/docker-entrypoint"]
