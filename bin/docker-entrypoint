@@ -5,9 +5,28 @@ echo "RAILS_ENV: ${RAILS_ENV:-not set}"
 echo "DATABASE_URL set: $([ -n "$DATABASE_URL" ] && echo 'yes' || echo 'NO!')"
 
 if [ "${1}" == "bundle" ]; then
+  # Fix stale schema_migrations: previous entrypoint inserted migration versions
+  # without actually creating the tables. Remove entries for missing tables so
+  # db:migrate will re-run them.
+  echo "=== Checking for stale migration entries ==="
+  psql "$DATABASE_URL" <<'EOSQL' 2>/dev/null
+DELETE FROM schema_migrations WHERE version = '20260216000018'
+  AND NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='news_articles');
+DELETE FROM schema_migrations WHERE version = '20260216000019'
+  AND NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='posts');
+DELETE FROM schema_migrations WHERE version = '20260216000020'
+  AND NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='comments');
+DELETE FROM schema_migrations WHERE version = '20260216000021'
+  AND NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='photo_albums');
+DELETE FROM schema_migrations WHERE version = '20260216000022'
+  AND NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='photos');
+DELETE FROM schema_migrations WHERE version = '20260216000023'
+  AND NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='active_storage_blobs');
+EOSQL
+  echo "=== Stale entries cleaned ==="
+
   # SKIP_EAGER_LOAD=1 prevents Rails from introspecting tables that
   # don't exist yet (chicken-and-egg with eager_load + db:migrate).
-  # db:prepare runs schema:load on fresh DBs, migrate on existing ones.
   echo "=== Running db:prepare ==="
   SKIP_EAGER_LOAD=1 bundle exec rails db:prepare 2>&1 || {
     echo "WARNING: db:prepare failed, trying db:migrate..."
