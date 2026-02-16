@@ -11,13 +11,19 @@ class DashboardController < ApplicationController
       @shortage_roles = calculate_shortage_roles
     end
 
-    # 모든 사용자에게 표시
-    @recent_news = NewsArticle.recent.limit(3)
-    @recent_posts = Post.recent.includes(:author).limit(3)
-    @recent_albums = PhotoAlbum.recent.includes(:author, :photos).limit(3)
+    # 모든 사용자에게 표시 (테이블 미존재 시 빈 배열로 처리)
+    @recent_news = safe_query { NewsArticle.recent.limit(3) }
+    @recent_posts = safe_query { Post.recent.includes(:author).limit(3) }
+    @recent_albums = safe_query { PhotoAlbum.recent.includes(:author, :photos).limit(3) }
   end
 
   private
+
+  def safe_query
+    yield
+  rescue ActiveRecord::StatementInvalid
+    []
+  end
 
   def calculate_shortage_roles
     shortages = []
