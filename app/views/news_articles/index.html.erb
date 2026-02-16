@@ -1,0 +1,84 @@
+<div class="animate-in" style="margin-bottom: 1.5rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1 class="page-title">&#128240; 가톨릭 뉴스</h1>
+      <p style="color: var(--basalt-500); font-size: 0.875rem;">성산포 성단 관련 최신 뉴스를 확인하세요</p>
+    </div>
+    <% if policy(NewsArticle).refresh? %>
+      <%= button_to "새로고침", refresh_news_articles_path, method: :post, class: "btn-ocean" %>
+    <% end %>
+  </div>
+</div>
+
+<!-- 소스 필터 탭 -->
+<div class="animate-in animate-delay-1" style="margin-bottom: 1.5rem;">
+  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+    <%= link_to "전체", news_articles_path,
+        class: "badge #{@source.blank? ? 'badge-ocean' : 'badge-basalt'}",
+        style: "text-decoration: none; padding: 0.375rem 0.75rem; font-size: 0.875rem;" %>
+    <%= link_to "네이버", news_articles_path(source: "naver"),
+        class: "badge #{@source == 'naver' ? 'badge-moss' : 'badge-basalt'}",
+        style: "text-decoration: none; padding: 0.375rem 0.75rem; font-size: 0.875rem;" %>
+    <%= link_to "가톨릭뉴스", news_articles_path(source: "catholic_news"),
+        class: "badge #{@source == 'catholic_news' ? 'badge-ocean' : 'badge-basalt'}",
+        style: "text-decoration: none; padding: 0.375rem 0.75rem; font-size: 0.875rem;" %>
+    <%= link_to "교구", news_articles_path(source: "diocese"),
+        class: "badge #{@source == 'diocese' ? 'badge-sunrise' : 'badge-basalt'}",
+        style: "text-decoration: none; padding: 0.375rem 0.75rem; font-size: 0.875rem;" %>
+  </div>
+</div>
+
+<!-- 뉴스 카드 목록 -->
+<% if @news_articles.any? %>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <% @news_articles.each_with_index do |article, i| %>
+      <div class="card-basalt animate-in animate-delay-<%= (i % 4) + 1 %>" style="padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <span class="badge <%= article.source_badge_class %>"><%= article.source_label %></span>
+          <span style="font-size: 0.75rem; color: var(--basalt-400);">
+            <%= article.published_at&.strftime("%Y.%m.%d") %>
+          </span>
+        </div>
+
+        <h3 style="font-size: 1rem; font-weight: 600; line-height: 1.4; color: var(--basalt-800);">
+          <%= link_to article.title, news_article_path(article), class: "link-ocean", style: "text-decoration: none;" %>
+        </h3>
+
+        <% if article.summary.present? %>
+          <p style="font-size: 0.85rem; color: var(--basalt-500); line-height: 1.5; flex-grow: 1;">
+            <%= truncate(article.summary, length: 120) %>
+          </p>
+        <% end %>
+
+        <div style="padding-top: 0.5rem; border-top: 1px solid var(--basalt-100);">
+          <%= link_to "원문 보기 &rarr;".html_safe, article.source_url, target: "_blank", rel: "noopener",
+              style: "font-size: 0.8rem; color: var(--ocean-600); text-decoration: none;" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 페이지네이션 -->
+  <% page = [params[:page].to_i, 1].max %>
+  <div class="pagination" style="margin-top: 2rem;">
+    <% if page > 1 %>
+      <%= link_to "이전", news_articles_path(request.query_parameters.merge(page: page - 1)),
+          class: "page-btn inactive" %>
+    <% end %>
+    <span class="page-btn active"><%= page %></span>
+    <% if @news_articles.size >= 12 %>
+      <%= link_to "다음", news_articles_path(request.query_parameters.merge(page: page + 1)),
+          class: "page-btn inactive" %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card-basalt animate-in" style="padding: 3rem; text-align: center;">
+    <p style="font-size: 1.25rem; margin-bottom: 0.5rem;">&#128240;</p>
+    <p style="color: var(--basalt-500);">아직 수집된 뉴스가 없습니다.</p>
+    <% if policy(NewsArticle).refresh? %>
+      <p style="margin-top: 0.75rem;">
+        <%= button_to "지금 뉴스 수집하기", refresh_news_articles_path, method: :post, class: "btn-ocean" %>
+      </p>
+    <% end %>
+  </div>
+<% end %>

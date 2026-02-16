@@ -8,6 +8,28 @@ Rails.application.routes.draw do
     member do
       patch :toggle_active
     end
+    collection do
+      get :bulk_new
+      post :bulk_create
+      get :sample_csv
+    end
+  end
+
+  # News
+  resources :news_articles, only: [:index, :show] do
+    collection do
+      post :refresh
+    end
+  end
+
+  # Board
+  resources :posts do
+    resources :comments, only: [:create, :destroy]
+  end
+
+  # Gallery
+  resources :photo_albums do
+    resources :photos, only: [:create, :destroy]
   end
 
   # Events

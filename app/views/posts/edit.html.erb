@@ -1,0 +1,9 @@
+<div class="animate-in" style="margin-bottom: 1rem;">
+  <%= link_to "&larr; 게시글로 돌아가기".html_safe, post_path(@post), class: "link-ocean", style: "font-size: 0.875rem;" %>
+</div>
+
+<h1 class="page-title animate-in">&#9998; 글 수정</h1>
+
+<div class="animate-in animate-delay-1">
+  <%= render "form", post: @post %>
+</div>

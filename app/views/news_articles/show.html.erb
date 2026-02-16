@@ -1,0 +1,31 @@
+<div class="animate-in" style="margin-bottom: 1rem;">
+  <%= link_to "&larr; 뉴스 목록".html_safe, news_articles_path, class: "link-ocean", style: "font-size: 0.875rem;" %>
+</div>
+
+<div class="card-basalt animate-in animate-delay-1" style="padding: 2rem;">
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+    <span class="badge <%= @news_article.source_badge_class %>"><%= @news_article.source_label %></span>
+    <span style="font-size: 0.85rem; color: var(--basalt-400);">
+      <%= @news_article.published_at&.strftime("%Y년 %m월 %d일 %H:%M") %>
+    </span>
+  </div>
+
+  <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--basalt-800); margin-bottom: 1.25rem; line-height: 1.4;">
+    <%= @news_article.title %>
+  </h1>
+
+  <% if @news_article.summary.present? %>
+    <div style="padding: 1rem; background: var(--basalt-50); border-radius: 0.5rem; margin-bottom: 1.5rem;">
+      <p style="font-size: 0.95rem; color: var(--basalt-600); line-height: 1.6;">
+        <%= @news_article.summary %>
+      </p>
+    </div>
+  <% end %>
+
+  <div style="padding-top: 1rem; border-top: 1px solid var(--basalt-100); display: flex; justify-content: space-between; align-items: center;">
+    <%= link_to "원문 보기 &rarr;".html_safe, @news_article.source_url, target: "_blank", rel: "noopener", class: "btn-ocean" %>
+    <span style="font-size: 0.8rem; color: var(--basalt-400);">
+      출처: <%= @news_article.source_label %>
+    </span>
+  </div>
+</div>

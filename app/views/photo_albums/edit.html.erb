@@ -1,0 +1,9 @@
+<div class="animate-in" style="margin-bottom: 1rem;">
+  <%= link_to "&larr; 앨범으로 돌아가기".html_safe, photo_album_path(@album), class: "link-ocean", style: "font-size: 0.875rem;" %>
+</div>
+
+<h1 class="page-title animate-in">&#128247; 앨범 수정</h1>
+
+<div class="animate-in animate-delay-1">
+  <%= render "form", album: @album %>
+</div>

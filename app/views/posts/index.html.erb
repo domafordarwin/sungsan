@@ -1,0 +1,61 @@
+<div class="animate-in" style="margin-bottom: 1.5rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1 class="page-title">&#128172; 게시판</h1>
+      <p style="color: var(--basalt-500); font-size: 0.875rem;">소소한 일상을 나누는 공간입니다</p>
+    </div>
+    <% if policy(Post).create? %>
+      <%= link_to "새 글 작성", new_post_path, class: "btn-ocean" %>
+    <% end %>
+  </div>
+</div>
+
+<% if @posts.any? %>
+  <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+    <% @posts.each_with_index do |post, i| %>
+      <div class="card-basalt animate-in animate-delay-<%= (i % 4) + 1 %>" style="padding: 1rem 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+          <div style="flex: 1; min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+              <% if post.pinned? %>
+                <span class="badge badge-sunrise">&#128204; 고정</span>
+              <% end %>
+              <h3 style="font-size: 1rem; font-weight: 600; margin: 0;">
+                <%= link_to post.title, post_path(post), class: "link-ocean", style: "text-decoration: none;" %>
+              </h3>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.8rem; color: var(--basalt-400);">
+              <span><%= post.author.name %></span>
+              <span><%= post.created_at.strftime("%Y.%m.%d %H:%M") %></span>
+              <span>&#128172; <%= post.comments_count || 0 %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 페이지네이션 -->
+  <% page = [params[:page].to_i, 1].max %>
+  <div class="pagination" style="margin-top: 2rem;">
+    <% if page > 1 %>
+      <%= link_to "이전", posts_path(request.query_parameters.merge(page: page - 1)),
+          class: "page-btn inactive" %>
+    <% end %>
+    <span class="page-btn active"><%= page %></span>
+    <% if @posts.size >= 15 %>
+      <%= link_to "다음", posts_path(request.query_parameters.merge(page: page + 1)),
+          class: "page-btn inactive" %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card-basalt animate-in" style="padding: 3rem; text-align: center;">
+    <p style="font-size: 1.25rem; margin-bottom: 0.5rem;">&#128172;</p>
+    <p style="color: var(--basalt-500);">아직 게시글이 없습니다.</p>
+    <% if policy(Post).create? %>
+      <p style="margin-top: 0.75rem;">
+        <%= link_to "첫 글을 작성해보세요!", new_post_path, class: "btn-ocean" %>
+      </p>
+    <% end %>
+  </div>
+<% end %>

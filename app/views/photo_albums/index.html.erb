@@ -1,0 +1,76 @@
+<div class="animate-in" style="margin-bottom: 1.5rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1 class="page-title">&#128247; 활동 갤러리</h1>
+      <p style="color: var(--basalt-500); font-size: 0.875rem;">성단 활동 사진을 모아보는 공간입니다</p>
+    </div>
+    <% if policy(PhotoAlbum).create? %>
+      <%= link_to "새 앨범 만들기", new_photo_album_path, class: "btn-ocean" %>
+    <% end %>
+  </div>
+</div>
+
+<% if @albums.any? %>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <% @albums.each_with_index do |album, i| %>
+      <div class="card-basalt animate-in animate-delay-<%= (i % 4) + 1 %>" style="overflow: hidden;">
+        <!-- 커버 이미지 -->
+        <div style="height: 180px; background: var(--basalt-100); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+          <% if album.cover_photo&.image&.attached? %>
+            <%= image_tag album.cover_photo.image.variant(resize_to_fill: [400, 180]),
+                style: "width: 100%; height: 100%; object-fit: cover;" %>
+          <% else %>
+            <span style="font-size: 3rem; color: var(--basalt-300);">&#128247;</span>
+          <% end %>
+        </div>
+
+        <div style="padding: 1rem;">
+          <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem;">
+            <%= link_to album.title, photo_album_path(album), class: "link-ocean", style: "text-decoration: none;" %>
+          </h3>
+
+          <% if album.description.present? %>
+            <p style="font-size: 0.85rem; color: var(--basalt-500); margin-bottom: 0.5rem;">
+              <%= truncate(album.description, length: 60) %>
+            </p>
+          <% end %>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--basalt-400);">
+            <span>
+              &#128247; <%= album.photos.count %>장
+              &middot;
+              <%= album.author.name %>
+            </span>
+            <span>
+              <%= album.event_date&.strftime("%Y.%m.%d") || album.created_at.strftime("%Y.%m.%d") %>
+            </span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 페이지네이션 -->
+  <% page = [params[:page].to_i, 1].max %>
+  <div class="pagination" style="margin-top: 2rem;">
+    <% if page > 1 %>
+      <%= link_to "이전", photo_albums_path(request.query_parameters.merge(page: page - 1)),
+          class: "page-btn inactive" %>
+    <% end %>
+    <span class="page-btn active"><%= page %></span>
+    <% if @albums.size >= 12 %>
+      <%= link_to "다음", photo_albums_path(request.query_parameters.merge(page: page + 1)),
+          class: "page-btn inactive" %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card-basalt animate-in" style="padding: 3rem; text-align: center;">
+    <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">&#128247;</p>
+    <p style="color: var(--basalt-500);">아직 등록된 앨범이 없습니다.</p>
+    <% if policy(PhotoAlbum).create? %>
+      <p style="margin-top: 0.75rem;">
+        <%= link_to "첫 앨범을 만들어보세요!", new_photo_album_path, class: "btn-ocean" %>
+      </p>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,111 @@
+<div class="animate-in" style="margin-bottom: 1rem;">
+  <%= link_to "&larr; 봉사자 목록".html_safe, members_path, class: "link-ocean", style: "font-size: 0.875rem;" %>
+</div>
+
+<h1 class="page-title animate-in">&#128229; 봉사자 일괄 등록</h1>
+
+<div class="card-basalt animate-in animate-delay-1" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+  <h3 class="section-title">CSV 파일 업로드</h3>
+
+  <% if @results && @results[:errors].any? %>
+    <div class="alert-lava" style="padding: 1rem; border-radius: 0.375rem; margin-bottom: 1rem;">
+      <p style="font-weight: 600; margin-bottom: 0.5rem;">
+        처리 결과: 성공 <%= @results[:success] %>건, 실패 <%= @results[:failed] %>건
+      </p>
+      <% @results[:errors].each do |error| %>
+        <p style="margin: 0.25rem 0; font-size: 0.85rem;">&bull; <%= error %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= form_with(url: bulk_create_members_path, method: :post, multipart: true,
+      style: "display: flex; flex-direction: column; gap: 1rem;") do |f| %>
+    <div>
+      <label style="display: block; font-weight: 600; margin-bottom: 0.375rem; color: var(--basalt-700);">
+        CSV 파일 선택
+      </label>
+      <%= f.file_field :file, accept: ".csv", class: "input-basalt", style: "width: 100%;" %>
+      <p style="font-size: 0.8rem; color: var(--basalt-400); margin-top: 0.375rem;">
+        .csv 형식 파일만 업로드 가능합니다. UTF-8 인코딩을 사용해주세요.
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+      <%= f.submit "일괄 등록", class: "btn-ocean" %>
+      <%= link_to "양식 다운로드", sample_csv_members_path, class: "btn-basalt" %>
+    </div>
+  <% end %>
+</div>
+
+<!-- 안내 -->
+<div class="card-basalt animate-in animate-delay-2" style="padding: 1.5rem;">
+  <h3 class="section-title">&#128221; CSV 파일 형식 안내</h3>
+
+  <div style="overflow-x: auto;">
+    <table class="table-stone" style="width: 100%; font-size: 0.85rem;">
+      <thead>
+        <tr>
+          <th>컬럼명</th>
+          <th>필수</th>
+          <th>설명</th>
+          <th>예시</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>이름</strong></td>
+          <td><span class="badge badge-lava">필수</span></td>
+          <td>봉사자 이름</td>
+          <td>홍길동</td>
+        </tr>
+        <tr>
+          <td>세례명</td>
+          <td><span class="badge badge-basalt">선택</span></td>
+          <td>세례명 (영문 또는 한글)</td>
+          <td>베드로</td>
+        </tr>
+        <tr>
+          <td>연락처</td>
+          <td><span class="badge badge-basalt">선택</span></td>
+          <td>전화번호</td>
+          <td>010-1234-5678</td>
+        </tr>
+        <tr>
+          <td>이메일</td>
+          <td><span class="badge badge-basalt">선택</span></td>
+          <td>이메일 주소</td>
+          <td>hong@example.com</td>
+        </tr>
+        <tr>
+          <td>구역</td>
+          <td><span class="badge badge-basalt">선택</span></td>
+          <td>소속 구역</td>
+          <td>1구역</td>
+        </tr>
+        <tr>
+          <td>성별</td>
+          <td><span class="badge badge-basalt">선택</span></td>
+          <td>남/여</td>
+          <td>남</td>
+        </tr>
+        <tr>
+          <td>세례여부</td>
+          <td><span class="badge badge-basalt">선택</span></td>
+          <td>예/아니오</td>
+          <td>예</td>
+        </tr>
+        <tr>
+          <td>견진여부</td>
+          <td><span class="badge badge-basalt">선택</span></td>
+          <td>예/아니오</td>
+          <td>예</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--basalt-500);">
+    &#128161; <strong>팁:</strong> "양식 다운로드" 버튼을 클릭하면 예시가 포함된 CSV 파일을 받을 수 있습니다.
+    엑셀에서 "다른 이름으로 저장" &rarr; "CSV UTF-8" 형식으로 저장하면 됩니다.
+  </p>
+</div>

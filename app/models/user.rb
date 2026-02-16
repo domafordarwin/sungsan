@@ -5,6 +5,9 @@ class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
   has_one :member, dependent: :nullify
+  has_many :posts, foreign_key: :author_id, dependent: :destroy
+  has_many :comments, foreign_key: :author_id, dependent: :destroy
+  has_many :photo_albums, foreign_key: :author_id, dependent: :destroy
 
   validates :email_address, presence: true, uniqueness: true,
     format: { with: URI::MailTo::EMAIL_REGEXP }

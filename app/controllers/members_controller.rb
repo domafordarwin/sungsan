@@ -64,6 +64,34 @@ class MembersController < ApplicationController
     redirect_to member_path(@member), notice: "봉사자가 #{status}되었습니다."
   end
 
+  def bulk_new
+    authorize Member, :bulk_create?
+  end
+
+  def bulk_create
+    authorize Member, :bulk_create?
+
+    unless params[:file].present?
+      redirect_to bulk_new_members_path, alert: "CSV 파일을 선택해주세요."
+      return
+    end
+
+    service = MemberBulkImportService.new(params[:file], Current.user.parish)
+    @results = service.import!
+
+    if @results[:errors].empty? && @results[:success] > 0
+      redirect_to members_path, notice: "#{@results[:success]}명의 봉사자가 등록되었습니다."
+    else
+      render :bulk_new, status: :unprocessable_entity
+    end
+  end
+
+  def sample_csv
+    authorize Member, :bulk_create?
+    csv_data = MemberBulkImportService.sample_csv
+    send_data csv_data, filename: "봉사자_일괄등록_양식.csv", type: "text/csv; charset=utf-8"
+  end
+
   private
 
   def set_member

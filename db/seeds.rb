@@ -128,6 +128,84 @@ if Event.count == 0
   end
 end
 
+# 11. 샘플 뉴스 기사
+news_data = [
+  {
+    title: "제주교구 사순시기 특별 미사 안내",
+    summary: "제주교구에서 사순시기를 맞아 특별 미사를 봉헌합니다. 교구 내 모든 성당에서 참여 가능합니다.",
+    source_name: "diocese",
+    source_url: "https://www.jejucatholic.org/news/1",
+    published_at: 2.days.ago
+  },
+  {
+    title: "가톨릭 청년 봉사단 모집",
+    summary: "가톨릭 청년 봉사단에서 새로운 단원을 모집합니다. 관심 있는 청년들의 많은 참여 바랍니다.",
+    source_name: "catholic_news",
+    source_url: "https://www.catholicnews.co.kr/news/1",
+    published_at: 3.days.ago
+  },
+  {
+    title: "성산포 성당 부활절 행사 준비",
+    summary: "성산포 성당에서 부활절 행사를 준비하고 있습니다. 봉사자 여러분의 적극적인 참여를 부탁드립니다.",
+    source_name: "naver",
+    source_url: "https://news.naver.com/article/1",
+    published_at: 1.day.ago
+  },
+]
+news_data.each do |attrs|
+  ext_id = Digest::MD5.hexdigest(attrs[:source_url])
+  NewsArticle.find_or_create_by!(external_id: ext_id) do |n|
+    n.parish = parish
+    n.title = attrs[:title]
+    n.summary = attrs[:summary]
+    n.source_name = attrs[:source_name]
+    n.source_url = attrs[:source_url]
+    n.published_at = attrs[:published_at]
+    n.sample_data = true
+  end
+end
+
+# 12. 샘플 게시글 + 댓글
+posts_data = [
+  {
+    title: "이번 주일 미사 후 다과 나눔 안내",
+    body: "이번 주일 3차 미사 후에 성당 마당에서 다과를 나눌 예정입니다.\n\n준비물은 따로 없으니 편하게 오세요!\n봉사자 가족 여러분 모두 환영합니다.",
+    pinned: true
+  },
+  {
+    title: "복사 교육 후기",
+    body: "지난 토요일 복사 교육에 참석했습니다.\n새로운 전례 순서를 배웠는데 정말 유익했어요.\n다음에도 꼭 참석하려고 합니다!",
+    pinned: false
+  },
+  {
+    title: "성당 꽃꽂이 봉사 함께하실 분",
+    body: "매주 토요일 오후 2시에 성당 꽃꽂이 봉사를 하고 있습니다.\n관심 있으신 분은 댓글 남겨주세요!",
+    pinned: false
+  },
+]
+posts_data.each_with_index do |attrs, i|
+  post = Post.find_or_create_by!(parish: parish, title: attrs[:title]) do |p|
+    p.author = admin
+    p.body = attrs[:body]
+    p.pinned = attrs[:pinned]
+    p.sample_data = true
+  end
+
+  # 샘플 댓글 (첫 번째, 두 번째 게시글에만)
+  if i < 2 && post.comments.count == 0
+    Comment.create!(
+      post: post,
+      author: operator,
+      body: "좋은 소식 감사합니다! 참석하겠습니다."
+    )
+    Comment.create!(
+      post: post,
+      author: member_user,
+      body: "저도 참여하고 싶습니다!"
+    )
+  end
+end
+
 puts "Seeding completed!"
 puts "  Admin: admin@sungsan.org / password123"
 puts "  Operator: operator@sungsan.org / password123"

@@ -1,0 +1,35 @@
+<%= form_with(model: post, class: "card-basalt", style: "padding: 1.5rem;") do |f| %>
+  <% if post.errors.any? %>
+    <div class="alert-lava" style="padding: 0.75rem; border-radius: 0.375rem; margin-bottom: 1rem;">
+      <p style="font-weight: 600; margin-bottom: 0.25rem;">입력 오류가 있습니다:</p>
+      <% post.errors.full_messages.each do |msg| %>
+        <p style="margin: 0; font-size: 0.85rem;">&bull; <%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div style="display: flex; flex-direction: column; gap: 1rem;">
+    <div>
+      <%= f.label :title, "제목", style: "display: block; font-weight: 600; margin-bottom: 0.375rem; color: var(--basalt-700);" %>
+      <%= f.text_field :title, class: "input-basalt", placeholder: "제목을 입력하세요", style: "width: 100%;" %>
+    </div>
+
+    <div>
+      <%= f.label :body, "내용", style: "display: block; font-weight: 600; margin-bottom: 0.375rem; color: var(--basalt-700);" %>
+      <%= f.text_area :body, class: "input-basalt", rows: 10, placeholder: "내용을 입력하세요",
+          style: "width: 100%; resize: vertical;" %>
+    </div>
+
+    <% if Current.user.admin? %>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <%= f.check_box :pinned, class: "input-basalt" %>
+        <%= f.label :pinned, "게시판 상단에 고정", style: "font-size: 0.875rem; color: var(--basalt-600);" %>
+      </div>
+    <% end %>
+
+    <div style="display: flex; justify-content: flex-end; gap: 0.75rem; padding-top: 0.5rem;">
+      <%= link_to "취소", posts_path, class: "btn-basalt" %>
+      <%= f.submit(post.persisted? ? "수정" : "작성", class: "btn-ocean") %>
+    </div>
+  </div>
+<% end %>

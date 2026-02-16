@@ -10,6 +10,11 @@ class DashboardController < ApplicationController
       # 인력 부족 경고
       @shortage_roles = calculate_shortage_roles
     end
+
+    # 모든 사용자에게 표시
+    @recent_news = NewsArticle.recent.limit(3)
+    @recent_posts = Post.recent.includes(:author).limit(3)
+    @recent_albums = PhotoAlbum.recent.includes(:author, :photos).limit(3)
   end
 
   private

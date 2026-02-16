@@ -1,0 +1,9 @@
+<div class="animate-in" style="margin-bottom: 1rem;">
+  <%= link_to "&larr; 갤러리".html_safe, photo_albums_path, class: "link-ocean", style: "font-size: 0.875rem;" %>
+</div>
+
+<h1 class="page-title animate-in">&#128247; 새 앨범 만들기</h1>
+
+<div class="animate-in animate-delay-1">
+  <%= render "form", album: @album %>
+</div>

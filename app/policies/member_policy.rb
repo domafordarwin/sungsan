@@ -19,6 +19,10 @@ class MemberPolicy < ApplicationPolicy
     admin?
   end
 
+  def bulk_create?
+    admin?
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
       if user.admin? || user.operator?

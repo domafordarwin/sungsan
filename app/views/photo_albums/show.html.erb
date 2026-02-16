@@ -1,0 +1,97 @@
+<div class="animate-in" style="margin-bottom: 1rem;">
+  <%= link_to "&larr; 갤러리".html_safe, photo_albums_path, class: "link-ocean", style: "font-size: 0.875rem;" %>
+</div>
+
+<!-- 앨범 정보 -->
+<div class="card-basalt animate-in animate-delay-1" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+    <div>
+      <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--basalt-800); margin-bottom: 0.25rem;">
+        &#128247; <%= @album.title %>
+      </h1>
+      <div style="font-size: 0.85rem; color: var(--basalt-400);">
+        <span><%= @album.author.name %></span>
+        &middot;
+        <span><%= @album.event_date&.strftime("%Y년 %m월 %d일") || @album.created_at.strftime("%Y년 %m월 %d일") %></span>
+        &middot;
+        <span>&#128247; <%= @photos.count %>장</span>
+      </div>
+      <% if @album.description.present? %>
+        <p style="margin-top: 0.5rem; color: var(--basalt-600); font-size: 0.9rem;">
+          <%= @album.description %>
+        </p>
+      <% end %>
+    </div>
+
+    <% if policy(@album).update? || policy(@album).destroy? %>
+      <div style="display: flex; gap: 0.5rem;">
+        <% if policy(@album).update? %>
+          <%= link_to "수정", edit_photo_album_path(@album), class: "btn-basalt", style: "font-size: 0.85rem;" %>
+        <% end %>
+        <% if policy(@album).destroy? %>
+          <%= button_to "삭제", photo_album_path(@album), method: :delete,
+              class: "btn-lava", style: "font-size: 0.85rem;",
+              form: { data: { turbo_confirm: "이 앨범과 모든 사진을 삭제하시겠습니까?" } } %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- 사진 업로드 -->
+<% if policy(@album).update? %>
+  <div class="card-basalt animate-in animate-delay-2" style="padding: 1.25rem; margin-bottom: 1.5rem;">
+    <h3 class="section-title" style="margin-bottom: 0.75rem;">사진 추가</h3>
+    <%= form_with(url: photo_album_photos_path(@album), method: :post, multipart: true,
+        style: "display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;") do |f| %>
+      <%= f.file_field :photos, multiple: true, accept: "image/*", name: "photos[]",
+          class: "input-basalt", style: "flex: 1; min-width: 200px;" %>
+      <%= f.submit "업로드", class: "btn-ocean" %>
+    <% end %>
+    <p style="font-size: 0.75rem; color: var(--basalt-400); margin-top: 0.375rem;">
+      여러 장을 한 번에 선택할 수 있습니다. (JPG, PNG, GIF 지원)
+    </p>
+  </div>
+<% end %>
+
+<!-- 사진 그리드 -->
+<% if @photos.any? %>
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+    <% @photos.each_with_index do |photo, i| %>
+      <div class="card-basalt animate-in animate-delay-<%= (i % 4) + 1 %>" style="overflow: hidden; position: relative;">
+        <% if photo.image.attached? %>
+          <a href="<%= rails_blob_path(photo.image, disposition: "inline") %>" target="_blank" rel="noopener"
+             style="display: block; height: 200px; overflow: hidden;">
+            <%= image_tag photo.image.variant(resize_to_fill: [300, 200]),
+                style: "width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s;",
+                onmouseover: "this.style.transform='scale(1.05)'",
+                onmouseout: "this.style.transform='scale(1)'" %>
+          </a>
+        <% end %>
+
+        <% if photo.caption.present? || policy(@album).update? %>
+          <div style="padding: 0.5rem 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; color: var(--basalt-500);">
+              <%= photo.caption.present? ? photo.caption : "" %>
+            </span>
+            <% if policy(@album).update? %>
+              <%= button_to photo_album_photo_path(@album, photo), method: :delete,
+                  style: "background: none; border: none; cursor: pointer; color: var(--lava-500); font-size: 0.75rem; padding: 0;",
+                  form: { data: { turbo_confirm: "이 사진을 삭제하시겠습니까?" } } do %>
+                &#10005;
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card-basalt animate-in" style="padding: 3rem; text-align: center;">
+    <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">&#128247;</p>
+    <p style="color: var(--basalt-500);">아직 이 앨범에 사진이 없습니다.</p>
+    <% if policy(@album).update? %>
+      <p style="font-size: 0.85rem; color: var(--basalt-400); margin-top: 0.5rem;">위의 업로드 폼에서 사진을 추가해주세요.</p>
+    <% end %>
+  </div>
+<% end %>
