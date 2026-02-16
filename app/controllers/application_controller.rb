@@ -6,8 +6,9 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized, except: :index, unless: :skip_authorization?
   after_action :verify_policy_scoped, only: :index, unless: :skip_authorization?
 
-  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from StandardError, with: :handle_server_error
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   private
 
@@ -30,6 +31,10 @@ class ApplicationController < ActionController::Base
 
   def skip_authorization?
     is_a?(SessionsController) || is_a?(DashboardController) || is_a?(StatisticsController)
+  end
+
+  def record_not_found
+    redirect_back fallback_location: root_path, alert: "요청하신 항목을 찾을 수 없습니다."
   end
 
   def handle_server_error(exception)
