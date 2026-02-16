@@ -1,0 +1,99 @@
+<div class="survey-landing animate-in">
+  <!-- Hero -->
+  <div class="survey-hero">
+    <% if @survey.banner_image_url.present? %>
+      <img src="<%= @survey.banner_image_url %>" alt="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+    <% end %>
+    <div class="survey-hero-overlay"></div>
+    <div class="survey-hero-content">
+      <h1><%= @survey.title %></h1>
+      <% if @survey.event.present? %>
+        <p style="margin-bottom: 0.25rem;">
+          &#128197; <%= @survey.event.date.strftime("%Y년 %m월 %d일") %>
+          <%= @survey.event.start_time.strftime("%H:%M") %>
+          <% if @survey.event.location.present? %>
+            &middot; &#128205; <%= @survey.event.location %>
+          <% end %>
+        </p>
+      <% end %>
+      <% if @survey.description.present? %>
+        <p><%= @survey.description %></p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Survey Form -->
+  <%= form_with(url: landing_submit_path(@survey.slug), model: SurveyResponse.new, local: true) do |f| %>
+    <div class="card-basalt" style="padding: 1.5rem; margin-bottom: 1rem;">
+      <h3 class="section-title">응답자 정보</h3>
+      <div style="display: grid; gap: 0.75rem;">
+        <div>
+          <%= f.label :respondent_name, "이름 *", class: "label-basalt" %>
+          <%= f.text_field :respondent_name, class: "input-basalt", required: true, placeholder: "이름을 입력하세요" %>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <%= f.label :respondent_phone, "연락처", class: "label-basalt" %>
+            <%= f.text_field :respondent_phone, class: "input-basalt", placeholder: "010-0000-0000" %>
+          </div>
+          <div>
+            <%= f.label :respondent_email, "이메일", class: "label-basalt" %>
+            <%= f.email_field :respondent_email, class: "input-basalt", placeholder: "email@example.com" %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <% @survey.survey_questions.each do |q| %>
+      <div class="survey-question-card <%= 'required' if q.required? %>">
+        <span class="survey-q-label"><%= q.question_text %></span>
+
+        <% case q.question_type %>
+        <% when "text" %>
+          <input type="text" name="survey_response[answers][<%= q.id %>]"
+                 class="input-basalt" placeholder="답변을 입력하세요"
+                 <%= "required" if q.required? %>>
+
+        <% when "number" %>
+          <input type="number" name="survey_response[answers][<%= q.id %>]"
+                 class="input-basalt" placeholder="숫자를 입력하세요"
+                 <%= "required" if q.required? %>>
+
+        <% when "radio" %>
+          <div class="survey-radio-group">
+            <% q.options_list.each do |opt| %>
+              <label>
+                <input type="radio" name="survey_response[answers][<%= q.id %>]"
+                       value="<%= opt %>" <%= "required" if q.required? %>>
+                <%= opt %>
+              </label>
+            <% end %>
+          </div>
+
+        <% when "checkbox" %>
+          <div class="survey-checkbox-group">
+            <% q.options_list.each do |opt| %>
+              <label>
+                <input type="checkbox" name="survey_response[answers][<%= q.id %>][]"
+                       value="<%= opt %>">
+                <%= opt %>
+              </label>
+            <% end %>
+          </div>
+
+        <% when "select" %>
+          <select name="survey_response[answers][<%= q.id %>]" class="input-basalt" <%= "required" if q.required? %>>
+            <option value="">선택하세요</option>
+            <% q.options_list.each do |opt| %>
+              <option value="<%= opt %>"><%= opt %></option>
+            <% end %>
+          </select>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div style="margin-top: 1.5rem;">
+      <%= f.submit "응답 제출", class: "btn-ocean", style: "width: 100%; justify-content: center; padding: 0.75rem;" %>
+    </div>
+  <% end %>
+</div>

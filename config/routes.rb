@@ -51,6 +51,18 @@ Rails.application.routes.draw do
     resource :attendance, controller: "attendance_records", only: [:edit, :update]
   end
 
+  # Surveys (관리자)
+  resources :surveys do
+    member do
+      get :results
+    end
+  end
+
+  # Landing Page (공개 - 인증 불필요)
+  get "l/:slug", to: "landing#show", as: :landing
+  post "l/:slug", to: "landing#submit", as: :landing_submit
+  get "l/:slug/complete", to: "landing#complete", as: :landing_complete
+
   # Notifications
   resources :notifications, only: [:index, :show, :new, :create]
 

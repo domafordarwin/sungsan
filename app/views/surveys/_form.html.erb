@@ -1,0 +1,106 @@
+<%= form_with(model: survey, class: "animate-in") do |f| %>
+  <% if survey.errors.any? %>
+    <div class="flash-alert" style="margin-bottom: 1rem;">
+      <strong><%= survey.errors.count %>개의 오류가 있습니다:</strong>
+      <ul style="margin-top: 0.5rem; font-size: 0.85rem;">
+        <% survey.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="card-basalt" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+    <h3 class="section-title">기본 정보</h3>
+    <div style="display: grid; gap: 1rem;">
+      <div>
+        <%= f.label :title, "제목", class: "label-basalt" %>
+        <%= f.text_field :title, class: "input-basalt", placeholder: "설문 제목을 입력하세요" %>
+      </div>
+      <div>
+        <%= f.label :description, "설명", class: "label-basalt" %>
+        <%= f.text_area :description, class: "input-basalt", rows: 3, placeholder: "행사 소개 및 설문 안내 (선택)" %>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+          <%= f.label :status, "상태", class: "label-basalt" %>
+          <%= f.select :status, [["초안", "draft"], ["활성", "active"], ["종료", "closed"]], {}, class: "input-basalt" %>
+        </div>
+        <div>
+          <%= f.label :event_id, "연결 행사 (선택)", class: "label-basalt" %>
+          <%= f.select :event_id, Event.upcoming.map { |e| [e.display_name, e.id] }, { include_blank: "- 행사 없음 -" }, class: "input-basalt" %>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+          <%= f.label :starts_at, "시작일시", class: "label-basalt" %>
+          <%= f.datetime_local_field :starts_at, class: "input-basalt" %>
+        </div>
+        <div>
+          <%= f.label :ends_at, "종료일시", class: "label-basalt" %>
+          <%= f.datetime_local_field :ends_at, class: "input-basalt" %>
+        </div>
+      </div>
+      <div>
+        <%= f.label :banner_image_url, "배너 이미지 URL (선택)", class: "label-basalt" %>
+        <%= f.text_field :banner_image_url, class: "input-basalt", placeholder: "https://example.com/image.jpg" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-basalt" style="padding: 1.5rem; margin-bottom: 1.5rem;" data-controller="survey-form">
+    <h3 class="section-title">질문</h3>
+    <div id="questions-container" data-survey-form-target="container">
+      <%= f.fields_for :survey_questions do |qf| %>
+        <%= render "surveys/question_fields", f: qf %>
+      <% end %>
+    </div>
+
+    <template id="question-template">
+      <div class="survey-question-card" style="margin-bottom: 1rem;">
+        <div style="display: grid; gap: 0.75rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="label-basalt" style="margin: 0;">새 질문</span>
+            <button type="button" class="btn-ghost" style="font-size: 0.75rem; padding: 0.2rem 0.5rem; color: var(--lava-500);" onclick="this.closest('.survey-question-card').remove()">삭제</button>
+          </div>
+          <div>
+            <input type="text" name="survey[survey_questions_attributes][NEW_IDX][question_text]" class="input-basalt" placeholder="질문을 입력하세요" required>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.75rem; align-items: end;">
+            <div>
+              <label class="label-basalt">유형</label>
+              <select name="survey[survey_questions_attributes][NEW_IDX][question_type]" class="input-basalt">
+                <option value="text">텍스트</option>
+                <option value="radio">단일 선택</option>
+                <option value="checkbox">복수 선택</option>
+                <option value="select">드롭다운</option>
+                <option value="number">숫자</option>
+              </select>
+            </div>
+            <div>
+              <label class="label-basalt">순서</label>
+              <input type="number" name="survey[survey_questions_attributes][NEW_IDX][position]" class="input-basalt" value="0" min="0">
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; padding-bottom: 0.25rem;">
+              <input type="checkbox" name="survey[survey_questions_attributes][NEW_IDX][required]" value="1" id="q_NEW_IDX_req">
+              <label for="q_NEW_IDX_req" style="font-size: 0.8rem; color: var(--basalt-600);">필수</label>
+            </div>
+          </div>
+          <div>
+            <label class="label-basalt">선택지 (쉼표 구분, 단일/복수 선택 시)</label>
+            <input type="text" class="input-basalt options-input" placeholder="옵션1, 옵션2, 옵션3" data-field-name="survey[survey_questions_attributes][NEW_IDX][options][]">
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <button type="button" class="btn-ghost" style="width: 100%; margin-top: 0.75rem;" data-action="click->survey-form#addQuestion">
+      + 질문 추가
+    </button>
+  </div>
+
+  <div style="display: flex; gap: 0.75rem;">
+    <%= f.submit survey.persisted? ? "설문 수정" : "설문 생성", class: "btn-ocean" %>
+    <%= link_to "취소", surveys_path, class: "btn-ghost" %>
+  </div>
+<% end %>

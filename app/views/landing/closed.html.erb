@@ -1,0 +1,14 @@
+<div class="survey-landing animate-in" style="text-align: center; padding-top: 4rem;">
+  <div class="card-basalt" style="padding: 3rem;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">&#128683;</div>
+    <h2 style="font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 0.75rem;">설문이 종료되었습니다</h2>
+    <p style="color: var(--basalt-500); font-size: 0.875rem;">
+      <strong><%= @survey.title %></strong> 설문은 현재 응답을 받지 않고 있습니다.
+    </p>
+    <% if @survey.ends_at.present? %>
+      <p style="color: var(--basalt-400); font-size: 0.8rem; margin-top: 0.5rem;">
+        종료일: <%= @survey.ends_at.strftime("%Y년 %m월 %d일") %>
+      </p>
+    <% end %>
+  </div>
+</div>

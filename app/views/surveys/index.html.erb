@@ -1,0 +1,51 @@
+<div class="page-header">
+  <h1>&#128203; 설문 관리</h1>
+  <%= link_to "새 설문 만들기", new_survey_path, class: "btn-ocean" %>
+</div>
+
+<% if @surveys.any? %>
+  <table class="table-stone">
+    <thead>
+      <tr>
+        <th>제목</th>
+        <th>상태</th>
+        <th>응답 수</th>
+        <th>연결 행사</th>
+        <th>공개 링크</th>
+        <th>생성일</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @surveys.each do |survey| %>
+        <tr>
+          <td><%= link_to survey.title, survey_path(survey), class: "link-ocean" %></td>
+          <td>
+            <span class="survey-status-badge <%= survey.status %>"><%= survey.status %></span>
+          </td>
+          <td><%= survey.response_count %></td>
+          <td><%= survey.event&.display_name || "-" %></td>
+          <td>
+            <% if survey.status == "active" %>
+              <code style="font-size: 0.75rem; background: var(--basalt-100); padding: 0.125rem 0.375rem; border-radius: 0.25rem;">/l/<%= survey.slug %></code>
+            <% else %>
+              <span style="color: var(--basalt-400); font-size: 0.8rem;">-</span>
+            <% end %>
+          </td>
+          <td style="font-size: 0.8rem; color: var(--basalt-500);"><%= survey.created_at.strftime("%Y-%m-%d") %></td>
+          <td>
+            <div style="display: flex; gap: 0.5rem;">
+              <%= link_to "결과", results_survey_path(survey), class: "btn-ghost", style: "font-size: 0.75rem; padding: 0.25rem 0.625rem;" %>
+              <%= link_to "수정", edit_survey_path(survey), class: "btn-ghost", style: "font-size: 0.75rem; padding: 0.25rem 0.625rem;" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="card-basalt" style="padding: 3rem; text-align: center;">
+    <p style="color: var(--basalt-400); margin-bottom: 1rem;">아직 생성된 설문이 없습니다.</p>
+    <%= link_to "첫 설문 만들기", new_survey_path, class: "btn-ocean" %>
+  </div>
+<% end %>

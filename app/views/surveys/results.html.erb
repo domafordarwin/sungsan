@@ -1,0 +1,77 @@
+<div class="page-header">
+  <h1>&#128202; 설문 결과: <%= @survey.title %></h1>
+  <div style="display: flex; gap: 0.5rem;">
+    <span class="badge badge-ocean"><%= @responses.count %>명 응답</span>
+    <%= link_to "설문으로", survey_path(@survey), class: "btn-ghost" %>
+  </div>
+</div>
+
+<% if @responses.any? %>
+  <!-- 질문별 요약 -->
+  <div class="card-basalt animate-in" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+    <h3 class="section-title">질문별 요약</h3>
+    <% @survey.survey_questions.each do |q| %>
+      <div style="padding: 1rem 0; border-bottom: 1px solid var(--basalt-100);">
+        <div style="font-weight: 600; font-size: 0.875rem; color: var(--basalt-800); margin-bottom: 0.5rem;">
+          Q<%= q.position + 1 %>. <%= q.question_text %>
+        </div>
+        <% if %w[radio select checkbox].include?(q.question_type) %>
+          <% counts = @responses.map { |r| r.answer_for(q.id) }.flatten.compact.tally %>
+          <div style="display: flex; flex-direction: column; gap: 0.375rem;">
+            <% q.options_list.each do |opt| %>
+              <% count = counts[opt] || 0 %>
+              <% pct = @responses.count > 0 ? (count * 100.0 / @responses.count).round(1) : 0 %>
+              <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.825rem;">
+                <span style="min-width: 8rem; color: var(--basalt-700);"><%= opt %></span>
+                <div style="flex: 1; height: 1.25rem; background: var(--basalt-100); border-radius: 0.375rem; overflow: hidden;">
+                  <div style="height: 100%; width: <%= pct %>%; background: linear-gradient(90deg, var(--ocean-500), var(--ocean-300)); border-radius: 0.375rem; transition: width 0.3s;"></div>
+                </div>
+                <span style="min-width: 4rem; text-align: right; font-size: 0.75rem; color: var(--basalt-500);"><%= count %>명 (<%= pct %>%)</span>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div style="font-size: 0.8rem; color: var(--basalt-500);">텍스트/숫자 응답 - 아래 개별 응답에서 확인</div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 개별 응답 -->
+  <div class="card-basalt animate-in" style="padding: 1.5rem;">
+    <h3 class="section-title">개별 응답</h3>
+    <table class="table-stone">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>이름</th>
+          <th>연락처</th>
+          <th>응답 시간</th>
+          <% @survey.survey_questions.each do |q| %>
+            <th><%= truncate(q.question_text, length: 15) %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @responses.each_with_index do |resp, i| %>
+          <tr>
+            <td><%= i + 1 %></td>
+            <td><%= resp.respondent_name %></td>
+            <td style="font-size: 0.8rem;"><%= resp.respondent_phone %></td>
+            <td style="font-size: 0.8rem;"><%= resp.submitted_at&.strftime("%m/%d %H:%M") %></td>
+            <% @survey.survey_questions.each do |q| %>
+              <td style="font-size: 0.8rem;">
+                <% ans = resp.answer_for(q.id) %>
+                <%= ans.is_a?(Array) ? ans.join(", ") : ans %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="card-basalt" style="padding: 3rem; text-align: center;">
+    <p style="color: var(--basalt-400);">아직 응답이 없습니다.</p>
+  </div>
+<% end %>

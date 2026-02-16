@@ -1,0 +1,77 @@
+<div class="page-header">
+  <h1><%= @survey.title %></h1>
+  <div style="display: flex; gap: 0.5rem; align-items: center;">
+    <span class="survey-status-badge <%= @survey.status %>"><%= @survey.status %></span>
+    <%= link_to "수정", edit_survey_path(@survey), class: "btn-ghost" %>
+    <%= link_to "결과 보기", results_survey_path(@survey), class: "btn-ocean" %>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  <div class="stat-card ocean animate-in">
+    <div class="stat-value"><%= @survey.response_count %></div>
+    <div class="stat-label">총 응답</div>
+  </div>
+  <div class="stat-card moss animate-in animate-delay-1">
+    <div class="stat-value"><%= @survey.survey_questions.count %></div>
+    <div class="stat-label">질문 수</div>
+  </div>
+  <div class="stat-card sunrise animate-in animate-delay-2">
+    <div class="stat-value"><%= @survey.event&.display_name || "-" %></div>
+    <div class="stat-label">연결 행사</div>
+  </div>
+</div>
+
+<div class="card-basalt animate-in" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+  <h3 class="section-title">설문 정보</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.875rem;">
+    <div>
+      <span class="label-basalt">공개 링크</span>
+      <% if @survey.status == "active" %>
+        <code style="background: var(--basalt-100); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.8rem;"><%= @survey.public_url %></code>
+      <% else %>
+        <span style="color: var(--basalt-400);">설문을 활성화하면 링크가 생성됩니다</span>
+      <% end %>
+    </div>
+    <div>
+      <span class="label-basalt">기간</span>
+      <p>
+        <%= @survey.starts_at&.strftime("%Y-%m-%d %H:%M") || "시작일 없음" %>
+        ~
+        <%= @survey.ends_at&.strftime("%Y-%m-%d %H:%M") || "종료일 없음" %>
+      </p>
+    </div>
+  </div>
+  <% if @survey.description.present? %>
+    <div style="margin-top: 1rem;">
+      <span class="label-basalt">설명</span>
+      <p style="font-size: 0.875rem; color: var(--basalt-700);"><%= @survey.description %></p>
+    </div>
+  <% end %>
+</div>
+
+<div class="card-basalt animate-in" style="padding: 1.5rem;">
+  <h3 class="section-title">질문 목록</h3>
+  <% if @survey.survey_questions.any? %>
+    <% @survey.survey_questions.each_with_index do |q, i| %>
+      <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--basalt-100);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <span style="font-weight: 600; color: var(--basalt-800); font-size: 0.875rem;">
+              Q<%= i + 1 %>. <%= q.question_text %>
+              <% if q.required? %><span style="color: var(--lava-500);">*</span><% end %>
+            </span>
+          </div>
+          <span class="badge badge-basalt"><%= q.question_type %></span>
+        </div>
+        <% if q.options_list.any? %>
+          <div style="margin-top: 0.375rem; font-size: 0.8rem; color: var(--basalt-500);">
+            선택지: <%= q.options_list.join(", ") %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p style="color: var(--basalt-400); font-size: 0.875rem;">질문이 없습니다. 수정에서 질문을 추가하세요.</p>
+  <% end %>
+</div>

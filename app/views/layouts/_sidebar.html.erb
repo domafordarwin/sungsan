@@ -1,0 +1,95 @@
+<!-- Sidebar Overlay (mobile) -->
+<div id="sidebar-overlay" class="sidebar-overlay" data-action="click->sidebar#close"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar" data-controller="sidebar" data-sidebar-target="sidebar">
+  <div class="sidebar-inner">
+    <!-- Brand -->
+    <div class="sidebar-brand">
+      <%= link_to root_path, class: "sidebar-brand-link" do %>
+        <span class="sidebar-cross">&#10013;</span>
+        <span class="sidebar-title">성단 매니저</span>
+      <% end %>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">커뮤니티</div>
+        <%= link_to news_articles_path, class: "sidebar-link #{'active' if controller_name == 'news_articles'}" do %>
+          <span class="sidebar-icon">&#128240;</span> 뉴스
+        <% end %>
+        <%= link_to posts_path, class: "sidebar-link #{'active' if controller_name == 'posts' || controller_name == 'comments'}" do %>
+          <span class="sidebar-icon">&#128172;</span> 게시판
+        <% end %>
+        <%= link_to photo_albums_path, class: "sidebar-link #{'active' if controller_name == 'photo_albums' || controller_name == 'photos'}" do %>
+          <span class="sidebar-icon">&#128247;</span> 갤러리
+        <% end %>
+      </div>
+
+      <% if Current.user&.admin? || Current.user&.operator? %>
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">운영</div>
+          <%= link_to members_path, class: "sidebar-link #{'active' if controller_name == 'members'}" do %>
+            <span class="sidebar-icon">&#128101;</span> 봉사자
+          <% end %>
+          <%= link_to events_path, class: "sidebar-link #{'active' if controller_name == 'events' || controller_name == 'assignments' || controller_name == 'attendance_records'}" do %>
+            <span class="sidebar-icon">&#128197;</span> 일정
+          <% end %>
+          <%= link_to surveys_path, class: "sidebar-link #{'active' if controller_name == 'surveys'}" do %>
+            <span class="sidebar-icon">&#128203;</span> 설문
+          <% end %>
+          <%= link_to notifications_path, class: "sidebar-link #{'active' if controller_name == 'notifications'}" do %>
+            <span class="sidebar-icon">&#128276;</span> 알림
+          <% end %>
+          <%= link_to statistics_path, class: "sidebar-link #{'active' if controller_name == 'statistics'}" do %>
+            <span class="sidebar-icon">&#128202;</span> 통계
+          <% end %>
+        </div>
+      <% end %>
+
+      <% if Current.user&.admin? %>
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">관리</div>
+          <%= link_to admin_roles_path, class: "sidebar-link #{'active' if controller_name == 'roles'}" do %>
+            <span class="sidebar-icon">&#127919;</span> 역할
+          <% end %>
+          <%= link_to admin_event_types_path, class: "sidebar-link #{'active' if controller_name == 'event_types'}" do %>
+            <span class="sidebar-icon">&#9962;</span> 미사유형
+          <% end %>
+          <%= link_to admin_users_path, class: "sidebar-link #{'active' if controller_name == 'users'}" do %>
+            <span class="sidebar-icon">&#128274;</span> 사용자
+          <% end %>
+        </div>
+      <% end %>
+    </nav>
+
+    <!-- User Info (bottom) -->
+    <div class="sidebar-footer">
+      <div class="sidebar-user-info">
+        <span class="sidebar-user-name"><%= Current.user&.name %></span>
+        <span class="sidebar-user-role"><%= Current.user&.role %></span>
+      </div>
+      <div class="sidebar-footer-links">
+        <% if Current.user&.member_role? %>
+          <%= link_to "내 프로필", profile_path, class: "sidebar-footer-link" %>
+        <% end %>
+        <%= link_to "비밀번호", edit_password_path, class: "sidebar-footer-link" %>
+        <%= button_to "로그아웃", session_path, method: :delete, class: "sidebar-logout" %>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- Mobile Header -->
+<header class="mobile-header" data-controller="sidebar">
+  <button class="mobile-menu-btn" data-action="click->sidebar#toggle">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+  <%= link_to root_path, class: "mobile-brand" do %>
+    &#10013; 성단 매니저
+  <% end %>
+  <span class="mobile-user"><%= Current.user&.name %></span>
+</header>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= @survey&.title || "성산포 성단" %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+<body class="min-h-screen" style="background: var(--sand-cream);">
+  <% if notice %>
+    <div class="flash-notice animate-in"><%= notice %></div>
+  <% end %>
+  <% if alert %>
+    <div class="flash-alert animate-in"><%= alert %></div>
+  <% end %>
+
+  <main style="padding: 2rem 1rem; max-width: 48rem; margin: 0 auto;">
+    <%= yield %>
+  </main>
+
+  <footer style="text-align: center; padding: 2rem; font-size: 0.75rem; color: var(--basalt-400);">
+    &#10013; 성산포 성단 매니저
+  </footer>
+</body>
+</html>
