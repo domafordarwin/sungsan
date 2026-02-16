@@ -1,0 +1,3 @@
+<%= turbo_stream.replace dom_id(@photo) do %>
+  <%= render "photos/photo_card", photo: @photo %>
+<% end %>

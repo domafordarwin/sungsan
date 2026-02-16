@@ -30,7 +30,7 @@ Rails.application.routes.draw do
 
   # Gallery
   resources :photo_albums do
-    resources :photos, only: [:create, :destroy]
+    resources :photos, only: [:create, :update, :destroy]
   end
 
   # Events

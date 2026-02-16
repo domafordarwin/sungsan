@@ -1,0 +1,53 @@
+<%= turbo_frame_tag dom_id(photo) do %>
+  <div class="card-basalt" style="overflow: hidden; position: relative;">
+    <% if photo.image.attached? %>
+      <a href="<%= url_for(photo.image) %>" target="_blank" rel="noopener"
+         style="display: block; height: 200px; overflow: hidden;">
+        <%= image_tag photo.image,
+            style: "width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s;",
+            onmouseover: "this.style.transform='scale(1.05)'",
+            onmouseout: "this.style.transform='scale(1)'" %>
+      </a>
+    <% end %>
+
+    <div style="padding: 0.5rem 0.75rem; display: flex; justify-content: space-between; align-items: center; gap: 0.25rem;"
+         data-controller="inline-edit">
+      <% if policy(photo.photo_album).update? %>
+        <%# Display mode %>
+        <span data-inline-edit-target="display"
+              data-action="click->inline-edit#toggle"
+              style="font-size: 0.8rem; color: var(--basalt-500); cursor: pointer; flex: 1; min-height: 1.2em;"
+              title="클릭하여 설명 편집">
+          <%= photo.caption.present? ? photo.caption : "설명 추가..." %>
+        </span>
+
+        <%# Edit form %>
+        <div data-inline-edit-target="form" hidden style="flex: 1;">
+          <%= form_with(model: [photo.photo_album, photo], method: :patch, style: "display: flex; align-items: center; gap: 0.25rem;") do |f| %>
+            <%= f.text_field :caption, value: photo.caption,
+                style: "font-size: 0.8rem; padding: 0.2rem 0.4rem; border: 1px solid var(--basalt-300); border-radius: 4px; flex: 1; min-width: 0;",
+                placeholder: "사진 설명 입력" %>
+            <%= f.submit "저장",
+                style: "font-size: 0.7rem; padding: 0.2rem 0.5rem; background: var(--ocean-500); color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;" %>
+            <button type="button" data-action="inline-edit#cancel"
+                    style="font-size: 0.7rem; padding: 0.2rem 0.5rem; background: var(--basalt-200); color: var(--basalt-600); border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">
+              취소
+            </button>
+          <% end %>
+        </div>
+      <% else %>
+        <span style="font-size: 0.8rem; color: var(--basalt-500);">
+          <%= photo.caption %>
+        </span>
+      <% end %>
+
+      <% if policy(photo.photo_album).update? %>
+        <%= button_to photo_album_photo_path(photo.photo_album, photo), method: :delete,
+            style: "background: none; border: none; cursor: pointer; color: var(--lava-500); font-size: 0.75rem; padding: 0; flex-shrink: 0;",
+            form: { data: { turbo_confirm: "이 사진을 삭제하시겠습니까?" } } do %>
+          &#10005;
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

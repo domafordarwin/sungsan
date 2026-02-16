@@ -24,6 +24,18 @@ class PhotosController < ApplicationController
     end
   end
 
+  def update
+    @photo = @album.photos.find(params[:id])
+    authorize @album, :update?, policy_class: PhotoAlbumPolicy
+
+    @photo.update!(caption: params.dig(:photo, :caption).to_s)
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to photo_album_path(@album) }
+    end
+  end
+
   def destroy
     @photo = @album.photos.find(params[:id])
     authorize @album, :update?, policy_class: PhotoAlbumPolicy
