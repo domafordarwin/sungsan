@@ -1,0 +1,36 @@
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold"><%= @member.name %></h1>
+    <span class="<%= @member.active? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %> px-3 py-1 rounded-full text-sm">
+      <%= @member.active? ? "활동" : "비활동" %>
+    </span>
+  </div>
+
+  <dl class="space-y-4">
+    <div><dt class="text-sm text-gray-500">세례명</dt><dd><%= @member.baptismal_name %></dd></div>
+    <div><dt class="text-sm text-gray-500">연락처</dt><dd><%= @member.masked_phone %></dd></div>
+    <div><dt class="text-sm text-gray-500">이메일</dt><dd><%= @member.masked_email %></dd></div>
+    <div><dt class="text-sm text-gray-500">생년월일</dt><dd><%= @member.masked_birth_date %></dd></div>
+    <div><dt class="text-sm text-gray-500">성별</dt><dd><%= @member.gender %></dd></div>
+    <div><dt class="text-sm text-gray-500">구역</dt><dd><%= @member.district %></dd></div>
+    <div><dt class="text-sm text-gray-500">단체</dt><dd><%= @member.group_name %></dd></div>
+    <div><dt class="text-sm text-gray-500">세례</dt><dd><%= @member.baptized? ? "O" : "X" %></dd></div>
+    <div><dt class="text-sm text-gray-500">견진</dt><dd><%= @member.confirmed? ? "O" : "X" %></dd></div>
+    <% if @member.notes.present? %>
+      <div><dt class="text-sm text-gray-500">메모</dt><dd><%= @member.notes %></dd></div>
+    <% end %>
+    <div><dt class="text-sm text-gray-500">등록일</dt><dd><%= @member.created_at.strftime("%Y-%m-%d") %></dd></div>
+  </dl>
+
+  <div class="mt-6 flex gap-4">
+    <% if policy(@member).update? %>
+      <%= link_to "수정", edit_member_path(@member), class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+    <% end %>
+    <% if policy(@member).destroy? %>
+      <%= button_to @member.active? ? "비활성화" : "활성화",
+          toggle_active_member_path(@member), method: :patch,
+          class: "#{@member.active? ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white px-4 py-2 rounded" %>
+    <% end %>
+    <%= link_to "목록", members_path, class: "text-gray-600 hover:text-gray-900 py-2" %>
+  </div>
+</div>

@@ -3,6 +3,16 @@ Rails.application.routes.draw do
   resource :session, only: %i[new create destroy]
   resource :password, only: %i[edit update]
 
+  # Members
+  resources :members do
+    member do
+      patch :toggle_active
+    end
+  end
+
+  # Profile (본인)
+  resource :profile, only: [:show]
+
   # Admin
   namespace :admin do
     resources :users

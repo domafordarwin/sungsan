@@ -2,6 +2,13 @@
 <p class="text-gray-600">안녕하세요, <%= Current.user.name %>님. (<%= Current.user.role %>)</p>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+  <% if Current.user.admin? || Current.user.operator? %>
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="font-bold text-gray-700">봉사자 관리</h3>
+      <%= link_to "봉사자 목록", members_path, class: "text-blue-600 hover:text-blue-800" %>
+    </div>
+  <% end %>
+
   <% if Current.user.admin? %>
     <div class="bg-white rounded-lg shadow p-6">
       <h3 class="font-bold text-gray-700">사용자 관리</h3>
@@ -11,6 +18,10 @@
 
   <div class="bg-white rounded-lg shadow p-6">
     <h3 class="font-bold text-gray-700">내 정보</h3>
+    <% if Current.user.member_role? && Current.user.member %>
+      <%= link_to "내 프로필", profile_path, class: "text-blue-600 hover:text-blue-800" %>
+      <br>
+    <% end %>
     <%= link_to "비밀번호 변경", edit_password_path, class: "text-blue-600 hover:text-blue-800" %>
   </div>
 </div>

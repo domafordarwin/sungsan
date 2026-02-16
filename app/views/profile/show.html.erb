@@ -1,0 +1,14 @@
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-8">
+  <h1 class="text-2xl font-bold mb-6">내 프로필</h1>
+
+  <dl class="space-y-4">
+    <div><dt class="text-sm text-gray-500">이름</dt><dd><%= @member.name %></dd></div>
+    <div><dt class="text-sm text-gray-500">세례명</dt><dd><%= @member.baptismal_name %></dd></div>
+    <div><dt class="text-sm text-gray-500">연락처</dt><dd><%= @member.masked_phone %></dd></div>
+    <div><dt class="text-sm text-gray-500">이메일</dt><dd><%= @member.masked_email %></dd></div>
+    <div><dt class="text-sm text-gray-500">구역</dt><dd><%= @member.district %></dd></div>
+    <div><dt class="text-sm text-gray-500">단체</dt><dd><%= @member.group_name %></dd></div>
+    <div><dt class="text-sm text-gray-500">세례</dt><dd><%= @member.baptized? ? "O" : "X" %></dd></div>
+    <div><dt class="text-sm text-gray-500">견진</dt><dd><%= @member.confirmed? ? "O" : "X" %></dd></div>
+  </dl>
+</div>

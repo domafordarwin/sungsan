@@ -2,6 +2,7 @@ class Member < ApplicationRecord
   include ParishScoped
   include Auditable
   include Maskable
+  include Paginatable
 
   belongs_to :user, optional: true
   has_many :assignments, dependent: :restrict_with_error
