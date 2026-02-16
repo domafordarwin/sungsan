@@ -7,6 +7,8 @@
           <%= link_to "봉사자", members_path, class: "text-gray-600 hover:text-gray-900" %>
         <% end %>
         <% if Current.user&.admin? %>
+          <%= link_to "역할", admin_roles_path, class: "text-gray-600 hover:text-gray-900" %>
+          <%= link_to "미사유형", admin_event_types_path, class: "text-gray-600 hover:text-gray-900" %>
           <%= link_to "사용자 관리", admin_users_path, class: "text-gray-600 hover:text-gray-900" %>
         <% end %>
       </div>

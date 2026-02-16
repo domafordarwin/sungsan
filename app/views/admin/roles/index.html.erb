@@ -1,0 +1,39 @@
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">역할 관리</h1>
+  <% if policy(Role).create? %>
+    <%= link_to "새 역할", new_admin_role_path, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+  <% end %>
+</div>
+
+<table class="min-w-full bg-white rounded-lg shadow">
+  <thead class="bg-gray-50">
+    <tr>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">순서</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">역할명</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">자격조건</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">상태</th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">관리</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @roles.each do |role| %>
+      <tr class="border-t">
+        <td class="px-6 py-4 text-gray-500"><%= role.sort_order %></td>
+        <td class="px-6 py-4 font-medium"><%= role.name %></td>
+        <td class="px-6 py-4 text-sm text-gray-500">
+          <%= "세례" if role.requires_baptism? %>
+          <%= "견진" if role.requires_confirmation? %>
+          <%= "#{role.min_age}세+" if role.min_age.present? %>
+        </td>
+        <td class="px-6 py-4">
+          <span class="<%= role.active? ? 'text-green-600' : 'text-red-600' %>">
+            <%= role.active? ? "활성" : "비활성" %>
+          </span>
+        </td>
+        <td class="px-6 py-4">
+          <%= link_to "보기", admin_role_path(role), class: "text-blue-600 hover:text-blue-800" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

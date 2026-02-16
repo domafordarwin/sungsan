@@ -1,0 +1,54 @@
+<%= form_with model: [:admin, role], class: "space-y-4" do |f| %>
+  <% if role.errors.any? %>
+    <div class="bg-red-100 text-red-800 p-3 rounded">
+      <ul>
+        <% role.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <%= f.label :name, "역할명 *", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :name, required: true, placeholder: "예: 십자가봉사, 초봉사",
+          class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+    <div>
+      <%= f.label :sort_order, "정렬순서", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.number_field :sort_order, min: 0,
+          class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+    <div>
+      <%= f.label :max_members, "최대인원 (선택)", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.number_field :max_members, min: 1, placeholder: "미입력 시 제한없음",
+          class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+    <div>
+      <%= f.label :min_age, "최소연령 (선택)", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.number_field :min_age, min: 1, placeholder: "미입력 시 제한없음",
+          class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :description, "설명", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :description, rows: 3,
+        class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+  </div>
+
+  <div class="flex gap-6">
+    <label class="flex items-center">
+      <%= f.check_box :requires_baptism, class: "rounded border-gray-300 text-blue-600" %>
+      <span class="ml-2 text-sm text-gray-700">세례 필요</span>
+    </label>
+    <label class="flex items-center">
+      <%= f.check_box :requires_confirmation, class: "rounded border-gray-300 text-blue-600" %>
+      <span class="ml-2 text-sm text-gray-700">견진 필요</span>
+    </label>
+  </div>
+
+  <%= f.submit role.new_record? ? "등록" : "수정",
+      class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer" %>
+<% end %>

@@ -16,6 +16,17 @@ Rails.application.routes.draw do
   # Admin
   namespace :admin do
     resources :users
+    resources :roles do
+      member do
+        patch :toggle_active
+      end
+    end
+    resources :event_types do
+      member do
+        patch :toggle_active
+      end
+      resources :event_role_requirements, only: %i[create update destroy]
+    end
   end
 
   # Dashboard (root)

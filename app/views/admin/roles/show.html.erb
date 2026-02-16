@@ -1,0 +1,50 @@
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold"><%= @role.name %></h1>
+    <span class="<%= @role.active? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %> px-3 py-1 rounded-full text-sm">
+      <%= @role.active? ? "활성" : "비활성" %>
+    </span>
+  </div>
+
+  <dl class="space-y-4">
+    <div><dt class="text-sm text-gray-500">설명</dt><dd><%= @role.description || "-" %></dd></div>
+    <div><dt class="text-sm text-gray-500">정렬순서</dt><dd><%= @role.sort_order %></dd></div>
+    <div><dt class="text-sm text-gray-500">최대인원</dt><dd><%= @role.max_members || "제한없음" %></dd></div>
+    <div>
+      <dt class="text-sm text-gray-500">자격조건</dt>
+      <dd>
+        <% conditions = [] %>
+        <% conditions << "세례 필요" if @role.requires_baptism? %>
+        <% conditions << "견진 필요" if @role.requires_confirmation? %>
+        <% conditions << "#{@role.min_age}세 이상" if @role.min_age.present? %>
+        <%= conditions.any? ? conditions.join(", ") : "없음" %>
+      </dd>
+    </div>
+  </dl>
+
+  <% if @event_types.any? %>
+    <div class="mt-6">
+      <h2 class="text-lg font-bold mb-3">이 역할이 필요한 미사유형</h2>
+      <ul class="space-y-1">
+        <% @event_types.each do |req| %>
+          <li class="text-gray-700">
+            <%= link_to req.event_type.name, admin_event_type_path(req.event_type), class: "text-blue-600 hover:text-blue-800" %>
+            (<%= req.required_count %>명)
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mt-6 flex gap-4">
+    <% if policy(@role).update? %>
+      <%= link_to "수정", edit_admin_role_path(@role), class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+    <% end %>
+    <% if policy(@role).destroy? %>
+      <%= button_to @role.active? ? "비활성화" : "활성화",
+          toggle_active_admin_role_path(@role), method: :patch,
+          class: "#{@role.active? ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white px-4 py-2 rounded" %>
+    <% end %>
+    <%= link_to "목록", admin_roles_path, class: "text-gray-600 hover:text-gray-900 py-2" %>
+  </div>
+</div>
