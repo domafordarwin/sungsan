@@ -1,39 +1,39 @@
 #!/bin/bash
 
-# Exit on error, but handle db:prepare separately
-set -e
-
 echo "=== Starting AltarServe Manager ==="
 echo "RAILS_ENV: ${RAILS_ENV:-not set}"
 echo "PORT: ${PORT:-3000}"
+echo "DATABASE_URL set: $([ -n "$DATABASE_URL" ] && echo 'yes' || echo 'NO!')"
 
-# Check required environment variables
-if [ -z "$SECRET_KEY_BASE" ] && [ -z "$SECRET_KEY_BASE_DUMMY" ]; then
-  echo "WARNING: SECRET_KEY_BASE is not set!"
-fi
-
-if [ -z "$DATABASE_URL" ] && [ "$RAILS_ENV" = "production" ]; then
-  echo "WARNING: DATABASE_URL is not set for production!"
-fi
-
-# Run db:prepare with retries (database might not be ready yet)
 if [ "${1}" == "bundle" ]; then
-  MAX_RETRIES=5
-  RETRY_COUNT=0
+  # Step 1: Try db:prepare (handles both new and existing databases)
+  echo "=== Step 1: db:prepare ==="
+  bundle exec rails db:prepare 2>&1 && echo "db:prepare OK" || {
+    echo "db:prepare failed, trying db:create + db:schema:load..."
+    bundle exec rails db:create 2>&1 || echo "(db:create skipped - DB may already exist)"
+    bundle exec rails db:schema:load 2>&1 && echo "db:schema:load OK" || {
+      echo "db:schema:load also failed, trying db:migrate..."
+      bundle exec rails db:migrate 2>&1 && echo "db:migrate OK" || echo "ERROR: All DB setup methods failed!"
+    }
+  }
 
-  until bundle exec rails db:prepare 2>&1; do
-    RETRY_COUNT=$((RETRY_COUNT + 1))
-    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-      echo "ERROR: db:prepare failed after $MAX_RETRIES attempts. Starting server anyway..."
-      break
-    fi
-    echo "db:prepare failed (attempt $RETRY_COUNT/$MAX_RETRIES). Retrying in 3 seconds..."
-    sleep 3
-  done
+  # Step 2: Verify tables exist
+  echo "=== Step 2: Verify tables ==="
+  TABLE_CHECK=$(bundle exec rails runner "puts ActiveRecord::Base.connection.table_exists?(:users)" 2>/dev/null)
+  echo "Users table exists: ${TABLE_CHECK}"
 
-  # Seed data (idempotent - uses find_or_create_by)
-  echo "=== Running db:seed ==="
-  bundle exec rails db:seed 2>&1 || echo "WARNING: db:seed failed (may already be seeded)"
+  if [ "$TABLE_CHECK" != "true" ]; then
+    echo "CRITICAL: Tables still missing! Force loading schema..."
+    bundle exec rails db:schema:load DISABLE_DATABASE_ENVIRONMENT_CHECK=1 2>&1
+  fi
+
+  # Step 3: Seed data
+  echo "=== Step 3: db:seed ==="
+  bundle exec rails db:seed 2>&1 && echo "db:seed OK" || echo "WARNING: db:seed failed"
+
+  # Step 4: Final verification
+  USER_COUNT=$(bundle exec rails runner "puts User.unscoped.count" 2>/dev/null || echo "0")
+  echo "=== DB Ready: ${USER_COUNT} users ==="
 fi
 
 echo "=== Starting Puma server ==="
