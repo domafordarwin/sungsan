@@ -7,7 +7,9 @@ Rails.application.configure do
   config.enable_reloading = false
 
   # Eager load code on boot for better performance and memory savings in production.
-  config.eager_load = true
+  # SKIP_EAGER_LOAD=1 is used by docker-entrypoint for DB tasks (avoids
+  # introspecting tables that don't exist yet before migrations run).
+  config.eager_load = ENV["SKIP_EAGER_LOAD"] != "1"
 
   # Full error reports are disabled.
   config.consider_all_requests_local = false

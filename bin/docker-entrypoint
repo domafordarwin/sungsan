@@ -5,150 +5,17 @@ echo "RAILS_ENV: ${RAILS_ENV:-not set}"
 echo "DATABASE_URL set: $([ -n "$DATABASE_URL" ] && echo 'yes' || echo 'NO!')"
 
 if [ "${1}" == "bundle" ]; then
-  # Check if new tables exist using psql directly (bypasses Rails entirely)
-  echo "=== Checking if new tables exist ==="
-  TABLE_CHECK=$(psql "$DATABASE_URL" -tAc "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='public' AND table_name IN ('news_articles','posts','comments','photo_albums','photos','active_storage_blobs');" 2>/dev/null)
-
-  echo "Found $TABLE_CHECK of 6 new tables"
-
-  if [ "$TABLE_CHECK" != "6" ]; then
-    echo "=== Creating missing tables via raw SQL ==="
-    psql "$DATABASE_URL" <<'EOSQL'
-
--- news_articles
-CREATE TABLE IF NOT EXISTS news_articles (
-  id bigserial PRIMARY KEY,
-  parish_id bigint NOT NULL REFERENCES parishes(id),
-  title varchar NOT NULL,
-  summary text,
-  source_name varchar NOT NULL,
-  source_url varchar NOT NULL,
-  external_id varchar,
-  image_url varchar,
-  published_at timestamp(6),
-  sample_data boolean NOT NULL DEFAULT false,
-  created_at timestamp(6) NOT NULL,
-  updated_at timestamp(6) NOT NULL
-);
-CREATE INDEX IF NOT EXISTS index_news_articles_on_parish_id ON news_articles(parish_id);
-CREATE INDEX IF NOT EXISTS index_news_articles_on_parish_id_and_published_at ON news_articles(parish_id, published_at);
-CREATE UNIQUE INDEX IF NOT EXISTS index_news_articles_on_external_id ON news_articles(external_id);
-
--- posts
-CREATE TABLE IF NOT EXISTS posts (
-  id bigserial PRIMARY KEY,
-  parish_id bigint NOT NULL REFERENCES parishes(id),
-  author_id bigint NOT NULL REFERENCES users(id),
-  title varchar NOT NULL,
-  body text NOT NULL,
-  pinned boolean NOT NULL DEFAULT false,
-  comments_count integer DEFAULT 0,
-  sample_data boolean NOT NULL DEFAULT false,
-  created_at timestamp(6) NOT NULL,
-  updated_at timestamp(6) NOT NULL
-);
-CREATE INDEX IF NOT EXISTS index_posts_on_parish_id ON posts(parish_id);
-CREATE INDEX IF NOT EXISTS index_posts_on_author_id ON posts(author_id);
-CREATE INDEX IF NOT EXISTS index_posts_on_parish_id_and_created_at ON posts(parish_id, created_at);
-
--- comments
-CREATE TABLE IF NOT EXISTS comments (
-  id bigserial PRIMARY KEY,
-  post_id bigint NOT NULL REFERENCES posts(id),
-  author_id bigint NOT NULL REFERENCES users(id),
-  body text NOT NULL,
-  created_at timestamp(6) NOT NULL,
-  updated_at timestamp(6) NOT NULL
-);
-CREATE INDEX IF NOT EXISTS index_comments_on_post_id ON comments(post_id);
-CREATE INDEX IF NOT EXISTS index_comments_on_author_id ON comments(author_id);
-CREATE INDEX IF NOT EXISTS index_comments_on_post_id_and_created_at ON comments(post_id, created_at);
-
--- photo_albums
-CREATE TABLE IF NOT EXISTS photo_albums (
-  id bigserial PRIMARY KEY,
-  parish_id bigint NOT NULL REFERENCES parishes(id),
-  author_id bigint NOT NULL REFERENCES users(id),
-  title varchar NOT NULL,
-  description text,
-  event_date date,
-  sample_data boolean NOT NULL DEFAULT false,
-  created_at timestamp(6) NOT NULL,
-  updated_at timestamp(6) NOT NULL
-);
-CREATE INDEX IF NOT EXISTS index_photo_albums_on_parish_id ON photo_albums(parish_id);
-CREATE INDEX IF NOT EXISTS index_photo_albums_on_author_id ON photo_albums(author_id);
-CREATE INDEX IF NOT EXISTS index_photo_albums_on_parish_id_and_created_at ON photo_albums(parish_id, created_at);
-
--- photos
-CREATE TABLE IF NOT EXISTS photos (
-  id bigserial PRIMARY KEY,
-  photo_album_id bigint NOT NULL REFERENCES photo_albums(id),
-  uploader_id bigint NOT NULL REFERENCES users(id),
-  caption varchar,
-  position integer DEFAULT 0,
-  created_at timestamp(6) NOT NULL,
-  updated_at timestamp(6) NOT NULL
-);
-CREATE INDEX IF NOT EXISTS index_photos_on_photo_album_id ON photos(photo_album_id);
-CREATE INDEX IF NOT EXISTS index_photos_on_uploader_id ON photos(uploader_id);
-CREATE INDEX IF NOT EXISTS index_photos_on_photo_album_id_and_position ON photos(photo_album_id, position);
-
--- active_storage_blobs
-CREATE TABLE IF NOT EXISTS active_storage_blobs (
-  id bigserial PRIMARY KEY,
-  key varchar NOT NULL,
-  filename varchar NOT NULL,
-  content_type varchar,
-  metadata text,
-  service_name varchar NOT NULL,
-  byte_size bigint NOT NULL,
-  checksum varchar,
-  created_at timestamp(6) NOT NULL
-);
-CREATE UNIQUE INDEX IF NOT EXISTS index_active_storage_blobs_on_key ON active_storage_blobs(key);
-
--- active_storage_attachments
-CREATE TABLE IF NOT EXISTS active_storage_attachments (
-  id bigserial PRIMARY KEY,
-  name varchar NOT NULL,
-  record_type varchar NOT NULL,
-  record_id bigint NOT NULL,
-  blob_id bigint NOT NULL REFERENCES active_storage_blobs(id),
-  created_at timestamp(6) NOT NULL
-);
-CREATE UNIQUE INDEX IF NOT EXISTS index_active_storage_attachments_uniqueness ON active_storage_attachments(record_type, record_id, name, blob_id);
-CREATE INDEX IF NOT EXISTS index_active_storage_attachments_on_blob_id ON active_storage_attachments(blob_id);
-
--- active_storage_variant_records
-CREATE TABLE IF NOT EXISTS active_storage_variant_records (
-  id bigserial PRIMARY KEY,
-  blob_id bigint NOT NULL REFERENCES active_storage_blobs(id),
-  variation_digest varchar NOT NULL
-);
-CREATE UNIQUE INDEX IF NOT EXISTS index_active_storage_variant_records_uniqueness ON active_storage_variant_records(blob_id, variation_digest);
-
--- Record migrations as done so Rails doesn't try to re-run them
-INSERT INTO schema_migrations (version) VALUES
-  ('20260216000018'),
-  ('20260216000019'),
-  ('20260216000020'),
-  ('20260216000021'),
-  ('20260216000022'),
-  ('20260216000023')
-ON CONFLICT DO NOTHING;
-
-EOSQL
-
-    echo "=== Raw SQL table creation complete ==="
-  fi
-
-  # Now run Rails db tasks safely (tables exist)
-  echo "=== Running db:migrate ==="
-  bundle exec rails db:migrate 2>&1 || echo "WARNING: db:migrate had issues"
+  # SKIP_EAGER_LOAD=1 prevents Rails from introspecting tables that
+  # don't exist yet (chicken-and-egg with eager_load + db:migrate).
+  # db:prepare runs schema:load on fresh DBs, migrate on existing ones.
+  echo "=== Running db:prepare ==="
+  SKIP_EAGER_LOAD=1 bundle exec rails db:prepare 2>&1 || {
+    echo "WARNING: db:prepare failed, trying db:migrate..."
+    SKIP_EAGER_LOAD=1 bundle exec rails db:migrate 2>&1 || echo "WARNING: db:migrate also failed"
+  }
 
   echo "=== Running db:seed ==="
-  bundle exec rails db:seed 2>&1 || echo "WARNING: db:seed skipped"
+  SKIP_EAGER_LOAD=1 bundle exec rails db:seed 2>&1 || echo "WARNING: db:seed skipped"
 
   echo "=== DB setup complete ==="
 fi
