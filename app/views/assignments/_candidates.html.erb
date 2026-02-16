@@ -1,0 +1,21 @@
+<%= turbo_frame_tag "recommend_#{role.id}" do %>
+  <div class="bg-green-50 rounded p-3 mt-2">
+    <h4 class="text-sm font-medium text-green-800 mb-2">추천 후보 (<%= role.name %>)</h4>
+    <% if candidates.any? %>
+      <% candidates.each do |c| %>
+        <div class="flex justify-between items-center py-1">
+          <span class="text-sm">
+            <%= c[:member].name %>
+            <span class="text-xs text-gray-500">(점수: <%= c[:score] %>)</span>
+          </span>
+          <%= button_to "배정",
+              event_assignments_path(event),
+              params: { assignment: { member_id: c[:member].id, role_id: role.id } },
+              class: "text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700" %>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-sm text-gray-500">추천 가능한 후보가 없습니다.</p>
+    <% end %>
+  </div>
+<% end %>

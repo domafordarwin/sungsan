@@ -17,6 +17,11 @@ Rails.application.routes.draw do
       post :bulk_create
       delete :destroy_recurring
     end
+    resources :assignments, only: %i[create destroy] do
+      collection do
+        get :recommend
+      end
+    end
   end
 
   # Profile (본인)
