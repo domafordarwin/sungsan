@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require "thruster/cli"
+Thruster::CLI.start

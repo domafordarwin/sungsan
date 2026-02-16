@@ -1,0 +1,12 @@
+ko:
+  activerecord:
+    errors:
+      messages:
+        blank: "을(를) 입력해주세요"
+        taken: "은(는) 이미 사용 중입니다"
+        too_short: "은(는) %{count}자 이상이어야 합니다"
+        too_long: "은(는) %{count}자 이하여야 합니다"
+        invalid: "은(는) 올바르지 않습니다"
+        not_a_number: "은(는) 숫자여야 합니다"
+        greater_than: "은(는) %{count}보다 커야 합니다"
+        greater_than_or_equal_to: "은(는) %{count} 이상이어야 합니다"
