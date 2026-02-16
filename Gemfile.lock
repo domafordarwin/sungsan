@@ -355,6 +355,7 @@ DEPENDENCIES
   pundit
   pundit-matchers
   rails (~> 8.0)
+  rexml
   rspec-rails (~> 7.0)
   rubocop-rails-omakase
   selenium-webdriver

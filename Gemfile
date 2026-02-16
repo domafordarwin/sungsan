@@ -11,6 +11,7 @@ gem "tailwindcss-rails"
 gem "thruster", require: false
 gem "pundit"
 gem "bcrypt", "~> 3.1"
+gem "rexml"
 gem "bootsnap", require: false
 
 group :development, :test do
