@@ -28,7 +28,7 @@ COPY . .
 
 # Fix WSL permission issues and create missing directories
 RUN chmod +x bin/* && \
-    mkdir -p log storage tmp/pids tmp/cache tmp/sockets && \
+    mkdir -p log storage tmp/pids tmp/cache tmp/sockets app/assets/builds && \
     SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 
 FROM base
