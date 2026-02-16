@@ -1,12 +1,11 @@
-<div class="animate-in">
-  <div class="page-header">
-    <div>
-      <h1>&#10013; 대시보드</h1>
-      <p style="color: var(--basalt-500); font-size: 0.875rem; margin-top: 0.25rem;">
-        안녕하세요, <strong style="color: var(--basalt-700);"><%= Current.user.name %></strong>님
-        <span class="badge badge-ocean" style="margin-left: 0.5rem;"><%= Current.user.role %></span>
-      </p>
-    </div>
+<div class="dashboard-hero animate-in">
+  <div class="dashboard-hero-bg"></div>
+  <div class="dashboard-hero-content">
+    <h1>&#10013; 성산포 성단 매니저</h1>
+    <p>
+      안녕하세요, <strong><%= Current.user.name %></strong>님
+      <span class="badge" style="margin-left: 0.5rem;"><%= Current.user.role %></span>
+    </p>
   </div>
 </div>
 
