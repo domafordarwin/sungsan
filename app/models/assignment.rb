@@ -2,6 +2,7 @@ class Assignment < ApplicationRecord
   include Auditable
 
   STATUSES = %w[pending accepted declined replaced canceled].freeze
+  TOKEN_EXPIRY_HOURS = 72
 
   belongs_to :event
   belongs_to :role
@@ -20,6 +21,7 @@ class Assignment < ApplicationRecord
   scope :pending, -> { where(status: "pending") }
   scope :accepted, -> { where(status: "accepted") }
   scope :declined, -> { where(status: "declined") }
+  scope :needing_substitute, -> { where(status: "declined", replaced_by_id: nil) }
   scope :for_member, ->(member) { where(member: member) }
   scope :for_event, ->(event) { where(event: event) }
   scope :for_role, ->(role) { where(role: role) }
@@ -40,5 +42,24 @@ class Assignment < ApplicationRecord
     response_token.present? &&
       response_token_expires_at.present? &&
       response_token_expires_at > Time.current
+  end
+
+  def respondable?
+    pending? && token_valid?
+  end
+
+  def generate_response_token!
+    update!(
+      response_token: SecureRandom.urlsafe_base64(32),
+      response_token_expires_at: TOKEN_EXPIRY_HOURS.hours.from_now
+    )
+  end
+
+  def accept!
+    update!(status: "accepted", responded_at: Time.current)
+  end
+
+  def decline!(reason = nil)
+    update!(status: "declined", responded_at: Time.current, decline_reason: reason)
   end
 end

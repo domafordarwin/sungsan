@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>봉사 배정 응답 - AltarServe</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+<body class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+    <% if notice %>
+      <div class="bg-green-100 text-green-800 p-3 text-center rounded-lg mb-4"><%= notice %></div>
+    <% end %>
+    <% if alert %>
+      <div class="bg-red-100 text-red-800 p-3 text-center rounded-lg mb-4"><%= alert %></div>
+    <% end %>
+    <%= yield %>
+  </div>
+</body>
+</html>

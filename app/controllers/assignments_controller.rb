@@ -8,6 +8,7 @@ class AssignmentsController < ApplicationController
     authorize @assignment
 
     if @assignment.save
+      @assignment.generate_response_token!
       redirect_to event_path(@event), notice: "봉사자가 배정되었습니다."
     else
       redirect_to event_path(@event), alert: @assignment.errors.full_messages.join(", ")
@@ -19,6 +20,26 @@ class AssignmentsController < ApplicationController
     authorize @assignment
     @assignment.update!(status: "canceled")
     redirect_to event_path(@event), notice: "배정이 취소되었습니다."
+  end
+
+  def substitute
+    @original = @event.assignments.find(params[:id])
+    authorize @original, :create?
+
+    @substitute = @event.assignments.build(
+      role_id: @original.role_id,
+      member_id: params[:member_id],
+      assigned_by: Current.user,
+      status: "pending"
+    )
+
+    if @substitute.save
+      @substitute.generate_response_token!
+      @original.update!(status: "replaced", replaced_by_id: @substitute.member_id)
+      redirect_to event_path(@event), notice: "대타가 배정되었습니다."
+    else
+      redirect_to event_path(@event), alert: @substitute.errors.full_messages.join(", ")
+    end
   end
 
   def recommend

@@ -21,8 +21,16 @@ Rails.application.routes.draw do
       collection do
         get :recommend
       end
+      member do
+        post :substitute
+      end
     end
   end
+
+  # Response (토큰 기반, 인증 불필요)
+  get "respond/:token", to: "responses#show", as: :response
+  patch "respond/:token", to: "responses#update"
+  get "respond/:token/completed", to: "responses#completed", as: :completed_response
 
   # Profile (본인)
   resource :profile, only: [:show]
