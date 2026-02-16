@@ -31,6 +31,9 @@ Rails.application.routes.draw do
   # Notifications
   resources :notifications, only: [:index, :show, :new, :create]
 
+  # Statistics
+  resources :statistics, only: [:index]
+
   # Response (토큰 기반, 인증 불필요)
   get "respond/:token", to: "responses#show", as: :response
   patch "respond/:token", to: "responses#update"
