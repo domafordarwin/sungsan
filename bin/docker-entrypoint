@@ -30,6 +30,10 @@ if [ "${1}" == "bundle" ]; then
     echo "db:prepare failed (attempt $RETRY_COUNT/$MAX_RETRIES). Retrying in 3 seconds..."
     sleep 3
   done
+
+  # Seed data (idempotent - uses find_or_create_by)
+  echo "=== Running db:seed ==="
+  bundle exec rails db:seed 2>&1 || echo "WARNING: db:seed failed (may already be seeded)"
 fi
 
 echo "=== Starting Puma server ==="
