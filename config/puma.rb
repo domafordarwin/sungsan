@@ -25,6 +25,6 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 plugin :tmp_restart
 
 # Log when Puma starts
-on_booted do
+after_booted do
   puts "=== Puma booted on port #{app_port} ==="
 end
