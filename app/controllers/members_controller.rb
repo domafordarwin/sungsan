@@ -86,6 +86,35 @@ class MembersController < ApplicationController
     end
   end
 
+  def bulk_destroy
+    authorize Member, :bulk_destroy?
+
+    ids = params[:member_ids]
+    if ids.blank?
+      redirect_to members_path, alert: "삭제할 봉사자를 선택해주세요."
+      return
+    end
+
+    members = policy_scope(Member).where(id: ids)
+    success_count = 0
+    failed_names = []
+
+    members.each do |member|
+      if member.destroy
+        success_count += 1
+      else
+        failed_names << member.name
+      end
+    end
+
+    if failed_names.empty?
+      redirect_to members_path, notice: "#{success_count}명의 봉사자가 삭제되었습니다."
+    else
+      msg = "#{success_count}명 삭제 완료. 삭제 실패: #{failed_names.join(', ')}"
+      redirect_to members_path, alert: msg
+    end
+  end
+
   def sample_csv
     authorize Member, :bulk_create?
     csv_data = MemberBulkImportService.sample_csv

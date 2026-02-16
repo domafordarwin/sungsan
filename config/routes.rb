@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       get :bulk_new
       post :bulk_create
       get :sample_csv
+      delete :bulk_destroy
     end
   end
 

@@ -30,12 +30,31 @@
   </div>
 <% end %>
 
+<% is_admin = policy(Member).destroy? %>
+
 <!-- 목록 -->
 <%= turbo_frame_tag "members_list" do %>
-  <div class="animate-in animate-delay-2">
+  <div class="animate-in animate-delay-2" data-controller="<%= 'bulk-select' if is_admin %>">
+
+    <% if is_admin %>
+      <%= form_with url: bulk_destroy_members_path, method: :delete, id: "bulk-destroy-form", data: { turbo_confirm: "선택한 봉사자를 삭제하시겠습니까?" } do %>
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+          <button type="submit" class="btn-lava" style="font-size: 0.8rem;" data-bulk-select-target="submitBtn" disabled>
+            선택 삭제
+          </button>
+          <span data-bulk-select-target="count" style="font-size: 0.85rem; color: var(--basalt-600);"></span>
+        </div>
+    <% end %>
+    <% end %>
+
     <table class="table-stone">
       <thead>
         <tr>
+          <% if is_admin %>
+            <th style="width: 2.5rem;">
+              <input type="checkbox" data-bulk-select-target="selectAll" data-action="bulk-select#toggleAll">
+            </th>
+          <% end %>
           <th>이름</th>
           <th>세례명</th>
           <th>연락처</th>
@@ -47,6 +66,14 @@
       <tbody>
         <% @members.each do |member| %>
           <tr>
+            <% if is_admin %>
+              <td>
+                <input type="checkbox" name="member_ids[]" value="<%= member.id %>"
+                       form="bulk-destroy-form"
+                       data-bulk-select-target="checkbox"
+                       data-action="bulk-select#toggle">
+              </td>
+            <% end %>
             <td style="font-weight: 500; color: var(--basalt-800);"><%= member.name %></td>
             <td><%= member.baptismal_name %></td>
             <td><%= member.masked_phone %></td>
@@ -58,13 +85,19 @@
                 <span class="badge badge-lava">비활동</span>
               <% end %>
             </td>
-            <td>
+            <td style="white-space: nowrap;">
               <%= link_to "보기", member_path(member), class: "link-ocean", style: "font-size: 0.8rem;" %>
+              <% if is_admin %>
+                <%= button_to "삭제", member_path(member), method: :delete,
+                    class: "link-lava", style: "font-size: 0.8rem; display: inline;",
+                    data: { turbo_confirm: "'#{member.name}' 봉사자를 삭제하시겠습니까?" } %>
+              <% end %>
             </td>
           </tr>
         <% end %>
       </tbody>
     </table>
+
   </div>
 
   <!-- 페이지네이션 -->
