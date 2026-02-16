@@ -5,7 +5,7 @@ if Rails.env.production?
   begin
     conn = ActiveRecord::Base.connection
 
-    missing = %w[news_articles posts comments photo_albums photos active_storage_blobs surveys survey_questions survey_responses].reject do |t|
+    missing = %w[news_articles posts comments photo_albums photos active_storage_blobs surveys survey_questions survey_responses active_storage_postgresql_files].reject do |t|
       conn.table_exists?(t)
     end
 
@@ -22,7 +22,8 @@ if Rails.env.production?
         "active_storage_blobs" => "20260216000023",
         "surveys"              => "20260217000001",
         "survey_questions"     => "20260217000001",
-        "survey_responses"     => "20260217000001"
+        "survey_responses"     => "20260217000001",
+        "active_storage_postgresql_files" => "20260217000002"
       }
 
       missing.each do |table|
