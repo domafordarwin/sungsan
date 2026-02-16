@@ -2,38 +2,29 @@
 
 echo "=== Starting AltarServe Manager ==="
 echo "RAILS_ENV: ${RAILS_ENV:-not set}"
-echo "PORT: ${PORT:-3000}"
 echo "DATABASE_URL set: $([ -n "$DATABASE_URL" ] && echo 'yes' || echo 'NO!')"
 
 if [ "${1}" == "bundle" ]; then
-  # Step 1: Ensure DB exists
-  echo "=== Step 1: Ensure database ==="
-  bundle exec rails db:create 2>&1 || echo "(db already exists)"
+  # Check if critical tables exist using psql directly
+  echo "=== Checking database tables ==="
+  TABLE_EXISTS=$(psql "$DATABASE_URL" -tAc "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'news_articles');" 2>/dev/null || echo "f")
 
-  # Step 2: Run pending migrations
-  echo "=== Step 2: db:migrate ==="
-  bundle exec rails db:migrate 2>&1 || {
-    echo "=== db:migrate failed, trying db:schema:load + db:migrate ==="
-    bundle exec rails db:schema:load 2>&1 || echo "schema:load had issues"
-    bundle exec rails db:migrate 2>&1 || echo "WARNING: migrate still failing"
-  }
+  if [ "$TABLE_EXISTS" = "t" ]; then
+    echo "Tables exist, running db:migrate for any pending migrations..."
+    bundle exec rails db:migrate 2>&1 || echo "WARNING: db:migrate had issues"
+  else
+    echo "Tables missing! Running db:schema:load to create all tables..."
+    bundle exec rails db:schema:load 2>&1 || {
+      echo "schema:load failed, trying db:prepare..."
+      bundle exec rails db:prepare 2>&1 || echo "CRITICAL: database setup failed"
+    }
+  fi
 
-  # Step 3: Verify tables
-  echo "=== Step 3: Verify tables ==="
-  bundle exec rails runner "
-    tables = %w[news_articles posts comments photo_albums photos active_storage_blobs]
-    tables.each do |t|
-      exists = ActiveRecord::Base.connection.table_exists?(t)
-      puts \"  #{t}: #{exists ? 'OK' : 'MISSING'}\";
-    end
-  " 2>&1 || echo "Table verification skipped"
-
-  # Step 4: Seed data
-  echo "=== Step 4: db:seed ==="
-  bundle exec rails db:seed 2>&1 || echo "WARNING: db:seed failed"
+  echo "=== Running db:seed ==="
+  bundle exec rails db:seed 2>&1 || echo "WARNING: db:seed skipped"
 
   echo "=== DB setup complete ==="
 fi
 
-echo "=== Starting Puma server ==="
+echo "=== Starting server ==="
 exec "${@}"
