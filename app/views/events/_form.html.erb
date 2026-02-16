@@ -1,0 +1,57 @@
+<%= form_with model: event, class: "space-y-6" do |f| %>
+  <% if event.errors.any? %>
+    <div class="bg-red-100 text-red-800 p-4 rounded">
+      <ul>
+        <% event.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :event_type_id, "미사유형", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.select :event_type_id, @event_types.map { |et| ["#{et.name} (#{et.total_required_count}명)", et.id] },
+        { prompt: "선택..." },
+        { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" } %>
+  </div>
+
+  <div>
+    <%= f.label :date, "날짜", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.date_field :date, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm", required: true %>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= f.label :start_time, "시작시간", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.time_field :start_time, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm", required: true %>
+    </div>
+    <div>
+      <%= f.label :end_time, "종료시간", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.time_field :end_time, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :title, "제목 (선택)", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :title, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm",
+        placeholder: "미입력 시 '미사유형 (날짜)' 로 표시" %>
+  </div>
+
+  <div>
+    <%= f.label :location, "장소", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :location, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+  </div>
+
+  <div>
+    <%= f.label :notes, "비고", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :notes, rows: 3, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+  </div>
+
+  <div class="flex gap-4">
+    <%= f.submit event.persisted? ? "수정" : "등록",
+        class: "bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 cursor-pointer" %>
+    <%= link_to "취소", event.persisted? ? event_path(event) : events_path,
+        class: "text-gray-600 hover:text-gray-900 py-2" %>
+  </div>
+<% end %>

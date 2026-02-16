@@ -5,6 +5,7 @@
         <%= link_to "성단 매니저", root_path, class: "text-xl font-bold text-blue-600" %>
         <% if Current.user&.admin? || Current.user&.operator? %>
           <%= link_to "봉사자", members_path, class: "text-gray-600 hover:text-gray-900" %>
+          <%= link_to "일정", events_path, class: "text-gray-600 hover:text-gray-900" %>
         <% end %>
         <% if Current.user&.admin? %>
           <%= link_to "역할", admin_roles_path, class: "text-gray-600 hover:text-gray-900" %>

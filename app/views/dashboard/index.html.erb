@@ -7,6 +7,11 @@
       <h3 class="font-bold text-gray-700">봉사자 관리</h3>
       <%= link_to "봉사자 목록", members_path, class: "text-blue-600 hover:text-blue-800" %>
     </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="font-bold text-gray-700">일정 관리</h3>
+      <%= link_to "일정 목록", events_path, class: "text-blue-600 hover:text-blue-800" %>
+    </div>
   <% end %>
 
   <% if Current.user.admin? %>

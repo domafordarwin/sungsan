@@ -10,6 +10,15 @@ Rails.application.routes.draw do
     end
   end
 
+  # Events
+  resources :events do
+    collection do
+      get :bulk_new
+      post :bulk_create
+      delete :destroy_recurring
+    end
+  end
+
   # Profile (본인)
   resource :profile, only: [:show]
 
