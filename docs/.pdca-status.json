@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-02-16T03:26:15.337Z",
+  "lastUpdated": "2026-02-16T03:53:26.204Z",
   "activeFeatures": [
     "bin",
     "migrate",
@@ -22,7 +22,10 @@
     "assignment_recommender_spec.rb",
     "notification_service.rb",
     "notification_service_spec.rb",
-    "jobs"
+    "jobs",
+    "mailers",
+    "application_cable",
+    "helpers"
   ],
   "primaryFeature": "bin",
   "features": {
@@ -61,9 +64,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-16T00:41:17.552Z",
-        "lastUpdated": "2026-02-16T03:25:38.908Z"
+        "lastUpdated": "2026-02-16T03:30:44.650Z"
       },
-      "lastFile": "/mnt/c/workspace/sungsan/app/controllers/profiles_controller.rb"
+      "lastFile": "/mnt/c/workspace/sungsan/app/controllers/statistics_controller.rb"
     },
     "concerns": {
       "phase": "do",
@@ -139,7 +142,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-16T01:14:02.323Z",
-        "lastUpdated": "2026-02-16T03:22:38.172Z"
+        "lastUpdated": "2026-02-16T03:31:12.360Z"
       },
       "lastFile": "/mnt/c/workspace/sungsan/config/routes.rb"
     },
@@ -152,9 +155,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-16T01:14:43.276Z",
-        "lastUpdated": "2026-02-16T03:23:08.544Z"
+        "lastUpdated": "2026-02-16T03:30:45.543Z"
       },
-      "lastFile": "/mnt/c/workspace/sungsan/spec/policies/notification_policy_spec.rb"
+      "lastFile": "/mnt/c/workspace/sungsan/app/policies/statistics_policy.rb"
     },
     "admin": {
       "phase": "do",
@@ -296,9 +299,48 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-16T03:24:50.035Z",
-        "lastUpdated": "2026-02-16T03:25:06.161Z"
+        "lastUpdated": "2026-02-16T03:49:40.358Z"
       },
-      "lastFile": "/mnt/c/workspace/sungsan/spec/jobs/event_reminder_job_spec.rb"
+      "lastFile": "/mnt/c/workspace/sungsan/app/jobs/application_job.rb"
+    },
+    "mailers": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-02-16T03:52:57.096Z",
+        "lastUpdated": "2026-02-16T03:52:57.096Z"
+      },
+      "lastFile": "/mnt/c/workspace/sungsan/app/mailers/application_mailer.rb"
+    },
+    "application_cable": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-02-16T03:52:56.658Z",
+        "lastUpdated": "2026-02-16T03:52:57.548Z"
+      },
+      "lastFile": "/mnt/c/workspace/sungsan/app/channels/application_cable/channel.rb"
+    },
+    "helpers": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-02-16T03:53:26.204Z",
+        "lastUpdated": "2026-02-16T03:53:26.204Z"
+      },
+      "lastFile": "/mnt/c/workspace/sungsan/app/helpers/application_helper.rb"
     }
   },
   "pipeline": {
@@ -309,7 +351,7 @@
   "session": {
     "startedAt": "2026-02-16T00:11:20.630Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-02-16T03:26:15.337Z"
+    "lastActivity": "2026-02-16T03:53:26.204Z"
   },
   "history": [
     {
@@ -1425,6 +1467,54 @@
     {
       "timestamp": "2026-02-16T03:26:15.337Z",
       "feature": "db",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T03:30:44.650Z",
+      "feature": "sungsan",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T03:30:45.543Z",
+      "feature": "policies",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T03:31:12.360Z",
+      "feature": "config",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T03:49:40.358Z",
+      "feature": "jobs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T03:52:57.096Z",
+      "feature": "mailers",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T03:52:56.658Z",
+      "feature": "application_cable",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T03:52:57.548Z",
+      "feature": "application_cable",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-16T03:53:26.204Z",
+      "feature": "helpers",
       "phase": "do",
       "action": "updated"
     }
