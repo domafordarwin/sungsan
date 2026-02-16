@@ -1,0 +1,34 @@
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-8">
+  <h1 class="text-2xl font-bold mb-6">공지 작성</h1>
+
+  <%= form_with model: @notification, class: "space-y-4" do |f| %>
+    <% if @notification.errors.any? %>
+      <div class="bg-red-100 text-red-800 p-3 rounded">
+        <% @notification.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div>
+      <%= f.label :subject, "제목", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :subject, class: "mt-1 w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+
+    <div>
+      <%= f.label :body, "내용", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :body, rows: 6, class: "mt-1 w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+
+    <div>
+      <%= f.label :channel, "채널", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.select :channel, [["이메일", "email"]], {},
+          class: "mt-1 w-full rounded-md border-gray-300 shadow-sm" %>
+    </div>
+
+    <div class="flex gap-4">
+      <%= f.submit "발송", class: "bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 cursor-pointer" %>
+      <%= link_to "취소", notifications_path, class: "text-gray-600 hover:text-gray-900 py-2" %>
+    </div>
+  <% end %>
+</div>

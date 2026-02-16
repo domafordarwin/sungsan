@@ -1,16 +1,83 @@
 <h1 class="text-2xl font-bold mb-6">대시보드</h1>
-<p class="text-gray-600">안녕하세요, <%= Current.user.name %>님. (<%= Current.user.role %>)</p>
+<p class="text-gray-600 mb-8">안녕하세요, <%= Current.user.name %>님. (<%= Current.user.role %>)</p>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+<% if Current.user.admin? || Current.user.operator? %>
+  <!-- 통계 카드 -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="bg-white rounded-lg shadow p-6 text-center">
+      <div class="text-3xl font-bold text-blue-600"><%= @upcoming_events_count %></div>
+      <div class="text-sm text-gray-500 mt-1">예정 일정</div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6 text-center">
+      <div class="text-3xl font-bold text-green-600"><%= @active_members_count %></div>
+      <div class="text-sm text-gray-500 mt-1">활성 봉사자</div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6 text-center">
+      <div class="text-3xl font-bold <%= @pending_assignments_count > 0 ? 'text-orange-600' : 'text-gray-400' %>"><%= @pending_assignments_count %></div>
+      <div class="text-sm text-gray-500 mt-1">미응답 배정</div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6 text-center">
+      <div class="text-3xl font-bold text-purple-600"><%= @this_week_events.size %></div>
+      <div class="text-sm text-gray-500 mt-1">이번 주 일정</div>
+    </div>
+  </div>
+
+  <!-- 이번 주 일정 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="font-bold text-gray-700 mb-4">이번 주 일정</h3>
+      <% if @this_week_events.any? %>
+        <ul class="space-y-2">
+          <% @this_week_events.each do |event| %>
+            <li class="flex justify-between">
+              <%= link_to event.display_name, event_path(event), class: "text-blue-600 hover:text-blue-800" %>
+              <span class="text-sm text-gray-500"><%= event.date.strftime("%m/%d %a") %> <%= event.start_time.strftime("%H:%M") %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-gray-400">이번 주 예정된 일정이 없습니다.</p>
+      <% end %>
+    </div>
+
+    <!-- 인력 부족 경고 -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="font-bold text-gray-700 mb-4">인력 부족 경고</h3>
+      <% if @shortage_roles.any? %>
+        <ul class="space-y-2">
+          <% @shortage_roles.each do |s| %>
+            <li class="flex justify-between items-center">
+              <div>
+                <span class="text-sm"><%= s[:event].display_name %></span>
+                <span class="text-xs text-gray-500 ml-1"><%= s[:role].name %></span>
+              </div>
+              <span class="text-xs text-red-600 font-medium">
+                <%= s[:assigned] %>/<%= s[:required] %>명
+              </span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-gray-400">부족한 역할이 없습니다.</p>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<!-- 빠른 접근 -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
   <% if Current.user.admin? || Current.user.operator? %>
     <div class="bg-white rounded-lg shadow p-6">
       <h3 class="font-bold text-gray-700">봉사자 관리</h3>
       <%= link_to "봉사자 목록", members_path, class: "text-blue-600 hover:text-blue-800" %>
     </div>
-
     <div class="bg-white rounded-lg shadow p-6">
       <h3 class="font-bold text-gray-700">일정 관리</h3>
       <%= link_to "일정 목록", events_path, class: "text-blue-600 hover:text-blue-800" %>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="font-bold text-gray-700">알림</h3>
+      <%= link_to "알림 이력", notifications_path, class: "text-blue-600 hover:text-blue-800" %>
     </div>
   <% end %>
 
@@ -19,12 +86,10 @@
       <h3 class="font-bold text-gray-700">역할 관리</h3>
       <%= link_to "역할 목록", admin_roles_path, class: "text-blue-600 hover:text-blue-800" %>
     </div>
-
     <div class="bg-white rounded-lg shadow p-6">
       <h3 class="font-bold text-gray-700">미사유형 관리</h3>
       <%= link_to "미사유형 목록", admin_event_types_path, class: "text-blue-600 hover:text-blue-800" %>
     </div>
-
     <div class="bg-white rounded-lg shadow p-6">
       <h3 class="font-bold text-gray-700">사용자 관리</h3>
       <%= link_to "사용자 목록", admin_users_path, class: "text-blue-600 hover:text-blue-800" %>

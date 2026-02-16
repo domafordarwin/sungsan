@@ -1,5 +1,6 @@
 class Notification < ApplicationRecord
   include ParishScoped
+  include Paginatable
 
   TYPES = %w[assignment reminder announcement].freeze
   CHANNELS = %w[email sms push].freeze

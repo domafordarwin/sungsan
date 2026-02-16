@@ -25,7 +25,11 @@ Rails.application.routes.draw do
         post :substitute
       end
     end
+    resource :attendance, controller: "attendance_records", only: [:edit, :update]
   end
+
+  # Notifications
+  resources :notifications, only: [:index, :show, :new, :create]
 
   # Response (토큰 기반, 인증 불필요)
   get "respond/:token", to: "responses#show", as: :response

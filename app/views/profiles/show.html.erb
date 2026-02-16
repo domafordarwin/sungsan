@@ -1,0 +1,94 @@
+<div class="max-w-2xl mx-auto">
+  <div class="bg-white rounded-lg shadow p-8 mb-6">
+    <h1 class="text-2xl font-bold mb-4">내 프로필</h1>
+    <dl class="space-y-3">
+      <div><dt class="text-sm text-gray-500">이름</dt><dd class="font-medium"><%= @member.name %></dd></div>
+      <div><dt class="text-sm text-gray-500">세례명</dt><dd><%= @member.baptismal_name || "-" %></dd></div>
+      <div><dt class="text-sm text-gray-500">구역</dt><dd><%= @member.district || "-" %></dd></div>
+      <div><dt class="text-sm text-gray-500">단체</dt><dd><%= @member.group_name || "-" %></dd></div>
+    </dl>
+  </div>
+
+  <% if @recent_assignments.present? %>
+  <div class="bg-white rounded-lg shadow p-8 mb-6">
+    <h2 class="text-lg font-bold mb-4">최근 봉사 배정</h2>
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b">
+          <th class="text-left py-2">날짜</th>
+          <th class="text-left py-2">미사</th>
+          <th class="text-left py-2">역할</th>
+          <th class="text-left py-2">상태</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recent_assignments.each do |a| %>
+          <tr class="border-b">
+            <td class="py-2"><%= a.event.date.strftime("%m/%d") %></td>
+            <td class="py-2"><%= a.event.event_type.name %></td>
+            <td class="py-2"><%= a.role.name %></td>
+            <td class="py-2">
+              <span class="text-xs px-2 py-0.5 rounded-full
+                <%= case a.status
+                    when 'accepted' then 'bg-green-100 text-green-800'
+                    when 'declined' then 'bg-red-100 text-red-800'
+                    when 'pending' then 'bg-yellow-100 text-yellow-800'
+                    else 'bg-gray-100 text-gray-800'
+                    end %>">
+                <%= case a.status
+                    when 'accepted' then '수락'
+                    when 'declined' then '거절'
+                    when 'pending' then '대기'
+                    when 'replaced' then '대타'
+                    when 'canceled' then '취소'
+                    else a.status
+                    end %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% end %>
+
+  <% if @attendance_records.present? %>
+  <div class="bg-white rounded-lg shadow p-8">
+    <h2 class="text-lg font-bold mb-4">출결 기록</h2>
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b">
+          <th class="text-left py-2">날짜</th>
+          <th class="text-left py-2">미사</th>
+          <th class="text-left py-2">출결</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @attendance_records.each do |r| %>
+          <tr class="border-b">
+            <td class="py-2"><%= r.event.date.strftime("%m/%d") %></td>
+            <td class="py-2"><%= r.event.event_type.name %></td>
+            <td class="py-2">
+              <span class="text-xs px-2 py-0.5 rounded-full
+                <%= case r.status
+                    when 'present' then 'bg-green-100 text-green-800'
+                    when 'late' then 'bg-yellow-100 text-yellow-800'
+                    when 'absent' then 'bg-red-100 text-red-800'
+                    else 'bg-gray-100 text-gray-800'
+                    end %>">
+                <%= case r.status
+                    when 'present' then '출석'
+                    when 'late' then '지각'
+                    when 'absent' then '결석'
+                    when 'excused' then '사유결석'
+                    else r.status
+                    end %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% end %>
+</div>

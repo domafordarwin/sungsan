@@ -11,6 +11,10 @@ class MembersController < ApplicationController
 
   def show
     authorize @member
+    @recent_assignments = @member.assignments.includes(:event, :role)
+                                 .order("events.date DESC").limit(10)
+    @attendance_records = @member.attendance_records.includes(:event)
+                                 .order("events.date DESC").limit(10)
   end
 
   def new

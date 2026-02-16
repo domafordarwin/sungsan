@@ -9,6 +9,7 @@ class AssignmentsController < ApplicationController
 
     if @assignment.save
       @assignment.generate_response_token!
+      NotificationService.assignment_created(@assignment)
       redirect_to event_path(@event), notice: "봉사자가 배정되었습니다."
     else
       redirect_to event_path(@event), alert: @assignment.errors.full_messages.join(", ")

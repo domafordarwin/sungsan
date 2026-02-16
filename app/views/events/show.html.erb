@@ -41,6 +41,10 @@
             class: "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700",
             data: { turbo_confirm: "이 일정을 삭제하시겠습니까?" } %>
       <% end %>
+      <% if policy(AttendanceRecord).edit? && @event.date <= Date.current %>
+        <%= link_to "출결 기록", edit_event_attendance_path(@event),
+            class: "bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" %>
+      <% end %>
       <%= link_to "목록", events_path, class: "text-gray-600 hover:text-gray-900 py-2" %>
     </div>
   </div>

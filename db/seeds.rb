@@ -75,18 +75,52 @@ qualifications_data.each do |attrs|
   end
 end
 
-# 7. 개발용 테스트 봉사자 (development 환경만)
-if Rails.env.development?
-  10.times do |i|
-    Member.find_or_create_by!(parish: parish, name: "봉사자#{i + 1}") do |m|
-      m.phone = "010-#{rand(1000..9999)}-#{rand(1000..9999)}"
-      m.baptismal_name = ["베드로", "바오로", "요한", "마리아", "안나", "요셉", "프란치스코", "데레사", "아녜스", "루치아"][i]
-      m.district = "#{rand(1..10)}구역"
-      m.baptized = true
-      m.confirmed = i < 7
-      m.active = true
-    end
+# 7. 운영자 계정
+operator = User.find_or_create_by!(email_address: "operator@sungsan.org") do |u|
+  u.parish = parish
+  u.name = "운영자"
+  u.password = "password123"
+  u.role = "operator"
+end
+
+# 8. 테스트 봉사자
+members = 10.times.map do |i|
+  Member.find_or_create_by!(parish: parish, name: "봉사자#{i + 1}") do |m|
+    m.phone = "010-#{rand(1000..9999)}-#{rand(1000..9999)}"
+    m.baptismal_name = ["베드로", "바오로", "요한", "마리아", "안나", "요셉", "프란치스코", "데레사", "아녜스", "루치아"][i]
+    m.district = "#{rand(1..10)}구역"
+    m.baptized = true
+    m.confirmed = i < 7
+    m.active = true
+  end
+end
+
+# 9. 멤버 유저 (봉사자1에 연결)
+member_user = User.find_or_create_by!(email_address: "member@sungsan.org") do |u|
+  u.parish = parish
+  u.name = "봉사자1"
+  u.password = "password123"
+  u.role = "member"
+end
+members.first.update!(user: member_user) unless members.first.user_id
+
+# 10. 샘플 이벤트 (다음 4주 주일미사)
+if Event.count == 0
+  next_sunday = Date.current.beginning_of_week + 6.days
+  next_sunday += 7.days if next_sunday <= Date.current
+  4.times do |week|
+    date = next_sunday + (week * 7).days
+    Event.create!(
+      parish: parish,
+      event_type: sunday_3rd,
+      date: date,
+      start_time: "11:00",
+      recurring_group_id: SecureRandom.uuid
+    )
   end
 end
 
 puts "Seeding completed!"
+puts "  Admin: admin@sungsan.org / password123"
+puts "  Operator: operator@sungsan.org / password123"
+puts "  Member: member@sungsan.org / password123"
