@@ -1,49 +1,49 @@
 <div class="max-w-4xl mx-auto">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">통계</h1>
+  <div class="page-header animate-in">
+    <h1>통계</h1>
     <div class="flex gap-2">
       <%= link_to "주간", statistics_path(period: "week"),
-          class: "px-3 py-1 rounded text-sm #{@period == 'week' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}" %>
+          class: "period-tab #{@period == 'week' ? 'active' : 'inactive'}" %>
       <%= link_to "월간", statistics_path(period: "month"),
-          class: "px-3 py-1 rounded text-sm #{@period == 'month' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}" %>
+          class: "period-tab #{@period == 'month' ? 'active' : 'inactive'}" %>
       <%= link_to "분기", statistics_path(period: "quarter"),
-          class: "px-3 py-1 rounded text-sm #{@period == 'quarter' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}" %>
+          class: "period-tab #{@period == 'quarter' ? 'active' : 'inactive'}" %>
     </div>
   </div>
 
   <!-- 핵심 지표 -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-    <div class="bg-white rounded-lg shadow p-6 text-center">
-      <div class="text-3xl font-bold text-blue-600"><%= @total_assignments %></div>
-      <div class="text-sm text-gray-500 mt-1">총 배정</div>
+    <div class="stat-card ocean animate-in animate-delay-1">
+      <div class="stat-value"><%= @total_assignments %></div>
+      <div class="stat-label">총 배정</div>
     </div>
-    <div class="bg-white rounded-lg shadow p-6 text-center">
-      <div class="text-3xl font-bold text-green-600"><%= @participation_rate %>%</div>
-      <div class="text-sm text-gray-500 mt-1">참여율</div>
+    <div class="stat-card moss animate-in animate-delay-2">
+      <div class="stat-value"><%= @participation_rate %>%</div>
+      <div class="stat-label">참여율</div>
     </div>
-    <div class="bg-white rounded-lg shadow p-6 text-center">
-      <div class="text-3xl font-bold text-red-600"><%= @absence_rate %>%</div>
-      <div class="text-sm text-gray-500 mt-1">결석률</div>
+    <div class="stat-card lava animate-in animate-delay-3">
+      <div class="stat-value"><%= @absence_rate %>%</div>
+      <div class="stat-label">결석률</div>
     </div>
-    <div class="bg-white rounded-lg shadow p-6 text-center">
-      <div class="text-3xl font-bold text-purple-600"><%= @accepted_count %></div>
-      <div class="text-sm text-gray-500 mt-1">수락 건수</div>
+    <div class="stat-card sunrise animate-in animate-delay-4">
+      <div class="stat-value"><%= @accepted_count %></div>
+      <div class="stat-label">수락 건수</div>
     </div>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <!-- 월별 봉사 횟수 -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="font-bold text-gray-700 mb-4">월별 봉사 횟수 (최근 6개월)</h3>
-      <table class="w-full text-sm">
+    <div class="card-basalt animate-in" style="padding: 1.5rem;">
+      <h3 class="section-title">월별 봉사 횟수 (최근 6개월)</h3>
+      <table class="table-stone">
         <thead>
-          <tr class="border-b"><th class="text-left py-2">월</th><th class="text-right py-2">수락 건수</th></tr>
+          <tr><th>월</th><th style="text-align: right;">수락 건수</th></tr>
         </thead>
         <tbody>
           <% @monthly_stats.each do |ms| %>
-            <tr class="border-b">
-              <td class="py-2"><%= ms[:month] %></td>
-              <td class="py-2 text-right font-medium"><%= ms[:count] %></td>
+            <tr>
+              <td><%= ms[:month] %></td>
+              <td style="text-align: right; font-weight: 500; color: var(--ocean-700);"><%= ms[:count] %></td>
             </tr>
           <% end %>
         </tbody>
@@ -51,22 +51,22 @@
     </div>
 
     <!-- 역할별 통계 -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="font-bold text-gray-700 mb-4">역할별 배정 현황</h3>
-      <table class="w-full text-sm">
+    <div class="card-basalt animate-in animate-delay-1" style="padding: 1.5rem;">
+      <h3 class="section-title">역할별 배정 현황</h3>
+      <table class="table-stone">
         <thead>
-          <tr class="border-b">
-            <th class="text-left py-2">역할</th>
-            <th class="text-right py-2">배정</th>
-            <th class="text-right py-2">수락</th>
+          <tr>
+            <th>역할</th>
+            <th style="text-align: right;">배정</th>
+            <th style="text-align: right;">수락</th>
           </tr>
         </thead>
         <tbody>
           <% @role_stats.each do |rs| %>
-            <tr class="border-b">
-              <td class="py-2"><%= rs[:role].name %></td>
-              <td class="py-2 text-right"><%= rs[:assigned] %></td>
-              <td class="py-2 text-right font-medium text-green-600"><%= rs[:accepted] %></td>
+            <tr>
+              <td><%= rs[:role].name %></td>
+              <td style="text-align: right;"><%= rs[:assigned] %></td>
+              <td style="text-align: right; font-weight: 500; color: var(--moss-600);"><%= rs[:accepted] %></td>
             </tr>
           <% end %>
         </tbody>
@@ -74,7 +74,7 @@
     </div>
   </div>
 
-  <div class="mt-4">
-    <%= link_to "대시보드", root_path, class: "text-gray-600 hover:text-gray-900" %>
+  <div style="margin-top: 1.5rem;">
+    <%= link_to "대시보드", root_path, class: "btn-ghost" %>
   </div>
 </div>

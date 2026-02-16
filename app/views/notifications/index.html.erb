@@ -1,33 +1,32 @@
 <div class="max-w-3xl mx-auto">
-  <div class="bg-white rounded-lg shadow p-8">
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold">알림 이력</h1>
+  <div class="card-basalt animate-in" style="padding: 2rem;">
+    <div class="page-header" style="margin-bottom: 1.5rem; border-bottom: none; padding-bottom: 0;">
+      <h1>알림 이력</h1>
       <% if policy(Notification).create? %>
-        <%= link_to "공지 작성", new_notification_path,
-            class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+        <%= link_to "공지 작성", new_notification_path, class: "btn-ocean" %>
       <% end %>
     </div>
 
     <% if @notifications.any? %>
-      <table class="w-full text-sm">
+      <table class="table-stone">
         <thead>
-          <tr class="border-b">
-            <th class="text-left py-2">유형</th>
-            <th class="text-left py-2">제목</th>
-            <th class="text-left py-2">수신자</th>
-            <th class="text-left py-2">상태</th>
-            <th class="text-left py-2">발송일</th>
+          <tr>
+            <th>유형</th>
+            <th>제목</th>
+            <th>수신자</th>
+            <th>상태</th>
+            <th>발송일</th>
           </tr>
         </thead>
         <tbody>
           <% @notifications.each do |n| %>
-            <tr class="border-b hover:bg-gray-50">
-              <td class="py-2">
-                <span class="text-xs px-2 py-0.5 rounded-full
+            <tr>
+              <td>
+                <span class="badge
                   <%= case n.notification_type
-                      when 'assignment' then 'bg-blue-100 text-blue-800'
-                      when 'announcement' then 'bg-purple-100 text-purple-800'
-                      else 'bg-gray-100 text-gray-800'
+                      when 'assignment' then 'badge-ocean'
+                      when 'announcement' then 'badge-sunrise'
+                      else 'badge-basalt'
                       end %>">
                   <%= case n.notification_type
                       when 'assignment' then '배정'
@@ -36,10 +35,16 @@
                       end %>
                 </span>
               </td>
-              <td class="py-2"><%= link_to n.subject, notification_path(n), class: "text-blue-600 hover:text-blue-800" %></td>
-              <td class="py-2"><%= n.recipient&.name || "전체" %></td>
-              <td class="py-2">
-                <span class="text-xs <%= n.status == 'sent' ? 'text-green-600' : 'text-gray-500' %>">
+              <td><%= link_to n.subject, notification_path(n), class: "link-ocean" %></td>
+              <td style="color: var(--basalt-500);"><%= n.recipient&.name || "전체" %></td>
+              <td>
+                <span class="badge
+                  <%= case n.status
+                      when 'sent' then 'badge-moss'
+                      when 'failed' then 'badge-lava'
+                      when 'read' then 'badge-ocean'
+                      else 'badge-basalt'
+                      end %>">
                   <%= case n.status
                       when 'pending' then '대기'
                       when 'sent' then '발송'
@@ -48,13 +53,15 @@
                       end %>
                 </span>
               </td>
-              <td class="py-2 text-gray-500"><%= n.created_at.strftime("%m/%d %H:%M") %></td>
+              <td style="color: var(--basalt-500); font-size: 0.8rem;"><%= n.created_at.strftime("%m/%d %H:%M") %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
     <% else %>
-      <p class="text-gray-500 text-center py-8">알림이 없습니다.</p>
+      <div style="text-align: center; padding: 3rem; color: var(--basalt-400);">
+        알림이 없습니다.
+      </div>
     <% end %>
   </div>
 </div>

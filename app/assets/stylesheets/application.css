@@ -1,4 +1,640 @@
 /*
- * This is a manifest file that'll be compiled into application.css.
- * Tailwind CSS is loaded via tailwindcss-rails gem.
+ * AltarServe Manager - Seongsanpo Design System
+ * Inspired by: Jeju basalt stone walls, Seongsan Ilchulbong sunrise, ocean teal
  */
+
+/* === Google Fonts === */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Pretendard:wght@300;400;500;600;700&display=swap');
+
+/* === Design Tokens === */
+:root {
+  /* Basalt (현무암) */
+  --basalt-900: #1a1d1e;
+  --basalt-800: #2d3436;
+  --basalt-700: #3d4449;
+  --basalt-600: #636e72;
+  --basalt-500: #7f8c8d;
+  --basalt-400: #95a5a6;
+  --basalt-300: #b2bec3;
+  --basalt-200: #dfe6e9;
+  --basalt-100: #ecf0f1;
+
+  /* Ocean (제주 바다) */
+  --ocean-900: #053d45;
+  --ocean-800: #075e6a;
+  --ocean-700: #0a7e8f;
+  --ocean-600: #0d98aa;
+  --ocean-500: #10b1c4;
+  --ocean-400: #38c5d6;
+  --ocean-300: #7ddce8;
+  --ocean-200: #baeef4;
+  --ocean-100: #e0f7fa;
+
+  /* Sunrise (성산일출봉 일출) */
+  --sunrise-700: #a0643e;
+  --sunrise-600: #c17f59;
+  --sunrise-500: #d4956a;
+  --sunrise-400: #e8b86d;
+  --sunrise-300: #f0cc8a;
+  --sunrise-200: #f5ddb3;
+  --sunrise-100: #faf0dd;
+
+  /* Moss (화산석 이끼) */
+  --moss-700: #1b4332;
+  --moss-600: #2d6a4f;
+  --moss-500: #40916c;
+  --moss-400: #52b788;
+  --moss-300: #74c69d;
+
+  /* Volcanic Red */
+  --lava-600: #c44536;
+  --lava-500: #d9594a;
+  --lava-400: #e07569;
+
+  /* Backgrounds */
+  --sand-cream: #f7f3ee;
+  --warm-white: #fdfbf8;
+
+  /* Fonts */
+  --font-display: 'Noto Serif KR', 'Batang', Georgia, serif;
+  --font-body: 'Pretendard', -apple-system, 'Apple SD Gothic Neo', sans-serif;
+}
+
+/* === Base Styles === */
+body {
+  font-family: var(--font-body);
+  background-color: var(--sand-cream);
+  color: var(--basalt-800);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* === Typography === */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  color: var(--basalt-900);
+  letter-spacing: -0.01em;
+}
+
+/* === Navbar === */
+.nav-seongsanpo {
+  background: linear-gradient(135deg, var(--basalt-900) 0%, var(--basalt-800) 50%, var(--basalt-700) 100%);
+  border-bottom: 3px solid var(--sunrise-500);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+}
+
+.nav-seongsanpo .nav-brand {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.25rem;
+  color: var(--sunrise-400);
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-seongsanpo .nav-brand:hover {
+  color: var(--sunrise-300);
+}
+
+.nav-seongsanpo .nav-link {
+  color: var(--basalt-300);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+}
+.nav-seongsanpo .nav-link:hover {
+  color: var(--warm-white);
+  background-color: rgba(255,255,255,0.08);
+}
+
+.nav-seongsanpo .nav-user {
+  font-size: 0.8rem;
+  color: var(--basalt-400);
+}
+
+.nav-seongsanpo .nav-logout {
+  font-size: 0.8rem;
+  color: var(--lava-400);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+}
+.nav-seongsanpo .nav-logout:hover {
+  color: var(--warm-white);
+  background-color: var(--lava-600);
+}
+
+/* === Cards === */
+.card-basalt {
+  background-color: var(--warm-white);
+  border-radius: 1rem;
+  border: 1px solid var(--basalt-200);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.card-basalt:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.04);
+  transform: translateY(-1px);
+}
+
+/* === Buttons === */
+.btn-ocean {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: linear-gradient(135deg, var(--ocean-700) 0%, var(--ocean-800) 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(10,126,143,0.3);
+}
+.btn-ocean:hover {
+  background: linear-gradient(135deg, var(--ocean-600) 0%, var(--ocean-700) 100%);
+  box-shadow: 0 2px 8px rgba(10,126,143,0.4);
+  transform: translateY(-1px);
+}
+
+.btn-sunrise {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: linear-gradient(135deg, var(--sunrise-600) 0%, var(--sunrise-700) 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.btn-sunrise:hover {
+  background: linear-gradient(135deg, var(--sunrise-500) 0%, var(--sunrise-600) 100%);
+  transform: translateY(-1px);
+}
+
+.btn-moss {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: linear-gradient(135deg, var(--moss-600) 0%, var(--moss-700) 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.btn-moss:hover {
+  background: linear-gradient(135deg, var(--moss-500) 0%, var(--moss-600) 100%);
+  transform: translateY(-1px);
+}
+
+.btn-lava {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: linear-gradient(135deg, var(--lava-500) 0%, var(--lava-600) 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.btn-lava:hover {
+  background: linear-gradient(135deg, var(--lava-400) 0%, var(--lava-500) 100%);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: transparent;
+  color: var(--basalt-600);
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--basalt-200);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.btn-ghost:hover {
+  background: var(--basalt-100);
+  color: var(--basalt-800);
+  border-color: var(--basalt-300);
+}
+
+/* === Form Inputs === */
+.input-basalt {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1.5px solid var(--basalt-200);
+  border-radius: 0.5rem;
+  background-color: var(--warm-white);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--basalt-800);
+  transition: all 0.2s;
+  outline: none;
+}
+.input-basalt:focus {
+  border-color: var(--ocean-500);
+  box-shadow: 0 0 0 3px rgba(16,177,196,0.12);
+}
+.input-basalt::placeholder {
+  color: var(--basalt-400);
+}
+
+.label-basalt {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--basalt-600);
+  margin-bottom: 0.375rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* === Tables === */
+.table-stone {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: var(--warm-white);
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--basalt-200);
+}
+.table-stone thead {
+  background: linear-gradient(135deg, var(--basalt-800), var(--basalt-700));
+}
+.table-stone thead th {
+  color: var(--basalt-200);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.875rem 1.25rem;
+  text-align: left;
+}
+.table-stone tbody tr {
+  border-bottom: 1px solid var(--basalt-100);
+  transition: background-color 0.15s;
+}
+.table-stone tbody tr:hover {
+  background-color: var(--ocean-100);
+}
+.table-stone tbody tr:last-child {
+  border-bottom: none;
+}
+.table-stone tbody td {
+  padding: 0.875rem 1.25rem;
+  font-size: 0.875rem;
+  color: var(--basalt-700);
+}
+
+/* === Stat Cards === */
+.stat-card {
+  background-color: var(--warm-white);
+  border-radius: 1rem;
+  border: 1px solid var(--basalt-200);
+  padding: 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.stat-card.ocean::before { background: linear-gradient(90deg, var(--ocean-500), var(--ocean-300)); }
+.stat-card.moss::before { background: linear-gradient(90deg, var(--moss-500), var(--moss-300)); }
+.stat-card.sunrise::before { background: linear-gradient(90deg, var(--sunrise-500), var(--sunrise-300)); }
+.stat-card.lava::before { background: linear-gradient(90deg, var(--lava-500), var(--lava-400)); }
+
+.stat-card .stat-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.stat-card.ocean .stat-value { color: var(--ocean-700); }
+.stat-card.moss .stat-value { color: var(--moss-600); }
+.stat-card.sunrise .stat-value { color: var(--sunrise-600); }
+.stat-card.lava .stat-value { color: var(--lava-600); }
+
+.stat-card .stat-label {
+  font-size: 0.8rem;
+  color: var(--basalt-500);
+  margin-top: 0.375rem;
+  font-weight: 500;
+}
+
+/* === Badges === */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.625rem;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+}
+.badge-ocean { background: var(--ocean-100); color: var(--ocean-800); }
+.badge-moss { background: rgba(45,106,79,0.1); color: var(--moss-600); }
+.badge-sunrise { background: var(--sunrise-100); color: var(--sunrise-700); }
+.badge-lava { background: rgba(196,69,54,0.1); color: var(--lava-600); }
+.badge-basalt { background: var(--basalt-100); color: var(--basalt-600); }
+
+/* === Flash Messages === */
+.flash-notice {
+  background: linear-gradient(135deg, rgba(45,106,79,0.08), rgba(64,145,108,0.05));
+  border-left: 4px solid var(--moss-500);
+  color: var(--moss-700);
+  padding: 0.875rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.flash-alert {
+  background: linear-gradient(135deg, rgba(196,69,54,0.08), rgba(217,89,74,0.05));
+  border-left: 4px solid var(--lava-500);
+  color: var(--lava-600);
+  padding: 0.875rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* === Login Page === */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, var(--basalt-900) 0%, var(--basalt-800) 35%, var(--ocean-900) 65%, var(--ocean-800) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 60%;
+  height: 200%;
+  background: radial-gradient(ellipse, rgba(212,149,106,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.login-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(0deg, rgba(10,110,122,0.12) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 26rem;
+  margin: 1rem;
+  background: rgba(253,251,248,0.97);
+  backdrop-filter: blur(20px);
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.05);
+  padding: 2.5rem;
+}
+
+.login-card .login-cross {
+  display: block;
+  text-align: center;
+  font-size: 2rem;
+  color: var(--sunrise-500);
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+.login-card .login-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--basalt-900);
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+.login-card .login-subtitle {
+  font-size: 0.85rem;
+  color: var(--basalt-500);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* === Page Headers === */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--basalt-200);
+}
+.page-header h1 {
+  font-family: var(--font-display);
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: var(--basalt-900);
+}
+
+/* === Link Styles === */
+.link-ocean {
+  color: var(--ocean-700);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.link-ocean:hover {
+  color: var(--ocean-500);
+}
+
+/* === Quick Access Cards === */
+.quick-card {
+  background: var(--warm-white);
+  border: 1px solid var(--basalt-200);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: block;
+}
+.quick-card:hover {
+  border-color: var(--ocean-300);
+  box-shadow: 0 2px 8px rgba(10,126,143,0.08);
+  transform: translateY(-1px);
+}
+.quick-card .quick-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.quick-card .quick-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--basalt-800);
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+.quick-card .quick-desc {
+  font-size: 0.8rem;
+  color: var(--basalt-500);
+}
+
+/* === Section Headers === */
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--basalt-800);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--basalt-200);
+}
+
+/* === Pagination === */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  margin-top: 1.5rem;
+}
+.pagination .page-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.pagination .page-btn.active {
+  background: var(--ocean-700);
+  color: white;
+}
+.pagination .page-btn.inactive {
+  background: var(--warm-white);
+  color: var(--basalt-600);
+  border: 1px solid var(--basalt-200);
+}
+.pagination .page-btn.inactive:hover {
+  background: var(--ocean-100);
+  border-color: var(--ocean-300);
+}
+
+/* === Period Tabs === */
+.period-tab {
+  padding: 0.375rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.period-tab.active {
+  background: var(--ocean-700);
+  color: white;
+}
+.period-tab.inactive {
+  background: var(--basalt-100);
+  color: var(--basalt-600);
+}
+.period-tab.inactive:hover {
+  background: var(--basalt-200);
+}
+
+/* === Animations === */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  animation: fadeInUp 0.4s ease-out both;
+}
+.animate-delay-1 { animation-delay: 0.05s; }
+.animate-delay-2 { animation-delay: 0.1s; }
+.animate-delay-3 { animation-delay: 0.15s; }
+.animate-delay-4 { animation-delay: 0.2s; }
+
+/* === Filter Panel === */
+.filter-panel {
+  background: var(--warm-white);
+  border: 1px solid var(--basalt-200);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* === Responsive Nav === */
+@media (max-width: 768px) {
+  .nav-seongsanpo .nav-links {
+    display: none;
+  }
+  .nav-seongsanpo .nav-right {
+    font-size: 0.75rem;
+  }
+}

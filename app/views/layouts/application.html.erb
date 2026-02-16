@@ -3,23 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AltarServe Manager</title>
+  <title>성산포 성단 매니저</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
   <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
 </head>
-<body class="min-h-screen bg-gray-50">
+<body class="min-h-screen">
   <% if authenticated? %>
     <%= render "layouts/navbar" %>
   <% end %>
 
   <% if notice %>
-    <div class="bg-green-100 text-green-800 p-3 text-center"><%= notice %></div>
+    <div class="flash-notice animate-in"><%= notice %></div>
   <% end %>
   <% if alert %>
-    <div class="bg-red-100 text-red-800 p-3 text-center"><%= alert %></div>
+    <div class="flash-alert animate-in"><%= alert %></div>
   <% end %>
 
   <main class="container mx-auto px-4 py-6">

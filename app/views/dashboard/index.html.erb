@@ -1,107 +1,122 @@
-<h1 class="text-2xl font-bold mb-6">대시보드</h1>
-<p class="text-gray-600 mb-8">안녕하세요, <%= Current.user.name %>님. (<%= Current.user.role %>)</p>
+<div class="animate-in">
+  <div class="page-header">
+    <div>
+      <h1>&#10013; 대시보드</h1>
+      <p style="color: var(--basalt-500); font-size: 0.875rem; margin-top: 0.25rem;">
+        안녕하세요, <strong style="color: var(--basalt-700);"><%= Current.user.name %></strong>님
+        <span class="badge badge-ocean" style="margin-left: 0.5rem;"><%= Current.user.role %></span>
+      </p>
+    </div>
+  </div>
+</div>
 
 <% if Current.user.admin? || Current.user.operator? %>
   <!-- 통계 카드 -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-    <div class="bg-white rounded-lg shadow p-6 text-center">
-      <div class="text-3xl font-bold text-blue-600"><%= @upcoming_events_count %></div>
-      <div class="text-sm text-gray-500 mt-1">예정 일정</div>
+    <div class="stat-card ocean animate-in animate-delay-1">
+      <div class="stat-value"><%= @upcoming_events_count %></div>
+      <div class="stat-label">예정 일정</div>
     </div>
-    <div class="bg-white rounded-lg shadow p-6 text-center">
-      <div class="text-3xl font-bold text-green-600"><%= @active_members_count %></div>
-      <div class="text-sm text-gray-500 mt-1">활성 봉사자</div>
+    <div class="stat-card moss animate-in animate-delay-2">
+      <div class="stat-value"><%= @active_members_count %></div>
+      <div class="stat-label">활성 봉사자</div>
     </div>
-    <div class="bg-white rounded-lg shadow p-6 text-center">
-      <div class="text-3xl font-bold <%= @pending_assignments_count > 0 ? 'text-orange-600' : 'text-gray-400' %>"><%= @pending_assignments_count %></div>
-      <div class="text-sm text-gray-500 mt-1">미응답 배정</div>
+    <div class="stat-card sunrise animate-in animate-delay-3">
+      <div class="stat-value"><%= @pending_assignments_count %></div>
+      <div class="stat-label">미응답 배정</div>
     </div>
-    <div class="bg-white rounded-lg shadow p-6 text-center">
-      <div class="text-3xl font-bold text-purple-600"><%= @this_week_events.size %></div>
-      <div class="text-sm text-gray-500 mt-1">이번 주 일정</div>
+    <div class="stat-card ocean animate-in animate-delay-4">
+      <div class="stat-value"><%= @this_week_events.size %></div>
+      <div class="stat-label">이번 주 일정</div>
     </div>
   </div>
 
-  <!-- 이번 주 일정 -->
+  <!-- 이번 주 일정 + 인력 부족 -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="font-bold text-gray-700 mb-4">이번 주 일정</h3>
+    <div class="card-basalt" style="padding: 1.5rem;">
+      <h3 class="section-title">이번 주 일정</h3>
       <% if @this_week_events.any? %>
-        <ul class="space-y-2">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
           <% @this_week_events.each do |event| %>
-            <li class="flex justify-between">
-              <%= link_to event.display_name, event_path(event), class: "text-blue-600 hover:text-blue-800" %>
-              <span class="text-sm text-gray-500"><%= event.date.strftime("%m/%d %a") %> <%= event.start_time.strftime("%H:%M") %></span>
-            </li>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--basalt-100);">
+              <%= link_to event.display_name, event_path(event), class: "link-ocean" %>
+              <span style="font-size: 0.8rem; color: var(--basalt-500);"><%= event.date.strftime("%m/%d %a") %> <%= event.start_time.strftime("%H:%M") %></span>
+            </div>
           <% end %>
-        </ul>
+        </div>
       <% else %>
-        <p class="text-gray-400">이번 주 예정된 일정이 없습니다.</p>
+        <p style="color: var(--basalt-400); font-size: 0.875rem;">이번 주 예정된 일정이 없습니다.</p>
       <% end %>
     </div>
 
-    <!-- 인력 부족 경고 -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="font-bold text-gray-700 mb-4">인력 부족 경고</h3>
+    <div class="card-basalt" style="padding: 1.5rem;">
+      <h3 class="section-title">인력 부족 경고</h3>
       <% if @shortage_roles.any? %>
-        <ul class="space-y-2">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
           <% @shortage_roles.each do |s| %>
-            <li class="flex justify-between items-center">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--basalt-100);">
               <div>
-                <span class="text-sm"><%= s[:event].display_name %></span>
-                <span class="text-xs text-gray-500 ml-1"><%= s[:role].name %></span>
+                <span style="font-size: 0.875rem;"><%= s[:event].display_name %></span>
+                <span class="badge badge-basalt" style="margin-left: 0.375rem;"><%= s[:role].name %></span>
               </div>
-              <span class="text-xs text-red-600 font-medium">
-                <%= s[:assigned] %>/<%= s[:required] %>명
-              </span>
-            </li>
+              <span class="badge badge-lava"><%= s[:assigned] %>/<%= s[:required] %>명</span>
+            </div>
           <% end %>
-        </ul>
+        </div>
       <% else %>
-        <p class="text-gray-400">부족한 역할이 없습니다.</p>
+        <p style="color: var(--basalt-400); font-size: 0.875rem;">부족한 역할이 없습니다.</p>
       <% end %>
     </div>
   </div>
 <% end %>
 
 <!-- 빠른 접근 -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<h3 class="section-title animate-in">빠른 접근</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
   <% if Current.user.admin? || Current.user.operator? %>
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="font-bold text-gray-700">봉사자 관리</h3>
-      <%= link_to "봉사자 목록", members_path, class: "text-blue-600 hover:text-blue-800" %>
-    </div>
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="font-bold text-gray-700">일정 관리</h3>
-      <%= link_to "일정 목록", events_path, class: "text-blue-600 hover:text-blue-800" %>
-    </div>
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="font-bold text-gray-700">알림</h3>
-      <%= link_to "알림 이력", notifications_path, class: "text-blue-600 hover:text-blue-800" %>
-    </div>
+    <%= link_to members_path, class: "quick-card animate-in animate-delay-1" do %>
+      <div class="quick-icon">&#128101;</div>
+      <div class="quick-title">봉사자 관리</div>
+      <div class="quick-desc">봉사자 목록 및 정보 관리</div>
+    <% end %>
+    <%= link_to events_path, class: "quick-card animate-in animate-delay-2" do %>
+      <div class="quick-icon">&#128197;</div>
+      <div class="quick-title">일정 관리</div>
+      <div class="quick-desc">미사 일정 및 반복 일정</div>
+    <% end %>
+    <%= link_to notifications_path, class: "quick-card animate-in animate-delay-3" do %>
+      <div class="quick-icon">&#128276;</div>
+      <div class="quick-title">알림</div>
+      <div class="quick-desc">알림 이력 확인</div>
+    <% end %>
   <% end %>
 
   <% if Current.user.admin? %>
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="font-bold text-gray-700">역할 관리</h3>
-      <%= link_to "역할 목록", admin_roles_path, class: "text-blue-600 hover:text-blue-800" %>
-    </div>
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="font-bold text-gray-700">미사유형 관리</h3>
-      <%= link_to "미사유형 목록", admin_event_types_path, class: "text-blue-600 hover:text-blue-800" %>
-    </div>
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="font-bold text-gray-700">사용자 관리</h3>
-      <%= link_to "사용자 목록", admin_users_path, class: "text-blue-600 hover:text-blue-800" %>
-    </div>
+    <%= link_to admin_roles_path, class: "quick-card animate-in animate-delay-1" do %>
+      <div class="quick-icon">&#127919;</div>
+      <div class="quick-title">역할 관리</div>
+      <div class="quick-desc">복사 역할 설정</div>
+    <% end %>
+    <%= link_to admin_event_types_path, class: "quick-card animate-in animate-delay-2" do %>
+      <div class="quick-icon">&#9962;</div>
+      <div class="quick-title">미사유형 관리</div>
+      <div class="quick-desc">미사 유형 및 시간 설정</div>
+    <% end %>
+    <%= link_to admin_users_path, class: "quick-card animate-in animate-delay-3" do %>
+      <div class="quick-icon">&#128274;</div>
+      <div class="quick-title">사용자 관리</div>
+      <div class="quick-desc">계정 및 권한 관리</div>
+    <% end %>
   <% end %>
 
-  <div class="bg-white rounded-lg shadow p-6">
-    <h3 class="font-bold text-gray-700">내 정보</h3>
-    <% if Current.user.member_role? && Current.user.member %>
-      <%= link_to "내 프로필", profile_path, class: "text-blue-600 hover:text-blue-800" %>
-      <br>
-    <% end %>
-    <%= link_to "비밀번호 변경", edit_password_path, class: "text-blue-600 hover:text-blue-800" %>
+  <div class="quick-card animate-in animate-delay-4">
+    <div class="quick-icon">&#128100;</div>
+    <div class="quick-title">내 정보</div>
+    <div class="quick-desc">
+      <% if Current.user.member_role? && Current.user.member %>
+        <%= link_to "내 프로필", profile_path, class: "link-ocean" %> &middot;
+      <% end %>
+      <%= link_to "비밀번호 변경", edit_password_path, class: "link-ocean" %>
+    </div>
   </div>
 </div>

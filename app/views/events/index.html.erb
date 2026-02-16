@@ -1,70 +1,76 @@
-<div class="flex justify-between items-center mb-6">
-  <h1 class="text-2xl font-bold">일정 관리</h1>
+<div class="page-header animate-in">
+  <h1>일정 관리</h1>
   <div class="flex gap-2">
     <% if policy(Event).create? %>
-      <%= link_to "새 일정", new_event_path, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+      <%= link_to "새 일정", new_event_path, class: "btn-ocean" %>
     <% end %>
     <% if policy(Event).bulk_create? %>
-      <%= link_to "반복 일정", bulk_new_events_path, class: "bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" %>
+      <%= link_to "반복 일정", bulk_new_events_path, class: "btn-moss" %>
     <% end %>
   </div>
 </div>
 
 <!-- 필터 -->
-<div class="bg-white rounded-lg shadow p-4 mb-6">
+<div class="filter-panel animate-in animate-delay-1">
   <%= form_tag events_path, method: :get, class: "flex flex-wrap gap-4 items-end" do %>
     <div>
-      <%= label_tag :event_type_id, "미사유형", class: "block text-sm text-gray-500" %>
+      <label class="label-basalt">미사유형</label>
       <%= select_tag :event_type_id,
           options_from_collection_for_select(@event_types, :id, :name, params[:event_type_id]),
-          include_blank: "전체", class: "mt-1 rounded-md border-gray-300 shadow-sm" %>
+          include_blank: "전체", class: "input-basalt" %>
     </div>
     <div>
-      <%= label_tag :from, "시작일", class: "block text-sm text-gray-500" %>
-      <%= date_field_tag :from, params[:from], class: "mt-1 rounded-md border-gray-300 shadow-sm" %>
+      <label class="label-basalt">시작일</label>
+      <%= date_field_tag :from, params[:from], class: "input-basalt" %>
     </div>
     <div>
-      <%= label_tag :to, "종료일", class: "block text-sm text-gray-500" %>
-      <%= date_field_tag :to, params[:to], class: "mt-1 rounded-md border-gray-300 shadow-sm" %>
+      <label class="label-basalt">종료일</label>
+      <%= date_field_tag :to, params[:to], class: "input-basalt" %>
     </div>
-    <%= submit_tag "검색", class: "bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 cursor-pointer" %>
-    <%= link_to "초기화", events_path, class: "text-gray-500 hover:text-gray-700 py-2" %>
+    <%= submit_tag "검색", class: "btn-ocean cursor-pointer" %>
+    <%= link_to "초기화", events_path, class: "btn-ghost" %>
   <% end %>
 
   <div class="flex gap-4 mt-3">
-    <%= link_to "다가오는 일정", events_path, class: "text-sm #{params[:view].blank? ? 'text-blue-600 font-bold' : 'text-gray-500 hover:text-gray-700'}" %>
-    <%= link_to "지난 일정", events_path(view: "past"), class: "text-sm #{params[:view] == 'past' ? 'text-blue-600 font-bold' : 'text-gray-500 hover:text-gray-700'}" %>
+    <%= link_to "다가오는 일정", events_path,
+        class: "period-tab #{params[:view].blank? ? 'active' : 'inactive'}" %>
+    <%= link_to "지난 일정", events_path(view: "past"),
+        class: "period-tab #{params[:view] == 'past' ? 'active' : 'inactive'}" %>
   </div>
 </div>
 
 <!-- 일정 목록 -->
-<table class="min-w-full bg-white rounded-lg shadow">
-  <thead class="bg-gray-50">
-    <tr>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">날짜</th>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">시간</th>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">미사유형</th>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">제목</th>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">장소</th>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">관리</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @events.each do |event| %>
-      <tr class="border-t">
-        <td class="px-6 py-4"><%= event.date.strftime("%Y-%m-%d (%a)") %></td>
-        <td class="px-6 py-4 text-gray-500"><%= event.start_time.strftime("%H:%M") %></td>
-        <td class="px-6 py-4"><%= event.event_type.name %></td>
-        <td class="px-6 py-4"><%= event.title || "-" %></td>
-        <td class="px-6 py-4 text-gray-500"><%= event.location || "-" %></td>
-        <td class="px-6 py-4">
-          <%= link_to "보기", event_path(event), class: "text-blue-600 hover:text-blue-800" %>
-        </td>
+<div class="animate-in animate-delay-2">
+  <table class="table-stone">
+    <thead>
+      <tr>
+        <th>날짜</th>
+        <th>시간</th>
+        <th>미사유형</th>
+        <th>제목</th>
+        <th>장소</th>
+        <th>관리</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @events.each do |event| %>
+        <tr>
+          <td style="font-weight: 500; color: var(--basalt-800);"><%= event.date.strftime("%Y-%m-%d (%a)") %></td>
+          <td style="color: var(--basalt-500);"><%= event.start_time.strftime("%H:%M") %></td>
+          <td><span class="badge badge-ocean"><%= event.event_type.name %></span></td>
+          <td><%= event.title || "-" %></td>
+          <td style="color: var(--basalt-500);"><%= event.location || "-" %></td>
+          <td>
+            <%= link_to "보기", event_path(event), class: "link-ocean", style: "font-size: 0.8rem;" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<% if @events.empty? %>
-  <p class="text-gray-500 text-center py-8">등록된 일정이 없습니다.</p>
-<% end %>
+  <% if @events.empty? %>
+    <div style="text-align: center; padding: 3rem; color: var(--basalt-400);">
+      등록된 일정이 없습니다.
+    </div>
+  <% end %>
+</div>

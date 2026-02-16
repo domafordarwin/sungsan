@@ -1,125 +1,135 @@
-<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-8">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold"><%= @member.name %></h1>
-    <span class="<%= @member.active? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %> px-3 py-1 rounded-full text-sm">
-      <%= @member.active? ? "활동" : "비활동" %>
-    </span>
+<div class="max-w-2xl mx-auto">
+  <div class="card-basalt animate-in" style="padding: 2rem;">
+    <div class="flex justify-between items-center" style="margin-bottom: 1.5rem;">
+      <h1 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 700;"><%= @member.name %></h1>
+      <% if @member.active? %>
+        <span class="badge badge-moss">활동</span>
+      <% else %>
+        <span class="badge badge-lava">비활동</span>
+      <% end %>
+    </div>
+
+    <dl style="display: flex; flex-direction: column; gap: 0.875rem;">
+      <div><dt class="label-basalt">세례명</dt><dd><%= @member.baptismal_name %></dd></div>
+      <div><dt class="label-basalt">연락처</dt><dd><%= @member.masked_phone %></dd></div>
+      <div><dt class="label-basalt">이메일</dt><dd><%= @member.masked_email %></dd></div>
+      <div><dt class="label-basalt">생년월일</dt><dd><%= @member.masked_birth_date %></dd></div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><dt class="label-basalt">성별</dt><dd><%= @member.gender %></dd></div>
+        <div><dt class="label-basalt">구역</dt><dd><%= @member.district %></dd></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><dt class="label-basalt">단체</dt><dd><%= @member.group_name %></dd></div>
+        <div><dt class="label-basalt">등록일</dt><dd><%= @member.created_at.strftime("%Y-%m-%d") %></dd></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><dt class="label-basalt">세례</dt><dd><%= @member.baptized? ? "O" : "X" %></dd></div>
+        <div><dt class="label-basalt">견진</dt><dd><%= @member.confirmed? ? "O" : "X" %></dd></div>
+      </div>
+      <% if @member.notes.present? %>
+        <div><dt class="label-basalt">메모</dt><dd style="color: var(--basalt-600);"><%= @member.notes %></dd></div>
+      <% end %>
+    </dl>
+
+    <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+      <% if policy(@member).update? %>
+        <%= link_to "수정", edit_member_path(@member), class: "btn-ocean" %>
+      <% end %>
+      <% if policy(@member).destroy? %>
+        <%= button_to @member.active? ? "비활성화" : "활성화",
+            toggle_active_member_path(@member), method: :patch,
+            class: @member.active? ? "btn-lava" : "btn-moss" %>
+      <% end %>
+      <%= link_to "목록", members_path, class: "btn-ghost" %>
+    </div>
   </div>
 
-  <dl class="space-y-4">
-    <div><dt class="text-sm text-gray-500">세례명</dt><dd><%= @member.baptismal_name %></dd></div>
-    <div><dt class="text-sm text-gray-500">연락처</dt><dd><%= @member.masked_phone %></dd></div>
-    <div><dt class="text-sm text-gray-500">이메일</dt><dd><%= @member.masked_email %></dd></div>
-    <div><dt class="text-sm text-gray-500">생년월일</dt><dd><%= @member.masked_birth_date %></dd></div>
-    <div><dt class="text-sm text-gray-500">성별</dt><dd><%= @member.gender %></dd></div>
-    <div><dt class="text-sm text-gray-500">구역</dt><dd><%= @member.district %></dd></div>
-    <div><dt class="text-sm text-gray-500">단체</dt><dd><%= @member.group_name %></dd></div>
-    <div><dt class="text-sm text-gray-500">세례</dt><dd><%= @member.baptized? ? "O" : "X" %></dd></div>
-    <div><dt class="text-sm text-gray-500">견진</dt><dd><%= @member.confirmed? ? "O" : "X" %></dd></div>
-    <% if @member.notes.present? %>
-      <div><dt class="text-sm text-gray-500">메모</dt><dd><%= @member.notes %></dd></div>
-    <% end %>
-    <div><dt class="text-sm text-gray-500">등록일</dt><dd><%= @member.created_at.strftime("%Y-%m-%d") %></dd></div>
-  </dl>
-
-  <div class="mt-6 flex gap-4">
-    <% if policy(@member).update? %>
-      <%= link_to "수정", edit_member_path(@member), class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
-    <% end %>
-    <% if policy(@member).destroy? %>
-      <%= button_to @member.active? ? "비활성화" : "활성화",
-          toggle_active_member_path(@member), method: :patch,
-          class: "#{@member.active? ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white px-4 py-2 rounded" %>
-    <% end %>
-    <%= link_to "목록", members_path, class: "text-gray-600 hover:text-gray-900 py-2" %>
+  <!-- 최근 봉사 이력 -->
+  <% if @recent_assignments.present? %>
+  <div class="card-basalt animate-in animate-delay-1" style="padding: 2rem; margin-top: 1.5rem;">
+    <h2 class="section-title">최근 봉사 이력</h2>
+    <table class="table-stone">
+      <thead>
+        <tr>
+          <th>날짜</th>
+          <th>미사</th>
+          <th>역할</th>
+          <th>상태</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recent_assignments.each do |a| %>
+          <tr>
+            <td><%= a.event.date.strftime("%m/%d") %></td>
+            <td><%= a.event.event_type.name %></td>
+            <td><%= a.role.name %></td>
+            <td>
+              <span class="badge
+                <%= case a.status
+                    when 'accepted' then 'badge-moss'
+                    when 'declined' then 'badge-lava'
+                    when 'pending' then 'badge-sunrise'
+                    else 'badge-basalt'
+                    end %>">
+                <%= case a.status
+                    when 'accepted' then '수락'
+                    when 'declined' then '거절'
+                    when 'pending' then '대기'
+                    when 'replaced' then '대타'
+                    when 'canceled' then '취소'
+                    else a.status
+                    end %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
-</div>
+  <% end %>
 
-<!-- 최근 봉사 이력 -->
-<% if @recent_assignments.present? %>
-<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-8 mt-6">
-  <h2 class="text-lg font-bold mb-4">최근 봉사 이력</h2>
-  <table class="w-full text-sm">
-    <thead>
-      <tr class="border-b">
-        <th class="text-left py-2">날짜</th>
-        <th class="text-left py-2">미사</th>
-        <th class="text-left py-2">역할</th>
-        <th class="text-left py-2">상태</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @recent_assignments.each do |a| %>
-        <tr class="border-b">
-          <td class="py-2"><%= a.event.date.strftime("%m/%d") %></td>
-          <td class="py-2"><%= a.event.event_type.name %></td>
-          <td class="py-2"><%= a.role.name %></td>
-          <td class="py-2">
-            <span class="text-xs px-2 py-0.5 rounded-full
-              <%= case a.status
-                  when 'accepted' then 'bg-green-100 text-green-800'
-                  when 'declined' then 'bg-red-100 text-red-800'
-                  when 'pending' then 'bg-yellow-100 text-yellow-800'
-                  else 'bg-gray-100 text-gray-800'
-                  end %>">
-              <%= case a.status
-                  when 'accepted' then '수락'
-                  when 'declined' then '거절'
-                  when 'pending' then '대기'
-                  when 'replaced' then '대타'
-                  when 'canceled' then '취소'
-                  else a.status
-                  end %>
-            </span>
-          </td>
+  <!-- 출결 기록 -->
+  <% if @attendance_records.present? %>
+  <div class="card-basalt animate-in animate-delay-2" style="padding: 2rem; margin-top: 1.5rem;">
+    <h2 class="section-title">출결 기록</h2>
+    <table class="table-stone">
+      <thead>
+        <tr>
+          <th>날짜</th>
+          <th>미사</th>
+          <th>출결</th>
+          <th>사유</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @attendance_records.each do |r| %>
+          <tr>
+            <td><%= r.event.date.strftime("%m/%d") %></td>
+            <td><%= r.event.event_type.name %></td>
+            <td>
+              <span class="badge
+                <%= case r.status
+                    when 'present' then 'badge-moss'
+                    when 'late' then 'badge-sunrise'
+                    when 'absent' then 'badge-lava'
+                    when 'excused' then 'badge-ocean'
+                    else 'badge-basalt'
+                    end %>">
+                <%= case r.status
+                    when 'present' then '출석'
+                    when 'late' then '지각'
+                    when 'absent' then '결석'
+                    when 'excused' then '사유결석'
+                    when 'replaced' then '대타'
+                    else r.status
+                    end %>
+              </span>
+            </td>
+            <td style="color: var(--basalt-500);"><%= r.reason %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% end %>
 </div>
-<% end %>
-
-<!-- 출결 기록 -->
-<% if @attendance_records.present? %>
-<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-8 mt-6">
-  <h2 class="text-lg font-bold mb-4">출결 기록</h2>
-  <table class="w-full text-sm">
-    <thead>
-      <tr class="border-b">
-        <th class="text-left py-2">날짜</th>
-        <th class="text-left py-2">미사</th>
-        <th class="text-left py-2">출결</th>
-        <th class="text-left py-2">사유</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @attendance_records.each do |r| %>
-        <tr class="border-b">
-          <td class="py-2"><%= r.event.date.strftime("%m/%d") %></td>
-          <td class="py-2"><%= r.event.event_type.name %></td>
-          <td class="py-2">
-            <span class="text-xs px-2 py-0.5 rounded-full
-              <%= case r.status
-                  when 'present' then 'bg-green-100 text-green-800'
-                  when 'late' then 'bg-yellow-100 text-yellow-800'
-                  when 'absent' then 'bg-red-100 text-red-800'
-                  when 'excused' then 'bg-blue-100 text-blue-800'
-                  else 'bg-gray-100 text-gray-800'
-                  end %>">
-              <%= case r.status
-                  when 'present' then '출석'
-                  when 'late' then '지각'
-                  when 'absent' then '결석'
-                  when 'excused' then '사유결석'
-                  when 'replaced' then '대타'
-                  else r.status
-                  end %>
-            </span>
-          </td>
-          <td class="py-2 text-gray-500"><%= r.reason %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
-<% end %>
