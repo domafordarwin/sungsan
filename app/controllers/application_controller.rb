@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   after_action :verify_policy_scoped, only: :index, unless: :skip_authorization?
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  rescue_from StandardError, with: :handle_server_error
 
   private
 
@@ -29,5 +30,11 @@ class ApplicationController < ActionController::Base
 
   def skip_authorization?
     is_a?(SessionsController) || is_a?(DashboardController) || is_a?(StatisticsController)
+  end
+
+  def handle_server_error(exception)
+    Rails.logger.error("SERVER ERROR: #{exception.class}: #{exception.message}")
+    Rails.logger.error(exception.backtrace&.first(15)&.join("\n"))
+    render plain: "Error: #{exception.class} - #{exception.message}", status: :internal_server_error
   end
 end
