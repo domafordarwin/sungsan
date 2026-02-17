@@ -981,3 +981,291 @@ h1, h2, h3 {
 .survey-status-badge.draft { background: var(--basalt-100); color: var(--basalt-600); }
 .survey-status-badge.active { background: rgba(45,106,79,0.1); color: var(--moss-600); }
 .survey-status-badge.closed { background: rgba(196,69,54,0.1); color: var(--lava-600); }
+
+/* === Landing Main === */
+.landing-main {
+  padding: 0;
+  max-width: none;
+  margin: 0;
+}
+.landing-main .survey-landing {
+  padding: 2rem 1rem;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+/* === Landing Page (Root) === */
+.landing-hero {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.landing-hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--basalt-900) 0%, var(--ocean-900) 40%, var(--basalt-800) 100%);
+}
+.landing-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 60% 40%, rgba(232,184,109,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 20% 80%, rgba(10,126,143,0.1) 0%, transparent 50%);
+}
+.landing-hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+.landing-cross {
+  font-size: 2rem;
+  color: var(--sunrise-400);
+  display: block;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+.landing-hero h1 {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+.landing-subtitle {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--sunrise-300);
+  margin-bottom: 0.75rem;
+}
+.landing-desc {
+  font-size: 0.95rem;
+  color: var(--basalt-300);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+.landing-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+.btn-landing-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, var(--sunrise-500) 0%, var(--sunrise-400) 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(232,184,109,0.3);
+}
+.btn-landing-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(232,184,109,0.4);
+}
+
+/* Landing sections */
+.landing-section {
+  padding: 2.5rem 1.5rem;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+.landing-section-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--basalt-800);
+  margin-bottom: 1.25rem;
+}
+
+/* Events grid */
+.landing-events-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.landing-event-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--warm-white);
+  border: 1px solid var(--basalt-200);
+  border-radius: 10px;
+  transition: box-shadow 0.2s;
+}
+.landing-event-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.landing-event-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.5rem;
+  padding: 0.5rem;
+  background: linear-gradient(135deg, var(--ocean-800) 0%, var(--ocean-700) 100%);
+  border-radius: 8px;
+  color: #fff;
+}
+.landing-event-month {
+  font-size: 0.65rem;
+  font-weight: 600;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+.landing-event-day {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.landing-event-dow {
+  font-size: 0.6rem;
+  opacity: 0.7;
+}
+.landing-event-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.landing-event-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--basalt-800);
+  margin-bottom: 0.25rem;
+}
+.landing-event-time {
+  font-size: 0.8rem;
+  color: var(--basalt-500);
+}
+
+/* Surveys grid */
+.landing-surveys-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.landing-survey-card {
+  display: block;
+  padding: 1.25rem;
+  background: var(--warm-white);
+  border: 1px solid var(--basalt-200);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.landing-survey-card:hover {
+  border-color: var(--ocean-400);
+  box-shadow: 0 2px 12px rgba(13,152,170,0.1);
+}
+.landing-survey-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--basalt-800);
+  margin-bottom: 0.35rem;
+}
+.landing-survey-desc {
+  font-size: 0.8rem;
+  color: var(--basalt-500);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+.landing-survey-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--basalt-400);
+}
+.landing-survey-cta {
+  margin-left: auto;
+  color: var(--ocean-600);
+  font-weight: 600;
+}
+
+/* Gallery grid */
+.landing-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+.landing-gallery-card {
+  background: var(--warm-white);
+  border: 1px solid var(--basalt-200);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.landing-gallery-card:hover {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.landing-gallery-thumb {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--basalt-100);
+}
+.landing-gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.landing-gallery-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--basalt-300);
+}
+.landing-gallery-info {
+  padding: 0.75rem;
+}
+.landing-gallery-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--basalt-800);
+  margin-bottom: 0.2rem;
+}
+.landing-gallery-meta {
+  font-size: 0.7rem;
+  color: var(--basalt-400);
+}
+
+/* About section */
+.landing-about {
+  background: var(--warm-white);
+  border: 1px solid var(--basalt-200);
+  border-radius: 12px;
+  padding: 2rem;
+}
+.landing-about-content h2 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+.landing-about-content p {
+  color: var(--basalt-600);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* Landing responsive */
+@media (max-width: 640px) {
+  .landing-hero { min-height: 60vh; }
+  .landing-hero h1 { font-size: 1.8rem; }
+  .landing-subtitle { font-size: 0.95rem; }
+  .landing-section { padding: 2rem 1rem; }
+  .landing-gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+}
+@media (min-width: 641px) {
+  .landing-gallery-grid { grid-template-columns: repeat(4, 1fr); }
+}

@@ -1,0 +1,107 @@
+<!-- Hero -->
+<div class="landing-hero animate-in">
+  <div class="landing-hero-bg"></div>
+  <div class="landing-hero-overlay"></div>
+  <div class="landing-hero-content">
+    <span class="landing-cross">&#10013;</span>
+    <h1>성산포 성당</h1>
+    <p class="landing-subtitle">제대봉사단 (복사단)</p>
+    <p class="landing-desc">하느님의 제대 앞에서 봉사하는 기쁨을 함께합니다</p>
+    <div class="landing-actions">
+      <%= link_to "로그인", new_session_path, class: "btn-landing-primary" %>
+    </div>
+  </div>
+</div>
+
+<!-- 다가오는 일정 -->
+<% if @upcoming_events.present? && @upcoming_events.any? %>
+  <section class="landing-section animate-in">
+    <h2 class="landing-section-title">&#128197; 다가오는 일정</h2>
+    <div class="landing-events-grid">
+      <% @upcoming_events.each do |event| %>
+        <div class="landing-event-card">
+          <div class="landing-event-date">
+            <span class="landing-event-month"><%= event.date.strftime("%m") %>월</span>
+            <span class="landing-event-day"><%= event.date.strftime("%d") %></span>
+            <span class="landing-event-dow"><%= %w[일 월 화 수 목 금 토][event.date.wday] %></span>
+          </div>
+          <div class="landing-event-info">
+            <div class="landing-event-name"><%= event.display_name %></div>
+            <div class="landing-event-time">
+              &#9201; <%= event.start_time.strftime("%H:%M") %>
+              <% if event.location.present? %>
+                &middot; &#128205; <%= event.location %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+<% end %>
+
+<!-- 진행 중인 설문 -->
+<% if @active_surveys.present? && @active_surveys.any? %>
+  <section class="landing-section animate-in">
+    <h2 class="landing-section-title">&#128203; 참여 가능한 설문</h2>
+    <div class="landing-surveys-grid">
+      <% @active_surveys.each do |survey| %>
+        <%= link_to landing_path(survey.slug), class: "landing-survey-card" do %>
+          <div class="landing-survey-title"><%= survey.title %></div>
+          <% if survey.description.present? %>
+            <div class="landing-survey-desc"><%= truncate(survey.description, length: 60) %></div>
+          <% end %>
+          <div class="landing-survey-meta">
+            <% if survey.event.present? %>
+              <span>&#128197; <%= survey.event.date.strftime("%m/%d") %></span>
+            <% end %>
+            <% if survey.ends_at.present? %>
+              <span>&#9200; ~<%= survey.ends_at.strftime("%m/%d") %></span>
+            <% end %>
+            <span class="landing-survey-cta">응답하기 &rarr;</span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+<% end %>
+
+<!-- 최근 갤러리 -->
+<% if @recent_albums.present? && @recent_albums.any? %>
+  <section class="landing-section animate-in">
+    <h2 class="landing-section-title">&#128247; 활동 갤러리</h2>
+    <div class="landing-gallery-grid">
+      <% @recent_albums.each do |album| %>
+        <div class="landing-gallery-card">
+          <div class="landing-gallery-thumb">
+            <% if album.photos.any? && album.photos.first.image.attached? %>
+              <%= image_tag album.photos.first.image, class: "landing-gallery-img" %>
+            <% else %>
+              <div class="landing-gallery-placeholder">&#128247;</div>
+            <% end %>
+          </div>
+          <div class="landing-gallery-info">
+            <div class="landing-gallery-title"><%= album.title %></div>
+            <div class="landing-gallery-meta">
+              <%= album.event_date&.strftime("%Y.%m.%d") %> &middot; <%= album.photos.size %>장
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+<% end %>
+
+<!-- 소개 -->
+<section class="landing-section animate-in">
+  <div class="landing-about">
+    <div class="landing-about-content">
+      <h2>&#10013; 성산포 성당 제대봉사단</h2>
+      <p>
+        저희 제대봉사단은 미사 전례에서 사제를 보좌하며
+        하느님의 제대 앞에서 봉사하는 영광을 누리고 있습니다.
+        성산포 성당과 함께 신앙의 기쁨을 나누세요.
+      </p>
+    </div>
+  </div>
+</section>

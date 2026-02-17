@@ -1,27 +1,43 @@
 class DashboardController < ApplicationController
+  allow_unauthenticated_access
+
   def index
+    if authenticated?
+      set_current_attributes
+      load_dashboard_data
+      render :index
+    else
+      load_landing_data
+      render :landing, layout: "landing"
+    end
+  end
+
+  private
+
+  def load_dashboard_data
     if Current.user.admin? || Current.user.operator?
       @this_week_events = Event.this_week.ordered.limit(5)
       @active_members_count = Member.active.count
       @pending_assignments_count = Assignment.pending.joins(:event)
                                     .where("events.date >= ?", Date.current).count
       @upcoming_events_count = Event.upcoming.count
-
-      # 인력 부족 경고
       @shortage_roles = calculate_shortage_roles
     end
 
-    # 모든 사용자에게 표시 (테이블 미존재 시 빈 배열로 처리)
     @recent_news = safe_query { NewsArticle.recent.limit(3) }
     @recent_posts = safe_query { Post.recent.includes(:author).limit(3) }
     @recent_albums = safe_query { PhotoAlbum.recent.includes(:author, :photos).limit(3) }
   end
 
-  private
+  def load_landing_data
+    @upcoming_events = safe_query { Event.unscoped.upcoming.includes(:event_type).limit(6) }
+    @active_surveys = safe_query { Survey.unscoped.active.ordered.limit(3) }
+    @recent_albums = safe_query { PhotoAlbum.unscoped.recent.includes(:photos).limit(4) }
+  end
 
   def safe_query
     yield
-  rescue ActiveRecord::StatementInvalid
+  rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordNotFound
     []
   end
 
