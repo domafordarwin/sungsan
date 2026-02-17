@@ -1,64 +1,117 @@
-<!-- Hero: 성산일출봉과 바다가 보이는 성산포 성당 -->
+<!-- Hero: 풀스크린 성산포 성당 -->
 <div class="landing-hero animate-in">
   <div class="landing-hero-bg"></div>
   <div class="landing-hero-overlay"></div>
 
-  <!-- 원통형 종탑 모티프 장식 -->
-  <div class="landing-belltower"></div>
+  <!-- 부유하는 빛 파티클 -->
+  <div class="landing-particles">
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+    <div class="particle p4"></div>
+    <div class="particle p5"></div>
+  </div>
 
   <div class="landing-hero-content">
-    <span class="landing-cross">&#10013;</span>
+    <div class="landing-hero-badge">Est. 1955</div>
     <h1>성산포 성당</h1>
-    <p class="landing-subtitle">제대봉사단 (복사단)</p>
+    <div class="landing-hero-line"></div>
+    <p class="landing-subtitle">제대봉사단</p>
     <p class="landing-desc">
-      성산일출봉과 제주 바다가 어우러진 아름다운 성당에서<br>
-      하느님의 제대 앞에 봉사하는 기쁨을 함께합니다
+      성산일출봉과 푸른 바다가 어우러진<br>
+      대한민국에서 가장 아름다운 풍경의 성당
     </p>
     <div class="landing-actions">
-      <%= link_to "로그인", new_session_path, class: "btn-landing-primary" %>
+      <%= link_to new_session_path, class: "btn-landing-primary" do %>
+        <span>봉사자 로그인</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      <% end %>
     </div>
   </div>
 
-  <!-- 하단 웨이브 전환 -->
+  <!-- 스크롤 인디케이터 -->
+  <div class="landing-scroll-hint">
+    <span>아래로 스크롤</span>
+    <div class="landing-scroll-arrow"></div>
+  </div>
+
+  <!-- 하단 웨이브 -->
   <div class="landing-wave">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
-      <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z" fill="var(--sand-cream)"/>
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,120 L0,120 Z" fill="var(--sand-cream)" opacity="0.5"/>
+      <path d="M0,80 C360,110 720,40 1080,80 C1260,95 1380,85 1440,80 L1440,120 L0,120 Z" fill="var(--sand-cream)"/>
     </svg>
   </div>
 </div>
 
-<!-- 성당 소개: 역사와 건축 -->
+<!-- 숫자로 보는 성산포 성당 -->
+<section class="landing-stats animate-in">
+  <div class="landing-stats-inner">
+    <div class="landing-stat">
+      <div class="landing-stat-num">1955</div>
+      <div class="landing-stat-label">공소 설립</div>
+    </div>
+    <div class="landing-stat-divider"></div>
+    <div class="landing-stat">
+      <div class="landing-stat-num">1973</div>
+      <div class="landing-stat-label">본당 승격</div>
+    </div>
+    <div class="landing-stat-divider"></div>
+    <div class="landing-stat">
+      <div class="landing-stat-num">70+</div>
+      <div class="landing-stat-label">년의 역사</div>
+    </div>
+  </div>
+</section>
+
+<!-- 성당 소개: 3대 매력 -->
 <section class="landing-intro animate-in">
   <div class="landing-intro-inner">
     <div class="landing-intro-header">
-      <span class="landing-intro-year">since 1955</span>
-      <h2>제주에서 가장 아름다운 풍경의 성당</h2>
+      <span class="landing-intro-year">Seongsanpo Catholic Church</span>
+      <h2>제주가 품은 신앙의 보석</h2>
       <div class="landing-intro-divider"></div>
     </div>
 
     <div class="landing-features">
       <div class="landing-feature-card">
+        <div class="landing-feature-num">01</div>
         <div class="landing-feature-icon" style="background: linear-gradient(135deg, var(--ocean-700), var(--ocean-500));">
           <span>&#9962;</span>
         </div>
         <h3>유서 깊은 역사</h3>
-        <p>1955년 공소로 설립되어 1973년 본당으로 승격된 성산포 성당은 70년 가까운 신앙의 역사를 간직하고 있습니다</p>
+        <p>1955년 공소로 설립, 1973년 본당 승격. 70년 가까운 세월 동안 제주 동쪽 끝에서 신앙의 빛을 밝혀왔습니다</p>
       </div>
       <div class="landing-feature-card">
+        <div class="landing-feature-num">02</div>
         <div class="landing-feature-icon" style="background: linear-gradient(135deg, var(--sunrise-600), var(--sunrise-400));">
           <span>&#127748;</span>
         </div>
-        <h3>빼어난 경치</h3>
-        <p>멀리 보이는 성산일출봉과 푸른 바다가 어우러져 우리나라에서 가장 경치가 뛰어난 성당이라는 찬사를 받습니다</p>
+        <h3>압도적인 경치</h3>
+        <p>성산일출봉의 웅장한 실루엣과 끝없이 펼쳐진 제주 바다. 우리나라에서 가장 경치가 빼어난 성당이라는 찬사를 받습니다</p>
       </div>
       <div class="landing-feature-card">
+        <div class="landing-feature-num">03</div>
         <div class="landing-feature-icon" style="background: linear-gradient(135deg, var(--basalt-700), var(--basalt-500));">
           <span>&#128391;</span>
         </div>
-        <h3>독특한 건축</h3>
-        <p>한쪽이 절개된 현대식 기와지붕과 제주 바다를 연상시키는 푸른 타일의 원통형 종탑이 인상적입니다</p>
+        <h3>독특한 건축미</h3>
+        <p>한쪽이 절개된 현대식 기와지붕, 그리고 제주 바다를 연상시키는 푸른 타일로 장식된 원통형 종탑이 인상적입니다</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- 인용문 배너 -->
+<section class="landing-quote animate-in">
+  <div class="landing-quote-inner">
+    <span class="landing-quote-mark">"</span>
+    <blockquote>
+      멀리 보이는 성산일출봉과 바다가 어우러져<br>
+      우리나라에 있는 성당 중에서 가장 경치가 뛰어나다
+    </blockquote>
+    <div class="landing-quote-line"></div>
+    <cite>올레 2코스를 걷는 여행자들의 찬사</cite>
   </div>
 </section>
 
