@@ -997,7 +997,7 @@ h1, h2, h3 {
 /* === Landing Page (Root) === */
 .landing-hero {
   position: relative;
-  min-height: 70vh;
+  min-height: 85vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1006,47 +1006,107 @@ h1, h2, h3 {
 .landing-hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--basalt-900) 0%, var(--ocean-900) 40%, var(--basalt-800) 100%);
+  background:
+    linear-gradient(175deg,
+      var(--basalt-900) 0%,
+      var(--ocean-900) 30%,
+      #064e5a 50%,
+      var(--ocean-800) 70%,
+      var(--basalt-900) 100%);
+}
+/* 일출봉 실루엣 + 바다 수평선 */
+.landing-hero-bg::before {
+  content: '';
+  position: absolute;
+  bottom: 18%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,184,109,0.3) 30%, rgba(232,184,109,0.15) 70%, transparent);
+}
+.landing-hero-bg::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  right: 8%;
+  width: 200px;
+  height: 90px;
+  background: radial-gradient(ellipse 100% 100% at 50% 100%,
+    rgba(45,52,54,0.6) 0%, transparent 70%);
+  border-radius: 50% 60% 0 0 / 100% 100% 0 0;
+  opacity: 0.5;
 }
 .landing-hero-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 60% 40%, rgba(232,184,109,0.15) 0%, transparent 60%),
-              radial-gradient(ellipse at 20% 80%, rgba(10,126,143,0.1) 0%, transparent 50%);
+  background:
+    radial-gradient(ellipse at 70% 20%, rgba(232,184,109,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 70%, rgba(10,126,143,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 60%);
 }
+
+/* 종탑 모티프: 원통형 종탑 + 푸른 타일 */
+.landing-belltower {
+  position: absolute;
+  bottom: 25%;
+  left: 12%;
+  width: 40px;
+  height: 80px;
+  border-radius: 20px 20px 2px 2px;
+  background: linear-gradient(180deg, rgba(10,126,143,0.25) 0%, rgba(7,94,106,0.15) 100%);
+  border: 1px solid rgba(10,126,143,0.2);
+  z-index: 0;
+  opacity: 0.7;
+}
+.landing-belltower::before {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(125,220,232,0.4);
+  background: radial-gradient(circle, rgba(10,177,196,0.2) 0%, transparent 70%);
+}
+
 .landing-hero-content {
   position: relative;
   z-index: 1;
   text-align: center;
-  padding: 3rem 1.5rem;
+  padding: 3rem 1.5rem 5rem;
 }
 .landing-cross {
-  font-size: 2rem;
+  font-size: 2.25rem;
   color: var(--sunrise-400);
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   opacity: 0.9;
+  text-shadow: 0 2px 12px rgba(232,184,109,0.3);
 }
 .landing-hero h1 {
   font-family: var(--font-display);
-  font-size: 2.5rem;
+  font-size: 2.75rem;
   font-weight: 900;
   color: #fff;
   letter-spacing: -0.02em;
   margin-bottom: 0.5rem;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.3);
 }
 .landing-subtitle {
   font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--sunrise-300);
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
 }
 .landing-desc {
   font-size: 0.95rem;
   color: var(--basalt-300);
-  margin-bottom: 2rem;
-  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  line-height: 1.8;
 }
 .landing-actions {
   display: flex;
@@ -1056,19 +1116,149 @@ h1, h2, h3 {
 .btn-landing-primary {
   display: inline-flex;
   align-items: center;
-  padding: 0.75rem 2rem;
+  padding: 0.875rem 2.5rem;
   background: linear-gradient(135deg, var(--sunrise-500) 0%, var(--sunrise-400) 100%);
   color: #fff;
-  font-weight: 600;
-  font-size: 0.9rem;
-  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 10px;
   text-decoration: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(232,184,109,0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(232,184,109,0.35);
+  letter-spacing: 0.03em;
 }
 .btn-landing-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(232,184,109,0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(232,184,109,0.45);
+}
+
+/* 하단 웨이브 전환 */
+.landing-wave {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  line-height: 0;
+}
+.landing-wave svg {
+  width: 100%;
+  height: 60px;
+}
+
+/* === 성당 소개 섹션 === */
+.landing-intro {
+  padding: 3rem 1.5rem 2rem;
+  max-width: 52rem;
+  margin: 0 auto;
+}
+.landing-intro-inner {
+  text-align: center;
+}
+.landing-intro-header {
+  margin-bottom: 2.5rem;
+}
+.landing-intro-year {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ocean-600);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.landing-intro-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--basalt-900);
+  margin-top: 0.25rem;
+}
+.landing-intro-divider {
+  width: 3rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ocean-500), var(--sunrise-400));
+  margin: 1rem auto 0;
+  border-radius: 1px;
+}
+
+/* 특징 카드 */
+.landing-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.landing-feature-card {
+  background: var(--warm-white);
+  border: 1px solid var(--basalt-200);
+  border-radius: 1rem;
+  padding: 1.75rem 1.25rem;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+.landing-feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  border-color: var(--ocean-200);
+}
+.landing-feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.landing-feature-icon span {
+  font-size: 1.4rem;
+  filter: grayscale(1) brightness(10);
+}
+.landing-feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--basalt-800);
+  margin-bottom: 0.5rem;
+}
+.landing-feature-card p {
+  font-size: 0.8rem;
+  color: var(--basalt-500);
+  line-height: 1.65;
+}
+
+/* === 오시는 길 === */
+.landing-location {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--warm-white);
+  border: 1px solid var(--basalt-200);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+.landing-location-icon {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+}
+.landing-location-info h3 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--basalt-800);
+  margin-bottom: 0.25rem;
+}
+.landing-location-addr {
+  font-size: 0.85rem;
+  color: var(--basalt-700);
+  font-weight: 500;
+}
+.landing-location-note {
+  font-size: 0.75rem;
+  color: var(--basalt-400);
+  margin-top: 0.2rem;
 }
 
 /* Landing sections */
@@ -1239,32 +1429,22 @@ h1, h2, h3 {
   color: var(--basalt-400);
 }
 
-/* About section */
-.landing-about {
-  background: var(--warm-white);
-  border: 1px solid var(--basalt-200);
-  border-radius: 12px;
-  padding: 2rem;
-}
-.landing-about-content h2 {
-  font-family: var(--font-display);
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 0.75rem;
-}
-.landing-about-content p {
-  color: var(--basalt-600);
-  font-size: 0.9rem;
-  line-height: 1.7;
-}
-
 /* Landing responsive */
 @media (max-width: 640px) {
-  .landing-hero { min-height: 60vh; }
-  .landing-hero h1 { font-size: 1.8rem; }
+  .landing-hero { min-height: 75vh; }
+  .landing-hero h1 { font-size: 2rem; }
   .landing-subtitle { font-size: 0.95rem; }
+  .landing-desc { font-size: 0.85rem; }
+  .landing-belltower { display: none; }
+  .landing-features { grid-template-columns: 1fr; gap: 1rem; }
+  .landing-intro-header h2 { font-size: 1.25rem; }
   .landing-section { padding: 2rem 1rem; }
   .landing-gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+  .landing-wave svg { height: 40px; }
+  .landing-location { flex-direction: column; text-align: center; }
+}
+@media (min-width: 641px) and (max-width: 768px) {
+  .landing-features { grid-template-columns: 1fr; gap: 1rem; }
 }
 @media (min-width: 641px) {
   .landing-gallery-grid { grid-template-columns: repeat(4, 1fr); }

@@ -2,7 +2,7 @@
   <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
     <div>
       <h1 class="page-title">&#128240; 가톨릭 뉴스</h1>
-      <p style="color: var(--basalt-500); font-size: 0.875rem;">성산포 성단 관련 최신 뉴스를 확인하세요</p>
+      <p style="color: var(--basalt-500); font-size: 0.875rem;">성산포 성당 관련 최신 뉴스를 확인하세요</p>
     </div>
     <% if policy(NewsArticle).refresh? %>
       <%= button_to "새로고침", refresh_news_articles_path, method: :post, class: "btn-ocean" %>

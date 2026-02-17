@@ -1,17 +1,66 @@
-<!-- Hero -->
+<!-- Hero: 성산일출봉과 바다가 보이는 성산포 성당 -->
 <div class="landing-hero animate-in">
   <div class="landing-hero-bg"></div>
   <div class="landing-hero-overlay"></div>
+
+  <!-- 원통형 종탑 모티프 장식 -->
+  <div class="landing-belltower"></div>
+
   <div class="landing-hero-content">
     <span class="landing-cross">&#10013;</span>
     <h1>성산포 성당</h1>
     <p class="landing-subtitle">제대봉사단 (복사단)</p>
-    <p class="landing-desc">하느님의 제대 앞에서 봉사하는 기쁨을 함께합니다</p>
+    <p class="landing-desc">
+      성산일출봉과 제주 바다가 어우러진 아름다운 성당에서<br>
+      하느님의 제대 앞에 봉사하는 기쁨을 함께합니다
+    </p>
     <div class="landing-actions">
       <%= link_to "로그인", new_session_path, class: "btn-landing-primary" %>
     </div>
   </div>
+
+  <!-- 하단 웨이브 전환 -->
+  <div class="landing-wave">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z" fill="var(--sand-cream)"/>
+    </svg>
+  </div>
 </div>
+
+<!-- 성당 소개: 역사와 건축 -->
+<section class="landing-intro animate-in">
+  <div class="landing-intro-inner">
+    <div class="landing-intro-header">
+      <span class="landing-intro-year">since 1955</span>
+      <h2>제주에서 가장 아름다운 풍경의 성당</h2>
+      <div class="landing-intro-divider"></div>
+    </div>
+
+    <div class="landing-features">
+      <div class="landing-feature-card">
+        <div class="landing-feature-icon" style="background: linear-gradient(135deg, var(--ocean-700), var(--ocean-500));">
+          <span>&#9962;</span>
+        </div>
+        <h3>유서 깊은 역사</h3>
+        <p>1955년 공소로 설립되어 1973년 본당으로 승격된 성산포 성당은 70년 가까운 신앙의 역사를 간직하고 있습니다</p>
+      </div>
+      <div class="landing-feature-card">
+        <div class="landing-feature-icon" style="background: linear-gradient(135deg, var(--sunrise-600), var(--sunrise-400));">
+          <span>&#127748;</span>
+        </div>
+        <h3>빼어난 경치</h3>
+        <p>멀리 보이는 성산일출봉과 푸른 바다가 어우러져 우리나라에서 가장 경치가 뛰어난 성당이라는 찬사를 받습니다</p>
+      </div>
+      <div class="landing-feature-card">
+        <div class="landing-feature-icon" style="background: linear-gradient(135deg, var(--basalt-700), var(--basalt-500));">
+          <span>&#128391;</span>
+        </div>
+        <h3>독특한 건축</h3>
+        <p>한쪽이 절개된 현대식 기와지붕과 제주 바다를 연상시키는 푸른 타일의 원통형 종탑이 인상적입니다</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- 다가오는 일정 -->
 <% if @upcoming_events.present? && @upcoming_events.any? %>
@@ -92,16 +141,14 @@
   </section>
 <% end %>
 
-<!-- 소개 -->
+<!-- 오시는 길 -->
 <section class="landing-section animate-in">
-  <div class="landing-about">
-    <div class="landing-about-content">
-      <h2>&#10013; 성산포 성당 제대봉사단</h2>
-      <p>
-        저희 제대봉사단은 미사 전례에서 사제를 보좌하며
-        하느님의 제대 앞에서 봉사하는 영광을 누리고 있습니다.
-        성산포 성당과 함께 신앙의 기쁨을 나누세요.
-      </p>
+  <div class="landing-location">
+    <div class="landing-location-icon">&#128205;</div>
+    <div class="landing-location-info">
+      <h3>오시는 길</h3>
+      <p class="landing-location-addr">제주특별자치도 서귀포시 성산읍 고성오조로 120</p>
+      <p class="landing-location-note">올레 2코스 인근 &middot; 성산일출봉에서 도보 15분</p>
     </div>
   </div>
 </section>
