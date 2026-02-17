@@ -135,4 +135,76 @@
     </table>
   </div>
   <% end %>
+
+  <%# Availability Rules Section %>
+  <div class="card-basalt animate-in animate-delay-3" style="padding: 2rem; margin-top: 1.5rem;">
+    <h2 class="section-title">가용성 규칙</h2>
+    <%= render 'availability_rules/form', member: @member %>
+    <% if @member.availability_rules.any? %>
+      <table class="table-stone" style="margin-top: 1rem;">
+        <thead>
+          <tr>
+            <th>요일</th>
+            <th>가용</th>
+            <th>월 최대</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @member.availability_rules.each do |rule| %>
+            <tr>
+              <td><%= rule.day_of_week ? %w[일 월 화 수 목 금 토][rule.day_of_week] : "전체" %></td>
+              <td>
+                <span class="badge <%= rule.available? ? 'badge-moss' : 'badge-lava' %>">
+                  <%= rule.available? ? "가능" : "불가" %>
+                </span>
+              </td>
+              <td><%= rule.max_per_month.present? ? "#{rule.max_per_month}회" : "-" %></td>
+              <td>
+                <%= button_to "삭제", member_availability_rule_path(@member, rule), method: :delete,
+                    class: "btn-lava",
+                    form: { data: { turbo_confirm: "이 가용성 규칙을 삭제하시겠습니까?" } } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p style="color: var(--basalt-500); margin-top: 0.75rem; font-size: 0.875rem;">등록된 가용성 규칙이 없습니다.</p>
+    <% end %>
+  </div>
+
+  <%# Blackout Periods Section %>
+  <div class="card-basalt animate-in animate-delay-3" style="padding: 2rem; margin-top: 1.5rem;">
+    <h2 class="section-title">휴가 / 불가 기간</h2>
+    <%= render 'blackout_periods/form', member: @member %>
+    <% if @member.blackout_periods.any? %>
+      <table class="table-stone" style="margin-top: 1rem;">
+        <thead>
+          <tr>
+            <th>시작일</th>
+            <th>종료일</th>
+            <th>사유</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @member.blackout_periods.upcoming.each do |period| %>
+            <tr>
+              <td><%= period.start_date.strftime("%Y.%m.%d") %></td>
+              <td><%= period.end_date.strftime("%Y.%m.%d") %></td>
+              <td style="color: var(--basalt-600);"><%= period.reason %></td>
+              <td>
+                <%= button_to "삭제", member_blackout_period_path(@member, period), method: :delete,
+                    class: "btn-lava",
+                    form: { data: { turbo_confirm: "이 불가 기간을 삭제하시겠습니까?" } } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p style="color: var(--basalt-500); margin-top: 0.75rem; font-size: 0.875rem;">등록된 불가 기간이 없습니다.</p>
+    <% end %>
+  </div>
 </div>

@@ -13,6 +13,8 @@ RSpec.describe Role do
     it { is_expected.to belong_to(:parish) }
     it { is_expected.to have_many(:event_role_requirements).dependent(:destroy) }
     it { is_expected.to have_many(:assignments).dependent(:restrict_with_error) }
+    it { is_expected.to have_many(:member_roles).dependent(:destroy) }
+    it { is_expected.to have_many(:members).through(:member_roles) }
   end
 
   describe "scopes" do

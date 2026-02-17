@@ -69,6 +69,23 @@
     <%= f.text_area :notes, rows: 3, class: "input-basalt" %>
   </div>
 
+  <div class="form-group" style="margin-bottom: 1.25rem;">
+    <%= f.label :role_ids, "담당 가능 역할", class: "label-basalt" %>
+    <div class="checkbox-group" style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem;">
+      <% Role.active.ordered.each do |role| %>
+        <div class="form-check" style="display: flex; align-items: center; gap: 0.375rem;">
+          <%= check_box_tag "member[role_ids][]", role.id,
+              @member.roles.include?(role),
+              id: "role_#{role.id}",
+              style: "accent-color: var(--ocean-700);" %>
+          <%= label_tag "role_#{role.id}", role.name,
+              style: "font-size: 0.875rem; color: var(--basalt-700); cursor: pointer;" %>
+        </div>
+      <% end %>
+    </div>
+    <%= f.hidden_field :role_ids, value: "" %>
+  </div>
+
   <div style="display: flex; gap: 0.5rem;">
     <%= f.submit member.new_record? ? "등록" : "수정", class: "btn-ocean cursor-pointer" %>
     <%= link_to "취소", member.new_record? ? members_path : member_path(member), class: "btn-ghost" %>

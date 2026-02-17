@@ -100,6 +100,11 @@
                 <% end %>
               </span>
               <div class="flex items-center gap-2">
+                <% if assignment.accepted? && policy(assignment).create? %>
+                  <%= link_to "대타 요청", recommend_event_assignments_path(@event, role_id: assignment.role_id),
+                      style: "font-size: 0.75rem; color: var(--sunrise-600);",
+                      data: { turbo_frame: "substitute_#{assignment.id}" } %>
+                <% end %>
                 <% if assignment.declined? && assignment.replaced_by_id.nil? && policy(assignment).create? %>
                   <%= link_to "대타 추천", recommend_event_assignments_path(@event, role_id: assignment.role_id),
                       style: "font-size: 0.75rem; color: var(--sunrise-600);",
@@ -112,7 +117,9 @@
                 <% end %>
               </div>
             </div>
-            <% if assignment.declined? && assignment.replaced_by_id.nil? %>
+            <% if assignment.accepted? && policy(assignment).create? %>
+              <%= turbo_frame_tag "substitute_#{assignment.id}" %>
+            <% elsif assignment.declined? && assignment.replaced_by_id.nil? %>
               <%= turbo_frame_tag "substitute_#{assignment.id}" %>
             <% end %>
           <% end %>

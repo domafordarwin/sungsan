@@ -1,0 +1,17 @@
+<%= form_with(model: [@member, BlackoutPeriod.new], local: true) do |f| %>
+  <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end;">
+    <div>
+      <%= f.label :start_date, "시작일", class: "label-basalt" %>
+      <%= f.date_field :start_date, class: "input-basalt", style: "width: auto;" %>
+    </div>
+    <div>
+      <%= f.label :end_date, "종료일", class: "label-basalt" %>
+      <%= f.date_field :end_date, class: "input-basalt", style: "width: auto;" %>
+    </div>
+    <div>
+      <%= f.label :reason, "사유", class: "label-basalt" %>
+      <%= f.text_field :reason, placeholder: "여행, 시험 등", class: "input-basalt" %>
+    </div>
+    <%= f.submit "등록", class: "btn-ocean cursor-pointer" %>
+  </div>
+<% end %>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>내일 미사 봉사 알림</h2>
+  <p><%= @member.name %> 봉사자님,</p>
+  <p>
+    내일 <strong><%= @event.date.strftime('%Y년 %m월 %d일') %></strong>
+    <strong><%= @event.event_type.name %></strong>
+    (<%= @event.start_time.strftime('%H:%M') %>)에
+    <strong><%= @role.name %></strong> 봉사가 있습니다.
+  </p>
+  <p>장소: <%= @event.location || '대성전' %></p>
+</body>
+</html>

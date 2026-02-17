@@ -11,5 +11,13 @@ class NotificationService
       status: "pending",
       related: assignment
     )
+
+    SendNotificationJob.perform_later(assignment.id) if assignment.member.email.present?
+  end
+
+  def self.send_reminder(assignment)
+    return if assignment.member.email.blank?
+
+    AssignmentMailer.reminder(assignment).deliver_later
   end
 end

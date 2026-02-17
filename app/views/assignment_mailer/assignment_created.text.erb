@@ -1,0 +1,8 @@
+봉사 배정 알림
+
+<%= @member.name %> 봉사자님,
+
+<%= @event.date.strftime('%Y년 %m월 %d일') %> <%= @event.event_type.name %>에
+<%= @role.name %> 역할로 배정되었습니다.
+
+수락/거절: <%= @response_url %>

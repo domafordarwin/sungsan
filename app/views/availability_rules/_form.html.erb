@@ -1,0 +1,19 @@
+<%= form_with(model: [@member, AvailabilityRule.new], local: true) do |f| %>
+  <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end;">
+    <div>
+      <%= f.label :day_of_week, "요일", class: "label-basalt" %>
+      <%= f.select :day_of_week,
+          [["전체", nil], ["일", 0], ["월", 1], ["화", 2], ["수", 3], ["목", 4], ["금", 5], ["토", 6]],
+          {}, class: "input-basalt", style: "width: auto;" %>
+    </div>
+    <div>
+      <%= f.label :available, "가용 여부", class: "label-basalt" %>
+      <%= f.select :available, [["가능", true], ["불가", false]], {}, class: "input-basalt", style: "width: auto;" %>
+    </div>
+    <div>
+      <%= f.label :max_per_month, "월 최대", class: "label-basalt" %>
+      <%= f.number_field :max_per_month, placeholder: "횟수", class: "input-basalt", style: "width: 80px;" %>
+    </div>
+    <%= f.submit "추가", class: "btn-ocean cursor-pointer" %>
+  </div>
+<% end %>

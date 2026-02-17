@@ -10,6 +10,7 @@ class Event < ApplicationRecord
 
   validates :date, presence: true
   validates :start_time, presence: true
+  validate :end_time_after_start_time
 
   scope :upcoming, -> { where("date >= ?", Date.current).order(:date, :start_time) }
   scope :past, -> { where("date < ?", Date.current).order(date: :desc) }
@@ -32,6 +33,15 @@ class Event < ApplicationRecord
     event_type.event_role_requirements.includes(:role).map do |req|
       assigned = assignments.where(role_id: req.role_id).count
       { role: req.role, required: req.required_count, assigned: assigned }
+    end
+  end
+
+  private
+
+  def end_time_after_start_time
+    return if end_time.blank? || start_time.blank?
+    if end_time <= start_time
+      errors.add(:end_time, "은(는) 시작 시간 이후여야 합니다")
     end
   end
 end

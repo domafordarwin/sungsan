@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>대타 봉사 요청</h2>
+  <p><%= @candidate.name %> 봉사자님,</p>
+  <p>
+    <strong><%= @event.date.strftime('%Y년 %m월 %d일') %></strong>
+    <%= @event.event_type.name %>에서
+    <strong><%= @role.name %></strong> 역할 대타 봉사자를 찾고 있습니다.
+  </p>
+  <p>가능하시면 담당자에게 연락해주세요.</p>
+</body>
+</html>

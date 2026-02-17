@@ -21,6 +21,8 @@ RSpec.describe Member do
     it { is_expected.to have_many(:blackout_periods).dependent(:destroy) }
     it { is_expected.to have_many(:member_qualifications).dependent(:destroy) }
     it { is_expected.to have_many(:qualifications).through(:member_qualifications) }
+    it { is_expected.to have_many(:member_roles).dependent(:destroy) }
+    it { is_expected.to have_many(:roles).through(:member_roles) }
   end
 
   describe "scopes" do

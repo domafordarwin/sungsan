@@ -101,7 +101,16 @@ members = 10.times.map do |i|
   end
 end
 
-# 9. 멤버 유저 (봉사자1에 연결)
+# 9. 봉사자 역할 배정 (member_roles)
+members.each_with_index do |member, i|
+  # 봉사자마다 1~3개의 역할 랜덤 배정 (재현 가능하도록 인덱스 기반)
+  assigned_roles = roles.select.with_index { |_, ri| (i + ri) % 3 == 0 || ri == i % roles.size }
+  assigned_roles.first(2).each do |role|
+    MemberRole.find_or_create_by!(member: member, role: role)
+  end
+end
+
+# 10. 멤버 유저 (봉사자1에 연결)
 member_user = User.find_or_create_by!(email_address: "member@sungsan.org") do |u|
   u.parish = parish
   u.name = "봉사자1"
@@ -111,7 +120,7 @@ member_user = User.find_or_create_by!(email_address: "member@sungsan.org") do |u
 end
 members.first.update!(user: member_user) unless members.first.user_id
 
-# 10. 샘플 이벤트 (다음 4주 주일미사)
+# 11. 샘플 이벤트 (다음 4주 주일미사)
 if Event.count == 0
   next_sunday = Date.current.beginning_of_week + 6.days
   next_sunday += 7.days if next_sunday <= Date.current
@@ -128,7 +137,7 @@ if Event.count == 0
   end
 end
 
-# 11. 샘플 뉴스 기사
+# 12. 샘플 뉴스 기사
 news_data = [
   {
     title: "제주교구 사순시기 특별 미사 안내",
@@ -165,7 +174,7 @@ news_data.each do |attrs|
   end
 end
 
-# 12. 샘플 게시글 + 댓글
+# 13. 샘플 게시글 + 댓글
 posts_data = [
   {
     title: "이번 주일 미사 후 다과 나눔 안내",

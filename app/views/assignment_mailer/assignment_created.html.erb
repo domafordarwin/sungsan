@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>봉사 배정 알림</h2>
+  <p><%= @member.name %> 봉사자님,</p>
+  <p>
+    <strong><%= @event.date.strftime('%Y년 %m월 %d일') %></strong>
+    <%= @event.event_type.name %>에
+    <strong><%= @role.name %></strong> 역할로 배정되었습니다.
+  </p>
+  <p>아래 버튼을 클릭하여 수락 또는 거절해주세요:</p>
+  <div style="margin: 20px 0;">
+    <%= link_to "수락", "#{@response_url}&response=accepted",
+        style: "background:#16a34a;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;margin-right:10px" %>
+    <%= link_to "거절", "#{@response_url}&response=declined",
+        style: "background:#dc2626;color:white;padding:12px 24px;border-radius:6px;text-decoration:none" %>
+  </div>
+  <p style="color:#666;font-size:0.875rem">이 링크는 72시간 후 만료됩니다.</p>
+</body>
+</html>

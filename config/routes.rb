@@ -17,6 +17,8 @@ Rails.application.routes.draw do
       get :sample_csv
       delete :bulk_destroy
     end
+    resources :availability_rules, only: [:create, :destroy]
+    resources :blackout_periods, only: [:create, :destroy]
   end
 
   # News

@@ -12,6 +12,8 @@ class Member < ApplicationRecord
   has_many :blackout_periods, dependent: :destroy
   has_many :member_qualifications, dependent: :destroy
   has_many :qualifications, through: :member_qualifications
+  has_many :member_roles, dependent: :destroy
+  has_many :roles, through: :member_roles
 
   maskable_fields :phone, :email, :birth_date
 

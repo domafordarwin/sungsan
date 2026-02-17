@@ -18,6 +18,12 @@ class AssignmentRecommender
     members = members.confirmed if @role.requires_confirmation
     members = members.where.not(id: already_assigned_ids)
     members = members.where.not(id: blackout_member_ids) if blackout_member_ids.any?
+    # If any members have been assigned this role via member_roles, restrict to
+    # only those members. If no member_roles exist for this role yet, fall back
+    # to qualification-only filtering for backward compatibility.
+    if MemberRole.where(role_id: @role.id).exists?
+      members = members.joins(:member_roles).where(member_roles: { role_id: @role.id })
+    end
     members
   end
 

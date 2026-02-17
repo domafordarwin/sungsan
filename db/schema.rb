@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_16_000023) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_17_100002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -61,6 +61,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_000023) do
     t.index ["response_token"], name: "index_assignments_on_response_token", unique: true
     t.index ["role_id"], name: "index_assignments_on_role_id"
     t.index ["status"], name: "index_assignments_on_status"
+    t.index ["event_id", "role_id", "status"], name: "idx_assignments_event_role_status"
+    t.index ["member_id", "status"], name: "idx_assignments_member_status"
   end
 
   create_table "attendance_records", force: :cascade do |t|
@@ -75,6 +77,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_000023) do
     t.index ["assignment_id"], name: "index_attendance_records_on_assignment_id"
     t.index ["event_id", "member_id"], name: "idx_attendance_unique", unique: true
     t.index ["event_id"], name: "index_attendance_records_on_event_id"
+    t.index ["event_id", "status"], name: "idx_attendance_event_status"
     t.index ["member_id"], name: "index_attendance_records_on_member_id"
   end
 
@@ -90,6 +93,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_000023) do
     t.bigint "user_id"
     t.index ["auditable_type", "auditable_id"], name: "index_audit_logs_on_auditable_type_and_auditable_id"
     t.index ["created_at"], name: "index_audit_logs_on_created_at"
+    t.index ["parish_id", "created_at"], name: "idx_audit_logs_parish_created"
     t.index ["user_id"], name: "index_audit_logs_on_user_id"
   end
 
@@ -241,6 +245,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_000023) do
     t.string "subject"
     t.datetime "updated_at", null: false
     t.index ["parish_id"], name: "index_notifications_on_parish_id"
+    t.index ["parish_id", "created_at"], name: "idx_notifications_parish_created"
     t.index ["related_type", "related_id"], name: "index_notifications_on_related_type_and_related_id"
   end
 
@@ -325,6 +330,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_000023) do
     t.index ["sample_data"], name: "index_roles_on_sample_data"
   end
 
+  create_table "member_roles", force: :cascade do |t|
+    t.bigint "member_id", null: false
+    t.bigint "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id", "role_id"], name: "index_member_roles_on_member_id_and_role_id", unique: true
+    t.index ["member_id"], name: "index_member_roles_on_member_id"
+    t.index ["role_id"], name: "index_member_roles_on_role_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ip_address"
@@ -373,6 +388,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_000023) do
   add_foreign_key "events", "parishes"
   add_foreign_key "member_qualifications", "members"
   add_foreign_key "member_qualifications", "qualifications"
+  add_foreign_key "member_roles", "members"
+  add_foreign_key "member_roles", "roles"
   add_foreign_key "members", "parishes"
   add_foreign_key "members", "users"
   add_foreign_key "news_articles", "parishes"

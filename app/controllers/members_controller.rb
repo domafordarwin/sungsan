@@ -131,7 +131,7 @@ class MembersController < ApplicationController
     params.require(:member).permit(
       :name, :baptismal_name, :phone, :email, :birth_date,
       :gender, :district, :group_name, :baptized, :confirmed,
-      :notes, :user_id
+      :notes, :user_id, role_ids: []
     )
   end
 

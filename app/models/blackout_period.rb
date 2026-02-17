@@ -6,6 +6,7 @@ class BlackoutPeriod < ApplicationRecord
   validate :end_date_after_start_date
 
   scope :active_on, ->(date) { where("start_date <= ? AND end_date >= ?", date, date) }
+  scope :upcoming, -> { where("end_date >= ?", Date.current).order(:start_date) }
 
   private
 
