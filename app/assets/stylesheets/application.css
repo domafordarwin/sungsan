@@ -1003,32 +1003,111 @@ h1, h2, h3 {
   justify-content: center;
   overflow: hidden;
 }
-.landing-hero-bg {
+/* 슬라이드쇼 컨테이너 */
+.landing-slides {
   position: absolute;
   inset: 0;
-  background-image: url('https://blog.kakaocdn.net/dna/dXcnmI/btsCP350WKc/AAAAAAAAAAAAAAAAAAAAALvOjOtnrBlSSH9Cq_JQSJbHBGngIDcite0dNEN31eEQ/img.jpg');
+}
+.landing-slide {
+  position: absolute;
+  inset: 0;
   background-size: cover;
+  background-position: center;
+  opacity: 0;
+  animation: slideShow 32s ease-in-out infinite;
+  transform: scale(1);
+}
+.landing-slide.slide-1 {
+  background-image: url('https://blog.kakaocdn.net/dna/dXcnmI/btsCP350WKc/AAAAAAAAAAAAAAAAAAAAALvOjOtnrBlSSH9Cq_JQSJbHBGngIDcite0dNEN31eEQ/img.jpg');
   background-position: center 30%;
-  filter: saturate(0.6) brightness(0.4);
-  animation: heroZoom 20s ease-in-out infinite alternate;
+  animation-delay: 0s;
+  filter: saturate(0.7) brightness(0.45);
 }
-@keyframes heroZoom {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.08); }
+.landing-slide.slide-2 {
+  background-image: url('http://tong.visitkorea.or.kr/cms/resource/12/2800012_image2_1.jpg');
+  background-position: center 40%;
+  animation-delay: 8s;
+  filter: saturate(0.8) brightness(0.4);
 }
+.landing-slide.slide-3 {
+  background:
+    linear-gradient(175deg,
+      var(--basalt-900) 0%,
+      var(--ocean-900) 30%,
+      #064e5a 50%,
+      var(--ocean-800) 70%,
+      var(--basalt-900) 100%);
+  animation-delay: 16s;
+}
+.landing-slide.slide-4 {
+  background:
+    linear-gradient(135deg,
+      #1a1d1e 0%,
+      #2d1f10 30%,
+      #4a3520 50%,
+      #1a3040 70%,
+      #1a1d1e 100%);
+  animation-delay: 24s;
+}
+/* 4장 크로스페이드: 32초 사이클 */
+@keyframes slideShow {
+  0%    { opacity: 0; transform: scale(1); }
+  4%    { opacity: 1; }
+  25%   { opacity: 1; transform: scale(1.05); }
+  29%   { opacity: 0; transform: scale(1.05); }
+  100%  { opacity: 0; transform: scale(1); }
+}
+
+/* 일출봉 실루엣 (그라데이션 슬라이드에서 보임) */
+.landing-slide.slide-3::before {
+  content: '';
+  position: absolute;
+  bottom: 22%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,184,109,0.3) 30%, rgba(232,184,109,0.15) 70%, transparent);
+}
+.landing-slide.slide-3::after {
+  content: '';
+  position: absolute;
+  bottom: 18%;
+  right: 8%;
+  width: 220px;
+  height: 100px;
+  background: radial-gradient(ellipse 100% 100% at 50% 100%,
+    rgba(45,52,54,0.5) 0%, transparent 70%);
+  border-radius: 50% 60% 0 0 / 100% 100% 0 0;
+  opacity: 0.5;
+}
+/* 일출 느낌 (4번째 슬라이드) */
+.landing-slide.slide-4::before {
+  content: '';
+  position: absolute;
+  bottom: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 200px;
+  background: radial-gradient(ellipse at 50% 100%, rgba(232,184,109,0.2) 0%, transparent 60%);
+  pointer-events: none;
+}
+
 .landing-hero-overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background:
-    linear-gradient(180deg, rgba(5,61,69,0.5) 0%, rgba(26,29,30,0.3) 40%, rgba(26,29,30,0.85) 100%),
-    radial-gradient(ellipse at 50% 30%, rgba(232,184,109,0.1) 0%, transparent 60%);
+    linear-gradient(180deg, rgba(26,29,30,0.3) 0%, rgba(26,29,30,0.1) 40%, rgba(26,29,30,0.7) 100%),
+    radial-gradient(ellipse at 70% 20%, rgba(232,184,109,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 70%, rgba(10,126,143,0.1) 0%, transparent 50%);
 }
 
 /* 부유하는 빛 파티클 */
 .landing-particles {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
   overflow: hidden;
 }
@@ -1052,7 +1131,7 @@ h1, h2, h3 {
 
 .landing-hero-content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   text-align: center;
   padding: 2rem 1.5rem 6rem;
 }
